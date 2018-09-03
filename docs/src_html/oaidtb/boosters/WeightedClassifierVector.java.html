@@ -1,0 +1,165 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\boosters\WeightedClassifierVector.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\boosters\WeightedClassifierVector.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    WeightedClassifierVector.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.boosters; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.ArrayList; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.Serializable; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT> * Container class, type-conscious, to store classifiers with its vote weights. 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> * It's a more ironclad solution than simply use an ArrayList in the client class. 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> * Legibility is its main objective. It doesn´t make any error check, so be careful. 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> WeightedClassifierVector </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> Serializable{ 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The classifiers list.  
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@associates</B></FONT><FONT COLOR="#808080"><I> ClassifierAndWeight*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ArrayList classifierList = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ArrayList(); 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT>   * Inner class. It stores a classifier with it's vote weight. 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>   * Another solution could be use two ArrayList, one for classifiers and other for weights. 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> ClassifierAndWeight </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> Serializable{ 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>    </FONT><FONT COLOR="#808080"><I>//Friendly members; not a good object oriented approach, ¿if efficiency is not a relevant issue,</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>    </FONT><FONT COLOR="#808080"><I>//set them private and supply getter and setter methods?.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>    Classifier classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> weight; 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>     * Constructs with specified parameters. 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifier The classifier to be stored. 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> weight The weight of the classifier's vote. 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> ClassifierAndWeight(Classifier classifier, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> weight){ 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>      </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">.classifier = classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>      </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">.weight = weight; 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>     * Constructs with specified parameters. Weight is equal to zero. 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifier The classifier to be stored. 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> ClassifierAndWeight(Classifier classifier){ 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>      </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">.classifier = classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>     * Set the classifier's vote weight. 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> weight The weight. 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setWeight(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> weight){ 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>      </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">.weight = weight; 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>   * Adds a classifier to the array with a weight of zero. 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> c The classifier to addMemberName to the array. 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> add(Classifier c){ 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>    classifierList.add(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ClassifierAndWeight(c)); 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>   * Adds a classifier to the array with the specified weight. 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> c The classifier to addMemberName to the array. 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> w The classifier's weight. 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> add(Classifier c, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> w){ 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>    classifierList.add(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ClassifierAndWeight(c, w)); 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>   * Set the classifier's vote weight of classifier added at the specified index; 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>   * it doesn't handle a possible array's bound error, so be careful. 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> index The classifier's index. 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> weight The classifier's vote weight. 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setWeight(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> index, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> weight){ 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>    ((ClassifierAndWeight) classifierList.get(index)).weight = weight; 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>   * Get the classifier added at the specified index; it doesn't handle a possible 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>   * array's bound error, so be careful. 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> index The classifier's index. 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Classifier get(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> index){ 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> ((ClassifierAndWeight) classifierList.get(index)).classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>   * Get the classifier's vote weight of classifier added at the specified index; 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>   * it doesn't handle a possible array's bound error, so be careful. 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> index The classifier's index. 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The classifier's vote weight. 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getWeight(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> index){ 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> ((ClassifierAndWeight) classifierList.get(index)).weight; 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>   * Returns the number of classifiers in the list. 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The number of classifiers in the list. 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> size(){ 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> classifierList.size(); 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

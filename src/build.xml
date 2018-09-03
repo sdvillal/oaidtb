@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<project name="oaidtb" default="all" basedir="..">
+
+  <!--
+    OAIDTB - Ant script
+    Autor: Santiago David Villalba Bartolomé
+
+    Este archivo debe ser usado con Ant(http://jakarta.apache.org/ant),
+    una utilidad "makefile" basada en java y xml.
+
+    Mini-HowTo:
+    
+    - Para mostrar la configuración de directorios
+        ant check
+
+    - Para crear los javadocs con alcance public
+        ant javadoc
+
+    - Para crear los javadocs con alcance public
+        ant javadoc.private
+        
+    - Para compilar las clases necesarias para usar los boosters
+        ant compile.boosters
+        
+    - Para compilar todo el paquete
+        ant compile.oaidtb
+        
+    - Para crear oaidtb.manifest
+        ant oaidtb.manifest     
+    
+    - Para crear oaidtb.jar
+        ant oaidtb.jar
+
+    - Para crear oaidtb.jar sólo con los boosters:
+        ant oaidtb.jar.only.boosters
+
+    - Para crearlo todo
+        ant all    o
+        ant
+        
+    - Para borrar los archivos compilados (NO el jar) y el archivo manifest
+        ant clean
+
+    - Para borrar los javadocs con alcance private
+        ant clean.javadoc_private
+
+    - Para borrar los javadocs con alcance public
+        ant clean.javadoc_public
+        
+    - Para borrar todos los javadocs
+        ant clean.javadoc
+
+    - Para borrar los archivos compilados
+        ant clean.compiled
+
+    - Para borrar el archivo oaidtb.jar
+        ant clean.jar
+
+    - Para borrar los archivos .manifest
+        ant clean.manifest        
+    -->
+
+  <!-- Colocar aquí el compilador a usar (jikes, modern, gcj, ...) -->
+  <!-- property name="build.compiler" value="jikes"/ -->
+
+  <!-- Versión de la distribución de la librería -->
+  <property name="ver" value="1.1" />
+
+  <!-- Definir directorios y rutas a las bibliotecas -->
+  <property name="src.dir" value="${basedir}/src" />
+  <property name="resources.dir" value="${src.dir}/_resources_" />  
+  <property name="libs.dir" value="${basedir}/libs" />
+  <property name="weka.jar" value="${basedir}/libs/weka_patched.jar" />
+  <property name="colt.jar" value="${basedir}/libs/colt_only_used_classes.jar" />
+  <property name="jfreechart.jar" value="${basedir}/libs/jfreechart-0.9.2.jar" />
+  <property name="jcommon.jar" value="${basedir}/libs/jcommon-0.6.4.jar" />
+  <!-- Directorio donde se halla la documentacón -->
+  <property name="docs.dir" value="${basedir}/docs"/>  
+  
+  <!-- Definir el classpath -->
+  <property name="classpath" value="${src.dir}:${weka.jar}:${colt.jar}:${jfreechart.jar}:${jcommon.jar}"/>    
+
+  <!-- Localización de oaidtb.jar y de oaidtb.manifest -->
+  <property name="oaidtb.jar.file" value="${basedir}/libs/oaidtb.jar" />
+  <property name="oaidtb.manifest" value="${basedir}/src/oaidtb.manifest" />  
+
+  <!-- Compilar las clases añadiendo información de depurado? -->
+  <property name="debug" value="off"/>
+
+  <!-- Mostrar por pantalla algunas de las variables para comprobar su validez -->
+  <target name="check">
+    <echo message="basedir=${basedir}"/>
+    <echo message="src.dir=${src.dir}"/>
+    <echo message="resources.dir=${resources.dir}"/>
+    <echo message="libs.dir=${libs.dir}"/>
+    <echo message="docs.dir=${docs.dir}"/>
+    <echo message="classpath=${classpath}"/>
+    <echo message="debug=${debug}"/>
+  </target>
+
+  <!-- Crear los directorios necesarios + TimeStamp-->
+  <target name="prepare">
+    <mkdir dir="${libs.dir}"/>
+    <mkdir dir="${docs.dir}/javadoc"/>  
+    <tstamp />
+  </target>  
+
+  <!-- Construirlo todo -->
+  <target name="all" depends="prepare, compile.oaidtb, oaidtb.manifest, 
+                              oaidtb.jar, javadoc, javadoc.private
+                              "/>
+
+  <!-- Compilar sólo el código fuente necesario para los boosters -->
+  <target name="compile.boosters" depends="prepare, clean.compiled">
+    <echo message="Compilando los boosters."/>
+    <javac srcdir="${src.dir}"
+      destdir="${libs.dir}"
+      classpath="${classpath}"
+      optimize="on"
+      deprecation="on"
+      debug="${debug}">
+      <include name="oaidtb/boosters/*.java"/>
+      <include name="oaidtb/boosters/costSensitive/*.java"/>
+      <include name="oaidtb/filters/*.java"/>
+      <include name="oaidtb/misc/*.java"/>
+    </javac>
+  </target>
+
+  <!-- Compilar el código fuente del paquete oaidtb -->
+  <target name="compile.oaidtb" depends="prepare, clean.compiled, compile.boosters">
+    <echo message="Compilando todo el paquete oaidtb"/>
+    <javac srcdir="${src.dir}"
+      destdir="${libs.dir}"
+      classpath="${classpath}"
+      optimize="on"
+      deprecation="on"
+      debug="${debug}">
+      <include name="oaidtb/misc/guiUtils/*.java"/>
+      <include name="oaidtb/misc/javaTutorial/*.java"/>
+      <include name="oaidtb/misc/mediator/*.java"/>
+      <include name="oaidtb/misc/pointDistributions/*.java"/>
+      <include name="oaidtb/gui/*.java"/>
+      <include name="oaidtb/gui/customizedWeka/*.java"/>
+    </javac>
+    <copy todir="${libs.dir}">
+    <fileset dir="${resources.dir}"/>
+    </copy>
+  </target>
+  
+  <!-- Crear el archivo oaidtb.manifest -->
+  <target name="oaidtb.manifest" depends="clean.manifest">
+    <manifest file="${oaidtb.manifest}">
+      <attribute name="Built-By" value="SDVB"/>
+      <section name="common">
+        <attribute name="Specification-Title" value="Biblioteca de boosters + Aplicaciones gráficas" />
+        <attribute name="Specification-Vendor" value="Santiago David Villalba Bartolomé" />
+        <attribute name="Implementation-Title" value="OAIDTB" />
+        <attribute name="Implementation-Version" value="${ver} ${TODAY}" />
+      </section>
+    </manifest>
+  </target>
+
+  <!-- Empaquetar oaidtb.jar -->
+  <target name="oaidtb.jar" depends="compile.oaidtb, oaidtb.manifest, clean.jar">
+    <echo message="Creando ${oaidtb.jar.file}"/>
+    <jar jarfile="${oaidtb.jar.file}" manifest="${oaidtb.manifest}">
+      <fileset dir="${libs.dir}">
+        <include name="oaidtb/**"/>
+      </fileset>
+    </jar>
+  </target>
+  
+    
+  <!-- Crear el archivo oaidtb.manifest  -->
+  <target name="oaidtb.manifest.only.boosters" depends="clean.manifest">
+    <manifest file="${oaidtb.manifest}">
+      <attribute name="Built-By" value="SDVB"/>
+      <section name="common">
+        <attribute name="Specification-Title" value="Biblioteca de boosters" />
+        <attribute name="Specification-Vendor" value="Santiago David Villalba Bartolomé" />
+        <attribute name="Implementation-Title" value="OAIDTB" />
+        <attribute name="Implementation-Version" value="${ver} ${TODAY}" />
+      </section>
+    </manifest>
+  </target>
+
+  <!-- Empaquetar oaidtb.jar sólo con los boosters -->
+  <target name="oaidtb.jar.only.boosters" depends="compile.boosters, oaidtb.manifest.only.boosters, clean.jar">
+    <echo message="Creando ${oaidtb.jar.file}"/>
+    <jar jarfile="${oaidtb.jar.file}" manifest="${oaidtb.manifest}">
+      <fileset dir="${libs.dir}">
+        <include name="oaidtb/**"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <!-- Crear los javadocs, sólo miembros y métodos public -->
+  <target name="javadoc" depends="prepare, clean.javadoc_public">
+    <echo message="Creando los javadocs para los miembros y métodos public"/>
+    <mkdir dir="${docs.dir}/javadoc/javadoc_public"/>
+    <javadoc
+      packagenames="oaidtb.*"
+      sourcepath="${src.dir}"
+      destdir="${docs.dir}/javadoc/javadoc_public"
+      classpath="${classpath}"
+      author="true"
+      version="true"
+      use="true"
+      nodeprecated="false"
+      windowTitle="OAIDTB - Guía de referencia (public)"
+      >
+    </javadoc>
+  </target>
+
+  <!-- Crear los javadocs, mostrándolo todo -->
+  <target name="javadoc.private" depends="prepare,clean.javadoc_private">
+    <echo message="Creando los javadocs para los miembros y métodos private"/>
+    <mkdir dir="${docs.dir}/javadoc/javadoc_private"/>
+    <javadoc
+      packagenames="oaidtb.*"
+      sourcepath="${src.dir}"
+      destdir="${docs.dir}/javadoc/javadoc_private"
+      classpath="${classpath}"
+      author="true"
+      version="true"
+      use="true"
+      private="true"
+      nodeprecated="false"
+      windowTitle="OAIDTB - Guía de referencia (private)"
+      >
+    </javadoc>
+  </target>  
+
+  <!-- Borrar los javadocs creados -->
+  <target name="clean.javadoc" depends="clean.javadoc_public, clean.javadoc_private">
+  </target>
+  
+    <!-- Borrar los javadocs creados -->
+  <target name="clean.javadoc_public">
+    <echo message="Borrando el directorio ${docs.dir}/javadoc/javadoc_public"/>
+    <delete includeEmptyDirs="true" quiet="true">
+      <fileset dir="${docs.dir}/javadoc/javadoc_public"/>
+    </delete>
+  </target>
+
+  <!-- Borrar los javadocs creados -->
+  <target name="clean.javadoc_private">
+    <echo message="Borrando el directorio ${docs.dir}/javadoc/javadoc_private"/>
+    <delete includeEmptyDirs="true" quiet="true">
+      <fileset dir="${docs.dir}/javadoc/javadoc_private"/>
+    </delete>
+  </target>
+  
+  <!-- Borrar las clases compiladas -->
+  <target name="clean.compiled">
+    <echo message="Borrando el directorio ${libs.dir}/oaidtb"/>
+    <delete includeEmptyDirs="true" quiet="true">
+      <fileset dir="${libs.dir}/oaidtb"/>
+    </delete>
+  </target>
+  
+  <!-- Borrar los archivos jar creados -->
+  <target name="clean.jar">
+    <echo message="Borrando el archivo ${oaidtb.jar.file}"/>
+    <delete file="${oaidtb.jar.file}" includeEmptyDirs="true" quiet="true">
+    </delete>
+  </target>
+  
+  <!-- Borrar los archivos manifest creados -->
+  <target name="clean.manifest">
+    <echo message="Borrando los archivos manifest"/>
+    <delete includeEmptyDirs="true" quiet="true">
+      <fileset dir="${src.dir}">
+        <include name="*.manifest"/>
+      </fileset>
+    </delete>
+  </target>
+
+  <!-- Borrarlo todo -->
+  <target name="clean.all" depends="clean.compiled, clean.jar, clean.manifest, clean.javadoc"/>
+
+  <!-- Borrar los archivos compilados (NO el jar) y el archivo manifest -->
+  <target name="clean" depends="clean.compiled, clean.manifest"/>
+</project>

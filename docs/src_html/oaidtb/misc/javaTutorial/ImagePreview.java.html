@@ -1,0 +1,82 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\misc\javaTutorial\ImagePreview.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\misc\javaTutorial\ImagePreview.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.misc.javaTutorial; 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyChangeEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyChangeListener; 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.File; 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> ImagePreview </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> JComponent 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT>  </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> PropertyChangeListener{ 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT>  ImageIcon thumbnail = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT>  File f = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> ImagePreview(JFileChooser fc){ 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT>    setPreferredSize(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Dimension(</FONT><FONT COLOR="#0000ff">100</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">50</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT>    fc.addPropertyChangeListener(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> loadImage(){ 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (f == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT>    ImageIcon tmpIcon = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ImageIcon(f.getPath()); 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (tmpIcon.getIconWidth() &GT; </FONT><FONT COLOR="#0000ff">90</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT>      thumbnail = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ImageIcon(tmpIcon.getImage(). 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT>                                getScaledInstance(</FONT><FONT COLOR="#0000ff">90</FONT><FONT COLOR="#000000">, -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT>                                                  Image.SCALE_DEFAULT)); 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT>      thumbnail = tmpIcon; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> propertyChange(PropertyChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT>    String prop = e.getPropertyName(); 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (prop.equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)){ 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT>      f = (File) e.getNewValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (isShowing()){ 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT>        loadImage(); 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT>        repaint(); 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> paint(Graphics g){ 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (thumbnail == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>      loadImage(); 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (thumbnail != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> x = getWidth() / </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000"> - thumbnail.getIconWidth() / </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> y = getHeight() / </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000"> - thumbnail.getIconHeight() / </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (y &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>        y = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (x &LT; </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>        x = </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>      thumbnail.paintIcon(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">, g, x, y); 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>} 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT></FONT></PRE>
+</BODY>
+</HTML>

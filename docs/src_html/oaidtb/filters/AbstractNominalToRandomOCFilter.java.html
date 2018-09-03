@@ -1,0 +1,198 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\filters\AbstractNominalToRandomOCFilter.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\filters\AbstractNominalToRandomOCFilter.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    AbstractNominalToRandomOCFilter.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.filters; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Option; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Utils; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Instances; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Enumeration; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Random; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Vector; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * Abstract class defining the structure and common code to "nominal to output code" 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * filters which exhibit randomness in its behaviour (ie. they use a random number generator 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * when constructing new partitions). 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@see</B></FONT><FONT COLOR="#808080"><I> <A href="..\..\oaidtb\filters\AbstractNominalToOCFilter.java.html">oaidtb.filters.AbstractNominalToOCFilter</A> 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> AbstractNominalToRandomOCFilter </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\filters\AbstractNominalToOCFilter.java.html">AbstractNominalToOCFilter</A>{ 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The random number generator used to create each partition. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> Random m_Random = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random(); 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The m_Random's seed, unless it's a clock based seed. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>long</B></FONT><FONT COLOR="#000000"> m_Seed = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>   * Get the random number generator used to get the random behavior of the filter. 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The m_Random number generator. 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Random getRandom(){ 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Random; 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>   * Set the random number generator to be used as the basis for partition generation. 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> random The random number generator. 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setRandom(Random random){ 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>    m_Random = random; 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>   * Set the seed used by the random number generator. 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> seed The seed. 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSeed(</FONT><FONT COLOR="#000080"><B>long</B></FONT><FONT COLOR="#000000"> seed){ 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>    m_Seed = seed; 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>    m_Random = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random(m_Seed); </FONT><FONT COLOR="#808080"><I>//Use m_Random.setResampleSeed</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>   * Sets the format of the input instances. 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instanceInfo an Instances object containing the input instance structure. 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if the outputFormat may be collected immediately 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if the format couldn't be set successfully 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> setInputFormat(Instances instanceInfo) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>    </FONT><FONT COLOR="#808080"><I>//It must give the same results when running twice over the same dataset</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(</FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.setInputFormat(instanceInfo)){ 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>      m_Random = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random(m_Seed); 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>   * Get the seed used by the random number generator. 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The seed. 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>long</B></FONT><FONT COLOR="#000000"> getSeed(){ 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Seed; 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>   * Parses a given list of options controlling the behaviour of this object. 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>   * Valid options are:</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>   * -R seed</I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>   * Random number seed for the filter. Default is 0. If you call it with a -R 0, it will 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>   * use a clock based seed. 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> options the list of options as an array of strings 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if an option is not supported 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setOptions(String[] options) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>    </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.setOptions(options); 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>    String seedString = Utils.getOption(</FONT><FONT COLOR="#008000"><B>'R'</B></FONT><FONT COLOR="#000000">, options); 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (seedString.length() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>      </FONT><FONT COLOR="#000080"><B>long</B></FONT><FONT COLOR="#000000"> seed = Long.parseLong(seedString); 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (seed != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>        setSeed(seed); 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>        setRandom(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random()); </FONT><FONT COLOR="#808080"><I>//Clock based.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>      setSeed(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>   * Gets the current settings of the filter. 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an array of strings suitable for passing to setOptions 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String[] getOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>    String[] otherOptions = </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.getOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>    String[] options = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String[otherOptions.length + </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> current = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>"-R"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> + getSeed(); 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>    System.arraycopy(otherOptions, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>                     options, current, 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>                     otherOptions.length); 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>    current += otherOptions.length; 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (current &LT; options.length){ 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> options; 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>   * Returns an enumeration describing the available options 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an enumeration of all the available options 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Enumeration listOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>    Vector newVector = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Vector(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tRandom number seed for the filter.\n"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>      </FONT><FONT COLOR="#008000"><B>"R"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-R &LT;class name&GT;"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>    Enumeration enum = </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.listOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (enum.hasMoreElements()){ 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>      newVector.addElement(enum.nextElement()); 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> newVector.elements(); 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

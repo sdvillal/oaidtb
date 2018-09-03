@@ -1,0 +1,61 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\misc\javaTutorial\ImageFilter.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\misc\javaTutorial\ImageFilter.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.misc.javaTutorial; 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.File; 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.filechooser.*; 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> ImageFilter </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> FileFilter { 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String jpeg = </FONT><FONT COLOR="#008000"><B>"jpeg"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String jpg = </FONT><FONT COLOR="#008000"><B>"jpg"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String gif = </FONT><FONT COLOR="#008000"><B>"gif"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String tiff = </FONT><FONT COLOR="#008000"><B>"tiff"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String tif = </FONT><FONT COLOR="#008000"><B>"tif"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT>    </FONT><FONT COLOR="#808080"><I>// Accept all directories and all gif, jpg, or tiff files.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> accept(File f) { 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (f.isDirectory()) { 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT>            </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT>        String s = f.getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT>        </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = s.lastIndexOf(</FONT><FONT COLOR="#008000"><B>'.'</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (i &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> &&  i &LT; s.length() - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">) { 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT>            String extension = s.substring(i+</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">).toLowerCase(); 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT>            </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (tiff.equals(extension) || 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT>                tif.equals(extension) || 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT>                gif.equals(extension) || 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT>                jpeg.equals(extension) || 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT>                jpg.equals(extension)) { 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT>                    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT>            } </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> { 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT>                </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT>            } 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT>    </FONT><FONT COLOR="#808080"><I>// The description of this filter</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getDescription() { 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Just Images"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>} 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT></FONT></PRE>
+</BODY>
+</HTML>

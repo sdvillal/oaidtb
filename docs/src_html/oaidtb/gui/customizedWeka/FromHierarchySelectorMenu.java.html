@@ -1,0 +1,518 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\customizedWeka\FromHierarchySelectorMenu.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\customizedWeka\FromHierarchySelectorMenu.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    FromHierarchySelectorMenu.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui.customizedWeka; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.gui.HierarchyPropertyParser; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeListener; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.datatransfer.StringSelection; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.ActionEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.ActionListener; 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.MouseAdapter; 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.MouseEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Iterator; 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * A class that implements a menu that can cascade according to a hierarchical structure. 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * Based on the internal class "CascadedComboBox" of the original GenericObjectEditor in the weka library. 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * It allows the user to select a member from a hierarchy and retrieve this selection as a 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * representative string. To ensure that this selection is really the last selected, the InvokeLater 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> * method from the SwingUtilities class should be used (see addSecureChangeListener or 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> * the ChangeListener added in the GenericObjectEditor class). 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I>Also MenuSelectionManager.defaultManager().getSelectedPath() could be used 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT> * Note: "this" expression in the documentation usually refers to the class instance. 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> FromHierarchySelectorMenu </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> JMenu{ 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO: Create own HierarchyParser structure or implement it using the JMenu's hierarchy (mergeLevels etc.)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO: Disable the mnemonic key when selecting (not trivial, setMnemonic method fires</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>  </FONT><FONT COLOR="#808080"><I>//      a stateChange event and this also fires a menuEvent, so a lock variable</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>  </FONT><FONT COLOR="#808080"><I>//      would be neccesary to avoid infinite recursion). Cosmetic only.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The underlying structure this menu represents. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\MultiRootHierarchyPropertyParser.java.html">MultiRootHierarchyPropertyParser</A> m_ObjectNames = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\MultiRootHierarchyPropertyParser.java.html">MultiRootHierarchyPropertyParser</A>(); 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Selection tracking. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String m_LastHierarchyMemberSelected = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Selection tracking. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_HasChanged = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Can be different from the one used in m_ObjectNames. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String m_HierarchyLevelsSeparator = </FONT><FONT COLOR="#008000"><B>"."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>  </FONT><FONT COLOR="#808080"><I>/*-- 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>    Cosmetic configuration fields. 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>    Allows the appearance of this menu label to change if a selectable item is being highlighted in the submenu hierarchy. 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>   --*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_CurrentPrefixLength = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String m_SelectablePrefix = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String m_NotSelectablePrefix = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Icon m_SelectableIcon = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Icon m_NotSelectableIcon = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Font m_SelectableFont = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Font m_NotSelectableFont = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#808080"><I>/*-- 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>    Listeners. 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>   --*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>   * Updates the label string of the Jmenu. 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ChangeListener m_JMenuChangeListener = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stateChanged(ChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>      </FONT><FONT COLOR="#808080"><I>//If we click again in the label to cancel the action, the stateChanged will be fired</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>      </FONT><FONT COLOR="#808080"><I>//for some submenus, but in this case we don't want to change anything</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>      JMenu menuItem = (JMenu) e.getSource(); 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (menuItem.isSelected() || isTopLevelComponent(menuItem)) 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>        setNotSelectableMemberName(getSelectionIdentifier(menuItem)); 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>        setNotSelectableMemberName(getSelectionIdentifier(((JMenuItem) menuItem.getAccessibleContext().getAccessibleParent()))); 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>  }; 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>   * Updates the label string of the JMenuItem and allows some cosmetics enhancements 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ChangeListener m_JMenuItemChangeListener = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stateChanged(ChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>      </FONT><FONT COLOR="#808080"><I>//If we click again in the label to cancel the action, the stateChanged will be fired</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>      </FONT><FONT COLOR="#808080"><I>//for some submenus, but in this case we don't want to change anything</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>      JMenuItem menuItem = (JMenuItem) e.getSource(); 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (menuItem.isArmed()){ 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>        setFont(m_SelectableFont); 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>        setIcon(m_SelectableIcon); 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>        setSelectableMemberName(getSelectionIdentifier(menuItem)); 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>        setFont(m_NotSelectableFont); 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>        setIcon(m_NotSelectableIcon); 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!isTopLevelComponent(menuItem)) 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>          setNotSelectableMemberName(getSelectionIdentifier( 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>            ((JMenuItem) menuItem.getAccessibleContext().getAccessibleParent()))); 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>  }; 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>   * When the user confirms a selection it's fired 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ActionListener m_SelectionActionListener = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>      String tmp = getSelectionIdentifier((JMenuItem) e.getSource()); 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>      </FONT><FONT COLOR="#808080"><I>//This check avoid to "reset" the selection (i.e. reload a class), so finally we won't make it</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>      </FONT><FONT COLOR="#808080"><I>//if (!tmp.equals(m_LastHierarchyMemberSelected))</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>      m_HasChanged = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>      m_LastHierarchyMemberSelected = tmp; 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>      setSelectableMemberName(m_LastHierarchyMemberSelected); 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>  }; 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>   * Default constructor 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> FromHierarchySelectorMenu(){ 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>    m_SelectableFont = getFont(); 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>    m_NotSelectableFont = m_SelectableFont; 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>    addChangeListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stateChanged(ChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>          m_HasChanged = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>   * Rebuilds from scratch the menu. 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> memberNames 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> currentName The name to be put as a selectable member in the label string of this menu. 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> buildMenu(String memberNames, String currentName){ 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>    m_ObjectNames.build(memberNames); 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ObjectNames.size() &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>      </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>        build(); 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (currentName != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>          setSelectableMemberName(currentName); 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>          setSelectableMemberName(getFirstValue()); 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>      </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>        e.printStackTrace(); 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>        System.err.println(e.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>  </FONT><FONT COLOR="#808080"><I>/*-- 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>    Getter & Setter methods. 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>   --*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Font getNotSelectableFont(){ 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_NotSelectableFont; 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setNotSelectableFont(Font notSelectableFont){ 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>    m_NotSelectableFont = notSelectableFont; 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Font getSelectableFont(){ 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_SelectableFont; 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSelectableFont(Font selectableFont){ 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>    m_SelectableFont = selectableFont; 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Icon getNotSelectableIcon(){ 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_NotSelectableIcon; 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setNotSelectableIcon(Icon notSelectableIcon){ 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>    m_NotSelectableIcon = notSelectableIcon; 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Icon getSelectableIcon(){ 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_SelectableIcon; 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSelectableIcon(Icon selectableIcon){ 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>    m_SelectableIcon = selectableIcon; 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getNotSelectablePrefix(){ 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_NotSelectablePrefix; 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setNotSelectablePrefix(String notSelectablePrefix){ 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>    m_NotSelectablePrefix = notSelectablePrefix == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> ? </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> : notSelectablePrefix; 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getSelectablePrefix(){ 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_SelectablePrefix; 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSelectablePrefix(String selectablePrefix){ 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT>    m_SelectablePrefix = selectablePrefix == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> ? </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> : selectablePrefix; 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>   * Return the name of the member currently shown in the menu 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The name of the selected member. 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getMemberName(){ 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> getText().substring(m_CurrentPrefixLength); 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>   * Set this label text using the selectable prefix. 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> text The text to be put in this label (usually a JMenu hierarchical identifier). 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSelectableMemberName(String text){ 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>    setText(m_SelectablePrefix + text); 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>    m_CurrentPrefixLength = m_SelectablePrefix.length(); 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT>   * Set this label text using the not selectable prefix. 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> text The text to be put in this label (usually a leaf JMenuItem hierarchical identifier). 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setNotSelectableMemberName(String text){ 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>    setText(m_NotSelectablePrefix + text); 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>    m_CurrentPrefixLength = m_NotSelectablePrefix.length(); 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The underlying structure from where menu is constructed. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\MultiRootHierarchyPropertyParser.java.html">MultiRootHierarchyPropertyParser</A> getObjectNames(){ 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ObjectNames; 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>   * The caracters that separates the levels of each hierarchy. 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>   * Note: this could be different to the one used by the underlying structure from where menu is constructed; 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT>   * to get that, use getObjectNames.getHierarchyLevelsSeparator() 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The caracters that separates the levels of each hierarchy. 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getHierarchyLevelsSeparator(){ 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_HierarchyLevelsSeparator; 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>   * The caracters that separates the levels of each hierarchy. 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT>   * Note: this could be different to the one used by the underlying structure from where menu is constructed; 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>   * to set that, use getObjectNames.setHierarchyLevelsSeparator() 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> hierarchyLevelsSeparator The caracters that separates the levels of each hierarchy. 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setHierarchyLevelsSeparator(String hierarchyLevelsSeparator){ 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>    m_HierarchyLevelsSeparator = hierarchyLevelsSeparator; 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The caracters that separates the individual members of the hierarchies. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getHierarchyMembersSeparator(){ 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ObjectNames.getHierarchyMembersSeparator(); 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> hierarchyMembersSeparator The caracters that separates the individual members of the hierarchies. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setHierarchyMembersSeparator(String hierarchyMembersSeparator){ 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>    m_ObjectNames.setHierarchyMembersSeparator(hierarchyMembersSeparator); 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>  </FONT><FONT COLOR="#808080"><I>/*--------------------- Menu builder methods ---------------------*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>  </FONT><FONT COLOR="#808080"><I>/** The model containing the list of names to select from. 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT>   *  Necessary to minimize parameter pass until an iterative version of build is made, if ever. 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> HierarchyPropertyParser m_CurrentRootObjectNames; 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>   * Rebuilds the submenu hierarchy based on the underlying structure. 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT>   * Caution: It removes all the submenus before reconstructing the tree 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT>   * TODO: Control the maximun number of levels in a single MenuItem / minimum depth etc. 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> build(){ 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT>    Iterator iterator = m_ObjectNames.iterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT>    </FONT><FONT COLOR="#808080"><I>//Be careful, if it fails it will destroy the tree</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT>    removeAll(); 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT>    </FONT><FONT COLOR="#808080"><I>//We do it for all roots</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (iterator.hasNext()){ 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT>      m_CurrentRootObjectNames = (HierarchyPropertyParser) iterator.next(); 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT>      m_CurrentRootObjectNames.goToRoot(); 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT>      JMenuItem singleMemberCase = recursiveMenuHierarchyBuild(); 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> != singleMemberCase) 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT>        add(singleMemberCase); 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT>   * Private procedure to build the cascaded comboBox; slightly modified from the weka´s original. 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JMenuItem recursiveMenuHierarchyBuild(){ 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT>    JMenuItem menu; 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> singleItem = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT>    </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isFromRoot = m_CurrentRootObjectNames.isRootReached(); 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT>    </FONT><FONT COLOR="#808080"><I>//El texto para poner en este menu</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT>    StringBuffer sb = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringBuffer(m_CurrentRootObjectNames.getValue()); 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT>    </FONT><FONT COLOR="#808080"><I>//Siempre que se tenga sólo un hijo, lo ponemos todo junto.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (m_CurrentRootObjectNames.numChildren() == </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>      </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>        m_CurrentRootObjectNames.goToChild(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>      </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT>      sb.append(m_HierarchyLevelsSeparator + m_CurrentRootObjectNames.getValue()); 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT>      singleItem++; 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT>    </FONT><FONT COLOR="#808080"><I>//MODICADO (...&& m_ObjectNames.size() == 1): Colocar objetos que tengan diferentes raíces</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT>    </FONT><FONT COLOR="#808080"><I>//siempre en submenus distintos (y que no quepa la posibilidad de colocarlos como items seleccionables</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT>    </FONT><FONT COLOR="#808080"><I>//directamente en el primer subnivel de la jerarquía de menús (peazo de lío)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (isFromRoot && (!m_CurrentRootObjectNames.isLeafReached()) && m_ObjectNames.size() == </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>      String[] kids = m_CurrentRootObjectNames.childrenValues(); 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; kids.length; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>        String child = kids[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT>        m_CurrentRootObjectNames.goToChild(child); 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CurrentRootObjectNames.isLeafReached()){ 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT>          menu = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuItem(m_CurrentRootObjectNames.fullValue()); 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT>          menu.addChangeListener(m_JMenuItemChangeListener); 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT>          menu.addActionListener(m_SelectionActionListener); 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">382  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">383  </FONT>          menu = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenu(m_CurrentRootObjectNames.fullValue()); 
+<FONT COLOR=0 STYLE="font-style:normal">384  </FONT>          menu.addChangeListener(m_JMenuChangeListener); 
+<FONT COLOR=0 STYLE="font-style:normal">385  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">386  </FONT>          String[] grandkids = 
+<FONT COLOR=0 STYLE="font-style:normal">387  </FONT>            m_CurrentRootObjectNames.childrenValues(); 
+<FONT COLOR=0 STYLE="font-style:normal">388  </FONT>          </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> j = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; j &LT; grandkids.length; j++){ 
+<FONT COLOR=0 STYLE="font-style:normal">389  </FONT>            m_CurrentRootObjectNames.goToChild(grandkids[j]); 
+<FONT COLOR=0 STYLE="font-style:normal">390  </FONT>            menu.add(recursiveMenuHierarchyBuild()); 
+<FONT COLOR=0 STYLE="font-style:normal">391  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">392  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">393  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">394  </FONT>        m_CurrentRootObjectNames.goToParent(); 
+<FONT COLOR=0 STYLE="font-style:normal">395  </FONT>        add(menu); 
+<FONT COLOR=0 STYLE="font-style:normal">396  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">397  </FONT>      menu = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">398  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">399  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CurrentRootObjectNames.isLeafReached()){ 
+<FONT COLOR=0 STYLE="font-style:normal">400  </FONT>      menu = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuItem(sb.toString()); 
+<FONT COLOR=0 STYLE="font-style:normal">401  </FONT>      menu.addChangeListener(m_JMenuItemChangeListener); 
+<FONT COLOR=0 STYLE="font-style:normal">402  </FONT>      menu.addActionListener(m_SelectionActionListener); 
+<FONT COLOR=0 STYLE="font-style:normal">403  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">404  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">405  </FONT>      menu = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenu(sb.toString()); 
+<FONT COLOR=0 STYLE="font-style:normal">406  </FONT>      menu.addChangeListener(m_JMenuChangeListener); 
+<FONT COLOR=0 STYLE="font-style:normal">407  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">408  </FONT>      String[] kids = m_CurrentRootObjectNames.childrenValues(); 
+<FONT COLOR=0 STYLE="font-style:normal">409  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; kids.length; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">410  </FONT>        String child = kids[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">411  </FONT>        m_CurrentRootObjectNames.goToChild(child); 
+<FONT COLOR=0 STYLE="font-style:normal">412  </FONT>        menu.add(recursiveMenuHierarchyBuild()); 
+<FONT COLOR=0 STYLE="font-style:normal">413  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">414  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">415  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">416  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT;= singleItem; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">417  </FONT>      m_CurrentRootObjectNames.goToParent(); </FONT><FONT COLOR="#808080"><I>// One more level up</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">418  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">419  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> menu; 
+<FONT COLOR=0 STYLE="font-style:normal">420  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">421  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">422  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">423  </FONT>   * Search the HierarchyPropertyParser for the given member name, 
+<FONT COLOR=0 STYLE="font-style:normal">424  </FONT>   * if not found, add it into the appropriate position; rebuilds all the 
+<FONT COLOR=0 STYLE="font-style:normal">425  </FONT>   * menu hierarchy. Does nothing if already there 
+<FONT COLOR=0 STYLE="font-style:normal">426  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">427  </FONT>   * TODO: Make build iterative & not reconstruct all when adding... 
+<FONT COLOR=0 STYLE="font-style:normal">428  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">429  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> memberName the given member name 
+<FONT COLOR=0 STYLE="font-style:normal">430  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">431  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addMemberName(String memberName){ 
+<FONT COLOR=0 STYLE="font-style:normal">432  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ObjectNames.contains(memberName)){ 
+<FONT COLOR=0 STYLE="font-style:normal">433  </FONT>      m_ObjectNames.add(memberName); 
+<FONT COLOR=0 STYLE="font-style:normal">434  </FONT>      </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">435  </FONT>        </FONT><FONT COLOR="#808080"><I>//Build a more efficient function to...</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">436  </FONT>        build(); 
+<FONT COLOR=0 STYLE="font-style:normal">437  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">438  </FONT>      </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">439  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">440  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">441  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">442  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">443  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">444  </FONT>   * Is the item a direct submenu of this menu? 
+<FONT COLOR=0 STYLE="font-style:normal">445  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">446  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> item A menu item. 
+<FONT COLOR=0 STYLE="font-style:normal">447  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> True if it's a first level submenu 
+<FONT COLOR=0 STYLE="font-style:normal">448  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">449  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isTopLevelComponent(JMenuItem item){ 
+<FONT COLOR=0 STYLE="font-style:normal">450  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> item.getAccessibleContext().getAccessibleParent() == </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">451  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">452  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">453  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">454  </FONT>   * Get the string identifying a JMenuItem in the Hierarchy 
+<FONT COLOR=0 STYLE="font-style:normal">455  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">456  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> selected The JMenuItem 
+<FONT COLOR=0 STYLE="font-style:normal">457  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> A string representing the Hierarchy context of the JMenuItem 
+<FONT COLOR=0 STYLE="font-style:normal">458  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">459  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String getSelectionIdentifier(JMenuItem selected){ 
+<FONT COLOR=0 STYLE="font-style:normal">460  </FONT>    String tmp = selected.getText(); 
+<FONT COLOR=0 STYLE="font-style:normal">461  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (!isTopLevelComponent(selected)){ 
+<FONT COLOR=0 STYLE="font-style:normal">462  </FONT>      selected = (JMenuItem) selected.getAccessibleContext().getAccessibleParent(); 
+<FONT COLOR=0 STYLE="font-style:normal">463  </FONT>      tmp = selected.getText().concat(m_HierarchyLevelsSeparator + tmp); 
+<FONT COLOR=0 STYLE="font-style:normal">464  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">465  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> tmp; 
+<FONT COLOR=0 STYLE="font-style:normal">466  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">467  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">468  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> If the last selected item has changed */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">469  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> hasChanged(){ 
+<FONT COLOR=0 STYLE="font-style:normal">470  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_HasChanged; 
+<FONT COLOR=0 STYLE="font-style:normal">471  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">472  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">473  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The string identifying the last selected hierarchy member. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">474  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getLastHierarchyMemberSelected(){ 
+<FONT COLOR=0 STYLE="font-style:normal">475  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_LastHierarchyMemberSelected; 
+<FONT COLOR=0 STYLE="font-style:normal">476  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">477  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">478  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">479  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The first value introduced in the tree 
+<FONT COLOR=0 STYLE="font-style:normal">480  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If no value exists in the tree 
+<FONT COLOR=0 STYLE="font-style:normal">481  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">482  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getFirstValue() </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">483  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ObjectNames.getFirstValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">484  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">485  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">486  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">487  </FONT>   * Adds a </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>ChangeListener</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I> to the button. The event will be dispatched 
+<FONT COLOR=0 STYLE="font-style:normal">488  </FONT>   * after all of the queued events in the event dispatch thread. 
+<FONT COLOR=0 STYLE="font-style:normal">489  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> l the listener to be added 
+<FONT COLOR=0 STYLE="font-style:normal">490  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">491  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addSecureChangeListener(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> ChangeListener l){ 
+<FONT COLOR=0 STYLE="font-style:normal">492  </FONT>    </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.addChangeListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">493  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stateChanged(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> ChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">494  </FONT>        SwingUtilities.invokeLater(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Runnable(){ 
+<FONT COLOR=0 STYLE="font-style:normal">495  </FONT>          </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> run(){ 
+<FONT COLOR=0 STYLE="font-style:normal">496  </FONT>            l.stateChanged(e); 
+<FONT COLOR=0 STYLE="font-style:normal">497  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">498  </FONT>        }); 
+<FONT COLOR=0 STYLE="font-style:normal">499  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">500  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">501  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">502  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

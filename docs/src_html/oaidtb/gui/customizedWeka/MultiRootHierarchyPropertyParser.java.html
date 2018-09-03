@@ -1,0 +1,206 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\customizedWeka\MultiRootHierarchyPropertyParser.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\customizedWeka\MultiRootHierarchyPropertyParser.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    MultiRootHierarchyPropertyParser.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui.customizedWeka; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.gui.HierarchyPropertyParser; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Iterator; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.StringTokenizer; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.TreeMap; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> * Wrapper class which allows more than one "root" package (by example "weka." & "myWeka.") 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> * with weka's HierarchyPropertyParser. 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> MultiRootHierarchyPropertyParser{ 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT>  </FONT><FONT COLOR="#808080"><I>/** An index of roots over the HierarchyPropertyParsers.  
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@associates</B></FONT><FONT COLOR="#808080"><I> HierarchyPropertyParser*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> TreeMap m_Roots = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> TreeMap(); 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The caracters that separates the individual members of the hiererchies. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String m_HierarchyMembersSeparator = </FONT><FONT COLOR="#008000"><B>", "</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The caracters that separates the levels of each hiererchy. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String m_HierarchyLevelsSeparator = </FONT><FONT COLOR="#008000"><B>"."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>   * Add a single property name to the tree if it is not already in it. 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> propertyValue The property name 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> add(String propertyValue){ 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>    HierarchyPropertyParser hpp; 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>    propertyValue.trim(); 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>    StringTokenizer st = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringTokenizer(propertyValue, m_HierarchyLevelsSeparator); 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>    String root = st.nextToken(); 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> == (hpp = (HierarchyPropertyParser) m_Roots.get(root))){ 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>      hpp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> HierarchyPropertyParser(); 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>      hpp.setSeperator(m_HierarchyLevelsSeparator); 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>      m_Roots.put(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String(root), hpp); 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>    hpp.add(propertyValue); 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>   * Try to build a new multiroot tree and if it success replaces the old one with the new one. 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> propertiesNames The hierarchical properties to build the tree from. 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> build(String propertiesNames){ 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(propertiesNames == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; </FONT><FONT COLOR="#808080"><I>//throw an exception</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>    MultiRootHierarchyPropertyParser tmp_mrhpp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> MultiRootHierarchyPropertyParser(); 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>    StringTokenizer st = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringTokenizer(propertiesNames, m_HierarchyMembersSeparator); 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (st.hasMoreTokens()){ 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>      String nextPropertyValue = st.nextToken(); 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>      nextPropertyValue.trim(); 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>      tmp_mrhpp.add(nextPropertyValue); 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>    </FONT><FONT COLOR="#808080"><I>//If all is ok, replace with the new structure</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>    m_Roots = tmp_mrhpp.m_Roots; 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>   * Search for a property name in the tree 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> propertyValue The property name to search for. 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> True if the property name is in the tree, false otherwise 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> contains(String propertyValue){ 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>    HierarchyPropertyParser hpp; 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>    propertyValue.trim(); 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>    StringTokenizer st = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringTokenizer(propertyValue, </FONT><FONT COLOR="#008000"><B>". "</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>    String root = st.nextToken(); 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> == (hpp = (HierarchyPropertyParser) m_Roots.get(root))) 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (hpp.contains(propertyValue)) 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The number of roots. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> size(){ 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Roots.size(); 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> An iterator over the HierarchyPropertyParser's 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Iterator iterator(){ 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Roots.values().iterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> An array containing the HierarchyPropertyParser's 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> HierarchyPropertyParser[] getHPPsArray(){ 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>    Iterator iterator = iterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>    HierarchyPropertyParser[] tmp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> HierarchyPropertyParser[m_Roots.size()]; 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; tmp.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>      tmp[i] = (HierarchyPropertyParser) iterator.next(); 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> tmp; 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>  </FONT><FONT COLOR="#808080"><I>/*--------------------- GETTER & SETTER MEHODS ---------------------*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The caracters that separates the levels of each hierarchy. 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getHierarchyLevelsSeparator(){ 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_HierarchyLevelsSeparator; 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> hierarchyLevelsSeparator The caracters that separates the levels of each hierarchy. 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setHierarchyLevelsSeparator(String hierarchyLevelsSeparator){ 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>    m_HierarchyLevelsSeparator = hierarchyLevelsSeparator; 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The caracters that separates the individual members of the hierarchies. 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getHierarchyMembersSeparator(){ 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_HierarchyMembersSeparator; 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> hierarchyMembersSeparator The caracters that separates the individual members of the hierarchies. 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setHierarchyMembersSeparator(String hierarchyMembersSeparator){ 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>    m_HierarchyMembersSeparator = hierarchyMembersSeparator; 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The first value introduced in the tree. 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error occurs 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getFirstValue() </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>    HierarchyPropertyParser hpp = (HierarchyPropertyParser) m_Roots.get(m_Roots.firstKey()); 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (hpp.depth() &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>      hpp.goToRoot(); 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>      </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (!hpp.isLeafReached()) 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>        hpp.goToChild(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> hpp.fullValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

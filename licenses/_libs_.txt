@@ -1,0 +1,12 @@
+Estas licencias se aplican a las iguientes librerías:
+
+  - GNU General Public License (Gnu-gpl.txt):
+      * Weka
+      * Oaidtb
+  
+  - GNU Lesser General Public License (Gnu-lgpl.txt):
+      * JCommon
+      * JFreeChart      
+
+  - colt-license.html
+      * Colt Distribution      

@@ -1,0 +1,91 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\misc\guiUtils\LabeledSlider.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\misc\guiUtils\LabeledSlider.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    LabeledSlider.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.misc.guiUtils; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeListener; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT> * Clase que soluciona el bug de guiUtils 4220108 (un JSlider no se pinta cuando se inserta 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> * en un JDesktopPane...) y que permite tener un JLabel que se actualiza según los valores 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> * de un JSlider. 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> LabeledSlider{ 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JSlider slider = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JSlider(){ 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT>    </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> primeraVezQueSePinta = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT>    </FONT><FONT COLOR="#808080"><I>//Solución cutre para el bug 4220108</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>    </FONT><FONT COLOR="#808080"><I>//Ver http://developer.java.sun.com/developer/bugParade/bugs/4220108.html</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT>    </FONT><FONT COLOR="#808080"><I>//A ver si reabren el tema...</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> paint(Graphics g){ 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>      </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.paint(g); 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(primeraVezQueSePinta){ 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>        updateUI(); 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>        primeraVezQueSePinta = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>  }; 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JLabel label = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JLabel(</FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String labelMessage = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> JLabel getLabel(){ 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> label; 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> JSlider getSlider(){ 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> slider; 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> LabeledSlider(String messagePrefix){ 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(messagePrefix != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>      labelMessage = messagePrefix; 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>    slider.addChangeListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stateChanged(ChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>        label.setText(labelMessage +String.valueOf(slider.getValue())); 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,227 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\customizedWeka\PropertyPanel.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\customizedWeka\PropertyPanel.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    PropertyPanel.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 1999 Len Trigg 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> *    Modified 2002 by Santiago David Villaba 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> *  Customized Weka changes--&GT; 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT> *    ** Given "focusability" and keyboard "selectability" (appears like a button). 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> *    ** If the panel isn't enabled, it won't respond to the user clicks 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT> *    ** Also see removeNotify() notes. 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui.customizedWeka; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.border.Border; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.datatransfer.StringSelection; 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.*; 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyEditor; 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * Support for drawing a property value in a component. 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> Len Trigg (trigg@cs.waikato.ac.nz) 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> Santiago David Villalba (sdvb@wanadoo.es) 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.7 $ 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> PropertyPanel </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> JPanel{ 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The property editor */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> PropertyEditor m_Editor; 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The currently displayed property dialog, if any */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\PropertyDialog.java.html">oaidtb.gui.customizedWeka.PropertyDialog</A> m_PD; 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The appearance when this panel has the focus. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Border m_WithFocusBorder; 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The appearance when this panel doesn't have the focus. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Border m_WithoutFocusBorder; 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>   * Create the panel with the supplied property editor. 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> pe the PropertyEditor 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> PropertyPanel(PropertyEditor pe){ 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>    m_Editor = pe; 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>    m_WithoutFocusBorder = BorderFactory.createEtchedBorder(); 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>    m_WithFocusBorder = BorderFactory.createLineBorder(Color.black); 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>    setBorder(m_WithoutFocusBorder); 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>    setToolTipText(</FONT><FONT COLOR="#008000"><B>"Click to edit properties for this object"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>    setOpaque(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>    </FONT><FONT COLOR="#808080"><I>//m_Editor.getAsText() != null</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Editor </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\GenericObjectEditor.java.html">oaidtb.gui.customizedWeka.GenericObjectEditor</A>) 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>      addMouseListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> MouseAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mousePressed(MouseEvent evt){ 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!isEnabled()) 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>            </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (SwingUtilities.isRightMouseButton(evt)) 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>            showPopUp(evt); 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>          </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>            showPropertyDialog(getLocationOnScreen().x, getLocationOnScreen().y); 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>      addMouseListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> MouseAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mousePressed(MouseEvent evt){ 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!isEnabled()) 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>            </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (SwingUtilities.isLeftMouseButton(evt)) 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>            showPropertyDialog(getLocationOnScreen().x, getLocationOnScreen().y); 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>    addKeyListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> KeyAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> keyPressed(KeyEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!isEnabled()) 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>          </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>          showPropertyDialog(getLocationOnScreen().x, getLocationOnScreen().y); 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>    addFocusListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FocusListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> focusGained(FocusEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>        setBorder(m_WithFocusBorder); 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> focusLost(FocusEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>        setBorder(m_WithoutFocusBorder); 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>    Dimension newPref = getPreferredSize(); 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>    newPref.height = getFontMetrics(getFont()).getHeight() * </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000"> / </FONT><FONT COLOR="#0000ff">4</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>    newPref.width = newPref.height * </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>    setPreferredSize(newPref); 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> showPropertyDialog(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> x, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> y){ 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(!isEnabled()) 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Editor.getValue() != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_PD == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>        </FONT><FONT COLOR="#808080"><I>//Tenemos que hacer que el diálogo interno pertenezca al Frame principal de la</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>        </FONT><FONT COLOR="#808080"><I>//aplicación o a un JDialog subordinado para que al</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>        </FONT><FONT COLOR="#808080"><I>//cambiar de aplicación y volver no se pierda el mismo, bloqueando la aplicación</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>        </FONT><FONT COLOR="#808080"><I>//si es modal (se podría recuperar en ese caso mediante el cambio de ventana con el teclado)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>        Container container = getTopLevelAncestor(); 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>        </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000">(container </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> JInternalFrame) 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>          container = ((JInternalFrame)container).getTopLevelAncestor(); 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(container </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> JDialog) 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>          m_PD = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\PropertyDialog.java.html">oaidtb.gui.customizedWeka.PropertyDialog</A>((JDialog)container, m_Editor, x, y); 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>          m_PD = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\PropertyDialog.java.html">oaidtb.gui.customizedWeka.PropertyDialog</A>((JFrame)container, m_Editor, x, y); 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>        m_PD.setLocation(x, y); 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>        m_PD.setVisible(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>   * We allow this panel to receive the focus 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if this component can receive the focus 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isFocusTraversable(){ 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>   * Paints the component, using the property editor's paint method. 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> g the current graphics context 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> paintComponent(Graphics g){ 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>    Insets i = getInsets(); 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>    Rectangle box = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Rectangle(i.left, i.top, 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>                                  getSize().width - i.left - i.right - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>                                  getSize().height - i.top - i.bottom - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>    g.clearRect(i.left, i.top, 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>                getSize().width - i.right - i.left, 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>                getSize().height - i.bottom - i.top); 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>    m_Editor.paintValue(g, box); 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>   * Shows a popup menu that allows the user to put a textual representation of the object 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>   * being represented in the system clipboard. 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> e The mouse event that provocates the action 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> showPopUp(MouseEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>    JPopupMenu popupMenu = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPopupMenu(); 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>    JMenuItem copyToClipBoard = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuItem(</FONT><FONT COLOR="#008000"><B>"Copy the text to the clipboard"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>    copyToClipBoard.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e2){ 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>        String obj = ((<A href="..\..\..\oaidtb\gui\customizedWeka\GenericObjectEditor.java.html">GenericObjectEditor</A>) m_Editor).getObjectName(); 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>        String ops = ((<A href="..\..\..\oaidtb\gui\customizedWeka\GenericObjectEditor.java.html">GenericObjectEditor</A>) m_Editor).getObjectOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (ops != </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>          obj += </FONT><FONT COLOR="#008000"><B>" "</B></FONT><FONT COLOR="#000000"> + ops; 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>        StringSelection ss = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringSelection(obj); 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>    popupMenu.add(copyToClipBoard); 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>    popupMenu.show(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">, e.getX(), e.getY()); 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT></FONT><FONT COLOR="#808080"><I>// I think this is redundant</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT></FONT><FONT COLOR="#808080"><I>//  public void removeNotify(){</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT></FONT><FONT COLOR="#808080"><I>//    //Avoid a Exception: if we close the m_Editor windows and this PropertyPanel has</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT></FONT><FONT COLOR="#808080"><I>//    //the focus, a "java.lang.IllegalStateException: Can't dispose InputContext while it's active"</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT></FONT><FONT COLOR="#808080"><I>//    //is thrown (see the removeNotify docs). Nevertheless, this must be done.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT></FONT><FONT COLOR="#808080"><I>//    super.removeNotify();</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT></FONT><FONT COLOR="#808080"><I>//    if (m_PD != null){</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT></FONT><FONT COLOR="#808080"><I>//      m_PD.dispose();</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT></FONT><FONT COLOR="#808080"><I>//      m_PD = null;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT></FONT><FONT COLOR="#808080"><I>//    }</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT></FONT><FONT COLOR="#808080"><I>//  }</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

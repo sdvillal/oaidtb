@@ -1,0 +1,770 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\boosters\Booster.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\boosters\Booster.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    Booster.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.boosters; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">oaidtb.misc.CustomOrderDefiner</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.DistributionClassifier; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.*; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyDescriptor; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Enumeration; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Vector; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * Abstract class defining the structure ("iterative & interactive") and common options 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * to our boosting implementations. 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * Partially based in "AdaBoostM1" weka class. 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> Booster </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> DistributionClassifier 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>  </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> OptionHandler, WeightedInstancesHandler, <A href="..\..\oaidtb\boosters\IterativeUpdatableClassifier.java.html">IterativeUpdatableClassifier</A>{ 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO Implement setMaxNumberTrainingInstances (method for faster resize of m_TrainData).</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The model base classifier to use. We initialize it (initial value for the weka gui). Inefficient? */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> Classifier m_Classifier = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> weka.classifiers.trees.DecisionStump(); 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The number of boost iterations to perform on first call (buildClassifier).*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_InitialIterations = </FONT><FONT COLOR="#0000ff">10</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The number of successfully generated base classifiers (ie. the number of performed iterations). */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_NumIterations; 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Is the booster ready to iterate? (Have we successffully called buildClassifier?). */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_BoosterReady; 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Debugging mode, gives extra output if true 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>   *  Para mejorar la eficiencia, eliminarlo de las opciones y hacerlo una constante para que el 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>   *  compilador pueda optimizarlo eliminando o añadiendo el código. 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_Debug; 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Use boosting with resampling? */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_UseResampling; 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Seed for boosting with resampling. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_ResampleSeed = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The number of instances in the original training set.*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_NumInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The training instance set. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> Instances m_TrainData; 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#808080"><I>/** A small constant used to avoid degenerated cases (division by zero error). */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> NO_DIVISION_BY_ZERO = weka.core.Utils.SMALL; 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>  </FONT><FONT COLOR="#808080"><I>/** What will be the instances sum of weights at each iteration when normalizing?. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_NormFactor = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Constant indicating that the weights sum will be normalized to the initial weights sum. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> SUM_OF_WEIGHTS_NORM_FACTOR = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Constant indicating that the weights sum will be normalized to a custom number. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> CUSTOM_NORM_FACTOR = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Constant indicating that the weights sum will not be normalized */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> NOT_NORMALIZE = </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>  </FONT><FONT COLOR="#808080"><I>/** What will be the normalization factor?. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_NormFactorUsed = SUM_OF_WEIGHTS_NORM_FACTOR; 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>   * Returns an enumeration describing the available options 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an enumeration of all the available options 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Enumeration listOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>    Vector newVector = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Vector(</FONT><FONT COLOR="#0000ff">7</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tTurn on debugging output."</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>      </FONT><FONT COLOR="#008000"><B>"D"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-D"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tNumber of boost iterations on first call.\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>      + </FONT><FONT COLOR="#008000"><B>"\t(default 10)"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>      </FONT><FONT COLOR="#008000"><B>"I"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-I &LT;num&GT;"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tFull name of classifier to boost.\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>      + </FONT><FONT COLOR="#008000"><B>"\teg: weka.classifiers.NaiveBayes"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>      </FONT><FONT COLOR="#008000"><B>"W"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-W &LT;class name&GT;"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tUse resampling for boosting."</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>      </FONT><FONT COLOR="#008000"><B>"Q"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-Q"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tSeed for resampling. (Default 1)"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>      </FONT><FONT COLOR="#008000"><B>"S"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-S &LT;num&GT;"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tNormalization factor (sum of weights will be this). There are three options:"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>      + </FONT><FONT COLOR="#008000"><B>"\n\t- If less than 0 then the sum will not be normalized."</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>      + </FONT><FONT COLOR="#008000"><B>"\n\t- If equal to 0 then the sum will be normalized to the initial sum of weights (usually the number of instances)."</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>      + </FONT><FONT COLOR="#008000"><B>"\n\t- If greater than 0 then the sum will be normalized to that value."</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>      + </FONT><FONT COLOR="#008000"><B>"\n (default == 0)."</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>      </FONT><FONT COLOR="#008000"><B>"N"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-N &LT;normFactor&GT;"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((m_Classifier != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) && 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>      (m_Classifier </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> OptionHandler)){ 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>      newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>        </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>        </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"\nOptions specific to classifier "</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>               + m_Classifier.getClass().getName() + </FONT><FONT COLOR="#008000"><B>":"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>      Enumeration enum = ((OptionHandler) m_Classifier).listOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>      </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (enum.hasMoreElements()){ 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>        newVector.addElement(enum.nextElement()); 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> newVector.elements(); 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>   * Parses a given list of options. Valid options are:</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>   * -D </I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>   * Turn on debugging output.</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>   * -W classname </I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>   * Specify the full class name of a classifier as the basis for 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>   * boosting (required).</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>   * -I num </I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>   * Set the number of boost iterations on first call to BuildClassifier (default 10). </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>   * -Q </I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>   * Use resampling instead of reweighting.</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>   * -S seed </I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>   * Random number seed for resampling (default 1).</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>   * -N normFactor </I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>   * Normalization policy and factor; options: </I></FONT><FONT COLOR="#808080"><I>&LT;PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>   *   - If &LT;0  --&GT; Sum of weights at each iteration will not be normalized 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>   *   - If ==0 --&GT; Sum of weights at each iteration will be the original sum of weights in the training set 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>   *   - If &GT;0  --&GT; Sum of weights at each iteration will be normFactor 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;/PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>   * Options after -- are passed to the designated classifier.</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> options the list of options as an array of strings 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if an option is not supported 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setOptions(String[] options) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>    setDebug(Utils.getFlag(</FONT><FONT COLOR="#008000"><B>'D'</B></FONT><FONT COLOR="#000000">, options)); 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>    String boostIterations = Utils.getOption(</FONT><FONT COLOR="#008000"><B>'I'</B></FONT><FONT COLOR="#000000">, options); 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (boostIterations.length() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>      setInitialIterations(Integer.parseInt(boostIterations)); 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>      setInitialIterations(</FONT><FONT COLOR="#0000ff">10</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>    setUseResampling(Utils.getFlag(</FONT><FONT COLOR="#008000"><B>'Q'</B></FONT><FONT COLOR="#000000">, options)); 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>    String seedString = Utils.getOption(</FONT><FONT COLOR="#008000"><B>'S'</B></FONT><FONT COLOR="#000000">, options); 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (seedString.length() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>      setResampleSeed(Integer.parseInt(seedString)); 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>      setResampleSeed(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>    String classifierName = Utils.getOption(</FONT><FONT COLOR="#008000"><B>'W'</B></FONT><FONT COLOR="#000000">, options); 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (classifierName.length() == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"A classifier must be specified with"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>                          + </FONT><FONT COLOR="#008000"><B>" the -W option."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>    setClassifier(Classifier.forName(classifierName, 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>                                     Utils.partitionOptions(options))); 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>    String normFactor = Utils.getOption(</FONT><FONT COLOR="#008000"><B>'N'</B></FONT><FONT COLOR="#000000">, options); 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (normFactor.length() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>      setNormFactor(Double.parseDouble(normFactor)); 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT>   * Gets the current settings of the Classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an array of strings suitable for passing to setOptions 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String[] getOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>    String[] classifierOptions = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((m_Classifier != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) && (m_Classifier </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> OptionHandler)) 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>      classifierOptions = ((OptionHandler) m_Classifier).getOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>    String[] options = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String[classifierOptions.length + </FONT><FONT COLOR="#0000ff">12</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> current = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (getDebug()){ 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>"-D"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (getUseResampling()){ 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>"-Q"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>"-I"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> + getInitialIterations(); 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>"-S"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> + getResampleSeed(); 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>"-N"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NormFactorUsed == SUM_OF_WEIGHTS_NORM_FACTOR) 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NormFactorUsed == NOT_NORMALIZE) 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> + -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> + getNormFactor(); 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (getClassifier() != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>"-W"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>      options[current++] = getClassifier().getClass().getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>"--"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>    System.arraycopy(classifierOptions, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, options, current, 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>                     classifierOptions.length); 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT>    current += classifierOptions.length; 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (current &LT; options.length) 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> options; 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>   * Set the classifier for boosting. 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> newClassifier the Classifier to use. 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setClassifier(Classifier newClassifier){ 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>    m_Classifier = newClassifier; 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>   * Get the classifier used as the classifier 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> the classifier used as the base classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Classifier getClassifier(){ 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>   * Get the classifier used as the base classifier in the specified iteration 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> iterationIndex the iteration 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> the classifier used as the base classifier 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if iterationIndex is incorrect 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> Classifier getClassifier(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> iterationIndex) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception; 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>   * Set the maximum number of boost iterations 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setInitialIterations(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> maxIterations){ 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>    m_InitialIterations = maxIterations; 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>   * Get the number of boost iterations on first call to BuildClassifier. 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The maximum number of boost iterations on first call to BuildClassifier. 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getInitialIterations(){ 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_InitialIterations; 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>   * Get the number of iterations performed. 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The number of iterations performed. 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getNumIterationsPerformed(){ 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_NumIterations; 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>   * Set seed for resampling. 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> seed the seed for resampling 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setResampleSeed(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> seed){ 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>    m_ResampleSeed = seed; 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT>   * Get seed for resampling. 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> the seed for resampling 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getResampleSeed(){ 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ResampleSeed; 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT>   * Set debugging mode 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> debug true if debug output should be printed 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setDebug(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> debug){ 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT>    m_Debug = debug; 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT>   * Get whether debugging is turned on 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if debugging output is on 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> getDebug(){ 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Debug; 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT>   * Is the Booster ready to iterate?. 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if booster is ready to iterate. 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isReadyToIterate(){ 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BoosterReady; 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT>   * Set resampling mode 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> r true if resampling should be done 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setUseResampling(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> r){ 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT>    m_UseResampling = r; 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">382  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">383  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">384  </FONT>   * Get whether resampling is turned on 
+<FONT COLOR=0 STYLE="font-style:normal">385  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">386  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if resampling output is on 
+<FONT COLOR=0 STYLE="font-style:normal">387  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">388  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> getUseResampling(){ 
+<FONT COLOR=0 STYLE="font-style:normal">389  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">390  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_UseResampling; 
+<FONT COLOR=0 STYLE="font-style:normal">391  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">392  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">393  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">394  </FONT>   * Get the training dataset. Warning: training dataset must not be externally changed; instead, 
+<FONT COLOR=0 STYLE="font-style:normal">395  </FONT>   * addTrainingInstance & deleteTrainingInstance should be used. 
+<FONT COLOR=0 STYLE="font-style:normal">396  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">397  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The training dataset. 
+<FONT COLOR=0 STYLE="font-style:normal">398  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">399  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Instances getTrainData(){ 
+<FONT COLOR=0 STYLE="font-style:normal">400  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">401  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_TrainData; 
+<FONT COLOR=0 STYLE="font-style:normal">402  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">403  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">404  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">405  </FONT>   * Set the normalization factor (and policy) which will be used; options: </I></FONT><FONT COLOR="#808080"><I>&LT;PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">406  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">407  </FONT>   *   - If &LT;0  --&GT; Sum of weights at each iteration will not be normalized 
+<FONT COLOR=0 STYLE="font-style:normal">408  </FONT>   *   - If ==0 --&GT; Sum of weights at each iteration will be the original sum of weights in the training set 
+<FONT COLOR=0 STYLE="font-style:normal">409  </FONT>   *   - If &GT;0  --&GT; Sum of weights at each iteration will be normFactor 
+<FONT COLOR=0 STYLE="font-style:normal">410  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">411  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;/PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">412  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">413  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> normFactor Normalization policy indicator & sum of weights at each iteration if &GT; 0 
+<FONT COLOR=0 STYLE="font-style:normal">414  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">415  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setNormFactor(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> normFactor){ 
+<FONT COLOR=0 STYLE="font-style:normal">416  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (normFactor &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">417  </FONT>      m_NormFactor = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">418  </FONT>      m_NormFactorUsed = NOT_NORMALIZE; 
+<FONT COLOR=0 STYLE="font-style:normal">419  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">420  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (normFactor == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">421  </FONT>    </FONT><FONT COLOR="#808080"><I>//m_NormFactor will be calculated every time buildClassifier is called with initialNormFactor method.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">422  </FONT>      m_NormFactorUsed = SUM_OF_WEIGHTS_NORM_FACTOR; 
+<FONT COLOR=0 STYLE="font-style:normal">423  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">424  </FONT>      m_NormFactor = normFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">425  </FONT>      m_NormFactorUsed = CUSTOM_NORM_FACTOR; 
+<FONT COLOR=0 STYLE="font-style:normal">426  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">427  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">428  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">429  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">430  </FONT>   * Get the normalization factor used (ie. what will be the sum of weights after each iteration). 
+<FONT COLOR=0 STYLE="font-style:normal">431  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">432  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The normalization factor. 
+<FONT COLOR=0 STYLE="font-style:normal">433  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">434  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getNormFactor(){ 
+<FONT COLOR=0 STYLE="font-style:normal">435  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_NormFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">436  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">437  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">438  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Initializes the normalization factor if it must be the initial sum of weights. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">439  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> initializeNormFactor(){ 
+<FONT COLOR=0 STYLE="font-style:normal">440  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NormFactorUsed == SUM_OF_WEIGHTS_NORM_FACTOR) 
+<FONT COLOR=0 STYLE="font-style:normal">441  </FONT>      m_NormFactor = m_TrainData.sumOfWeights(); 
+<FONT COLOR=0 STYLE="font-style:normal">442  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">443  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">444  </FONT>      </FONT><FONT COLOR="#000080"><B>switch</B></FONT><FONT COLOR="#000000"> (m_NormFactorUsed){ 
+<FONT COLOR=0 STYLE="font-style:normal">445  </FONT>        </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> SUM_OF_WEIGHTS_NORM_FACTOR: 
+<FONT COLOR=0 STYLE="font-style:normal">446  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"Weights sum at each iteration will be the original weights sum: "</B></FONT><FONT COLOR="#000000"> + m_NormFactor); 
+<FONT COLOR=0 STYLE="font-style:normal">447  </FONT>          </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">448  </FONT>        </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> CUSTOM_NORM_FACTOR: 
+<FONT COLOR=0 STYLE="font-style:normal">449  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"Weights sum at each iteration will be: "</B></FONT><FONT COLOR="#000000"> + m_NormFactor); 
+<FONT COLOR=0 STYLE="font-style:normal">450  </FONT>          </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">451  </FONT>        </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> NOT_NORMALIZE: 
+<FONT COLOR=0 STYLE="font-style:normal">452  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"Weights sum will not be normalized in any way."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">453  </FONT>        </FONT><FONT COLOR="#000080"><B>default</B></FONT><FONT COLOR="#000000"> : 
+<FONT COLOR=0 STYLE="font-style:normal">454  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">455  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">456  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">457  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Initializes the weights if they must sum a custom number. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">458  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> initializeWeights(){ 
+<FONT COLOR=0 STYLE="font-style:normal">459  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NormFactorUsed == CUSTOM_NORM_FACTOR) 
+<FONT COLOR=0 STYLE="font-style:normal">460  </FONT>      normalizeWeights(m_TrainData.sumOfWeights()); 
+<FONT COLOR=0 STYLE="font-style:normal">461  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">462  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">463  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">464  </FONT>   * Normalize the weight sum of the train data following the predefined directives. 
+<FONT COLOR=0 STYLE="font-style:normal">465  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">466  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> weightSum The actual sum of weights of the train data. 
+<FONT COLOR=0 STYLE="font-style:normal">467  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">468  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> normalizeWeights(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> weightSum){ 
+<FONT COLOR=0 STYLE="font-style:normal">469  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NormFactorUsed != Booster.NOT_NORMALIZE){ 
+<FONT COLOR=0 STYLE="font-style:normal">470  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">471  </FONT>      weightSum /= m_NormFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">472  </FONT>      weightSum += Booster.NO_DIVISION_BY_ZERO; 
+<FONT COLOR=0 STYLE="font-style:normal">473  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">474  </FONT>      </FONT><FONT COLOR="#808080"><I>//Normalize (it isn´t usually necessary for properly work of the classifiers).</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">475  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumInstances; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">476  </FONT>        Instance instance = m_TrainData.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">477  </FONT>        instance.setWeight((instance.weight() + Booster.NO_DIVISION_BY_ZERO) / weightSum); 
+<FONT COLOR=0 STYLE="font-style:normal">478  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">479  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">480  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">481  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">482  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">483  </FONT>   * Set the weight of an instance. 
+<FONT COLOR=0 STYLE="font-style:normal">484  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">485  </FONT>   * When a mathematical exceptional value (NaN, Infinite) is passed as the value 
+<FONT COLOR=0 STYLE="font-style:normal">486  </FONT>   * of the weight of an instance (i.e. Math.exp(Double.POSITIVE_INFINITY)) it probably 
+<FONT COLOR=0 STYLE="font-style:normal">487  </FONT>   * will spoil the things. 
+<FONT COLOR=0 STYLE="font-style:normal">488  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">489  </FONT>   * TODO: Set up a policy to deal with those values, centralize it in this method or in 
+<FONT COLOR=0 STYLE="font-style:normal">490  </FONT>   *       ad hoc methods for each afectable operation (exp, log...) 
+<FONT COLOR=0 STYLE="font-style:normal">491  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">492  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance 
+<FONT COLOR=0 STYLE="font-style:normal">493  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> weight The weight 
+<FONT COLOR=0 STYLE="font-style:normal">494  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If weight is an invalid value 
+<FONT COLOR=0 STYLE="font-style:normal">495  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">496  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> secureSetWeight(Instance instance, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> weight) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">497  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">498  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (Double.isNaN(weight) || Double.isInfinite(weight)) 
+<FONT COLOR=0 STYLE="font-style:normal">499  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"The weight value "</B></FONT><FONT COLOR="#000000"> + weight + </FONT><FONT COLOR="#008000"><B>" is incorrect."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">500  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">501  </FONT>    instance.setWeight(weight); 
+<FONT COLOR=0 STYLE="font-style:normal">502  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">503  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">504  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">505  </FONT>   * Make numIterations iterations. 
+<FONT COLOR=0 STYLE="font-style:normal">506  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">507  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterations The number of iterations to perform. 
+<FONT COLOR=0 STYLE="font-style:normal">508  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">509  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error occurs (ej. Booster not initialized). 
+<FONT COLOR=0 STYLE="font-style:normal">510  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">511  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> nextIterations(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterations) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">512  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_BoosterReady) 
+<FONT COLOR=0 STYLE="font-style:normal">513  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Booster is not initialized properly."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">514  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((!m_UseResampling) && (m_Classifier </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> WeightedInstancesHandler)) 
+<FONT COLOR=0 STYLE="font-style:normal">515  </FONT>      buildClassifierWithWeights(numIterations); 
+<FONT COLOR=0 STYLE="font-style:normal">516  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">517  </FONT>      buildClassifierUsingResampling(numIterations); 
+<FONT COLOR=0 STYLE="font-style:normal">518  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">519  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">520  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">521  </FONT>   * Boosting method. Boosts any classifier that can handle weighted 
+<FONT COLOR=0 STYLE="font-style:normal">522  </FONT>   * instances. 
+<FONT COLOR=0 STYLE="font-style:normal">523  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">524  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterations The number of iterations to perform. 
+<FONT COLOR=0 STYLE="font-style:normal">525  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">526  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if the classifier could not be built successfully 
+<FONT COLOR=0 STYLE="font-style:normal">527  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">528  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> buildClassifierWithWeights(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterations) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception; 
+<FONT COLOR=0 STYLE="font-style:normal">529  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">530  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">531  </FONT>   * Boosting method. Boosts any classifier using training instances 
+<FONT COLOR=0 STYLE="font-style:normal">532  </FONT>   * weight for resampling. 
+<FONT COLOR=0 STYLE="font-style:normal">533  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">534  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterations The number of iterations to perform. 
+<FONT COLOR=0 STYLE="font-style:normal">535  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">536  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if the classifier could not be built successfully 
+<FONT COLOR=0 STYLE="font-style:normal">537  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">538  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> buildClassifierUsingResampling(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterations) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception; 
+<FONT COLOR=0 STYLE="font-style:normal">539  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">540  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">541  </FONT>   * Safely (and thus slower) inputs a new training instance. 
+<FONT COLOR=0 STYLE="font-style:normal">542  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">543  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance to addMemberName to the training set. 
+<FONT COLOR=0 STYLE="font-style:normal">544  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">545  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if instance format isn't compatible with the dataset. 
+<FONT COLOR=0 STYLE="font-style:normal">546  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">547  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addTrainingInstance(Instance instance) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">548  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">549  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_TrainData.checkInstance(instance)) 
+<FONT COLOR=0 STYLE="font-style:normal">550  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Instance not compatible with input set."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">551  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">552  </FONT>    instance = (Instance) instance.copy(); 
+<FONT COLOR=0 STYLE="font-style:normal">553  </FONT>    instance.setDataset(m_TrainData); 
+<FONT COLOR=0 STYLE="font-style:normal">554  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">555  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (instance.classIsMissing()) 
+<FONT COLOR=0 STYLE="font-style:normal">556  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Instance has no class defined."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">557  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">558  </FONT>    m_TrainData.add(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">559  </FONT>    m_NumInstances++; 
+<FONT COLOR=0 STYLE="font-style:normal">560  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">561  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">562  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">563  </FONT>   * Safely (and thus slower) removes a training instance. 
+<FONT COLOR=0 STYLE="font-style:normal">564  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">565  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numInstance The index of instance to delete from the training set. 
+<FONT COLOR=0 STYLE="font-style:normal">566  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">567  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if instance number is incorrect or if there is no more training instances. 
+<FONT COLOR=0 STYLE="font-style:normal">568  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">569  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> deleteTrainingInstance(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numInstance) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">570  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (numInstance &LT; m_NumInstances && m_NumInstances &GT; </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">571  </FONT>      m_TrainData.delete(numInstance); 
+<FONT COLOR=0 STYLE="font-style:normal">572  </FONT>      m_NumInstances--; 
+<FONT COLOR=0 STYLE="font-style:normal">573  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">574  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">575  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Incorrect instance number or unique training instance."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">576  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">577  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">578  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">579  </FONT>   * Classifies the given test instance. The instance has to belong to a 
+<FONT COLOR=0 STYLE="font-style:normal">580  </FONT>   * dataset when it's being classified. 
+<FONT COLOR=0 STYLE="font-style:normal">581  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">582  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance the instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">583  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> the predicted most likely class for the instance or 
+<FONT COLOR=0 STYLE="font-style:normal">584  </FONT>   * Instance.missingValue() if no prediction is made 
+<FONT COLOR=0 STYLE="font-style:normal">585  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if an error occurred during the prediction 
+<FONT COLOR=0 STYLE="font-style:normal">586  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">587  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> classifyInstance(Instance instance) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">588  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (<A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.maxIndex(distributionForInstance(instance))); 
+<FONT COLOR=0 STYLE="font-style:normal">589  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">590  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">591  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">592  </FONT>   * Free the memory reserved to the train dataset. 
+<FONT COLOR=0 STYLE="font-style:normal">593  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">594  </FONT>   * WARNING: After a call to this function the booster will not be ready to perform more 
+<FONT COLOR=0 STYLE="font-style:normal">595  </FONT>   *          iterations. 
+<FONT COLOR=0 STYLE="font-style:normal">596  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">597  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> purgeTraindata(){ 
+<FONT COLOR=0 STYLE="font-style:normal">598  </FONT>    m_TrainData = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">599  </FONT>    m_BoosterReady = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">600  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">601  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">602  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">603  </FONT>   * Eliminate the last numIterations performed from the final combined hypothesis. 
+<FONT COLOR=0 STYLE="font-style:normal">604  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">605  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;li&GT;</I></FONT><FONT COLOR="#808080"><I>Note: To free the memory allocated, this method must be overriden 
+<FONT COLOR=0 STYLE="font-style:normal">606  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;li&GT;</I></FONT><FONT COLOR="#808080"><I>Note: The weights distribution of the training instances will not return back in the time. 
+<FONT COLOR=0 STYLE="font-style:normal">607  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">608  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterations The number of iterations to get rid of 
+<FONT COLOR=0 STYLE="font-style:normal">609  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If numIterations parameter is incorrect 
+<FONT COLOR=0 STYLE="font-style:normal">610  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">611  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> purgeIterations(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterations) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">612  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NumIterations &LT; numIterations || numIterations &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">613  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"There aren't so many iterations."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">614  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">615  </FONT>    m_NumIterations -= numIterations; 
+<FONT COLOR=0 STYLE="font-style:normal">616  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">617  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">618  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">619  </FONT>   * Classify the given instance using only the first numIterationsToUse base classifiers 
+<FONT COLOR=0 STYLE="font-style:normal">620  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">621  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">622  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterationsToUse Number of base classifiers to use 
+<FONT COLOR=0 STYLE="font-style:normal">623  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The instance clasification distribution 
+<FONT COLOR=0 STYLE="font-style:normal">624  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error happens 
+<FONT COLOR=0 STYLE="font-style:normal">625  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">626  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance(Instance instance, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterationsToUse) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">627  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">628  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (numIterationsToUse &GT; m_NumIterations || numIterationsToUse &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">629  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Invaled numIterations parameter."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">630  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">631  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> swapTmp = m_NumIterations; 
+<FONT COLOR=0 STYLE="font-style:normal">632  </FONT>    m_NumIterations = numIterationsToUse; 
+<FONT COLOR=0 STYLE="font-style:normal">633  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">634  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">635  </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance = distributionForInstance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">636  </FONT>      m_NumIterations = swapTmp; 
+<FONT COLOR=0 STYLE="font-style:normal">637  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> distributionForInstance; 
+<FONT COLOR=0 STYLE="font-style:normal">638  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">639  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">640  </FONT>      m_NumIterations = swapTmp; 
+<FONT COLOR=0 STYLE="font-style:normal">641  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> e; 
+<FONT COLOR=0 STYLE="font-style:normal">642  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">643  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">644  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">645  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">646  </FONT>   * Classify the given instance using only the first numIterationsToUse base classifiers 
+<FONT COLOR=0 STYLE="font-style:normal">647  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">648  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">649  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterationsToUse Number of base classifiers to use 
+<FONT COLOR=0 STYLE="font-style:normal">650  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The instance clasification 
+<FONT COLOR=0 STYLE="font-style:normal">651  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error happens 
+<FONT COLOR=0 STYLE="font-style:normal">652  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">653  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> classifyInstance(Instance instance, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterationsToUse) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">654  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">655  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (numIterationsToUse &GT; m_NumIterations || numIterationsToUse &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">656  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Invaled numIterations parameter."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">657  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">658  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> swapTmp = m_NumIterations; 
+<FONT COLOR=0 STYLE="font-style:normal">659  </FONT>    m_NumIterations = numIterationsToUse; 
+<FONT COLOR=0 STYLE="font-style:normal">660  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">661  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">662  </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> classForInstance = classifyInstance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">663  </FONT>      m_NumIterations = swapTmp; 
+<FONT COLOR=0 STYLE="font-style:normal">664  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> classForInstance; 
+<FONT COLOR=0 STYLE="font-style:normal">665  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">666  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">667  </FONT>      m_NumIterations = swapTmp; 
+<FONT COLOR=0 STYLE="font-style:normal">668  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> e; 
+<FONT COLOR=0 STYLE="font-style:normal">669  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">670  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">671  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">672  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">673  </FONT>   * Get the classifier's vote for the instance; the (vectorial) sum of all base classifiers vote vectors must be 
+<FONT COLOR=0 STYLE="font-style:normal">674  </FONT>   * the final combined hypothesis of the booster (obviously, not normalized). 
+<FONT COLOR=0 STYLE="font-style:normal">675  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">676  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">677  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifierIndex The base classifier index 
+<FONT COLOR=0 STYLE="font-style:normal">678  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The vote of the base classifier to the overall classifier 
+<FONT COLOR=0 STYLE="font-style:normal">679  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if an error occurs 
+<FONT COLOR=0 STYLE="font-style:normal">680  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">681  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] getClassifierVote(Instance instance, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classifierIndex) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception; 
+<FONT COLOR=0 STYLE="font-style:normal">682  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">683  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------------------------*************************************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">684  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------- Configure the "GUI side" methods ********************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">685  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------------------------*************************************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">686  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">687  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------- ToolTips text ********************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">688  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">689  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String normFactorTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">690  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">691  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Set the normalization policy and factor. Options: \n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">692  </FONT>      + </FONT><FONT COLOR="#008000"><B>" - If &LT;0  --&GT; Sum of weights at each iteration will not be normalized\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">693  </FONT>      + </FONT><FONT COLOR="#008000"><B>" - If ==0 --&GT; Sum of weights at each iteration will be the original sum of weights in the training set\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">694  </FONT>      + </FONT><FONT COLOR="#008000"><B>" - If &GT;0  --&GT; Sum of weights at each iteration will be normFactor"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">695  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">696  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">697  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String debugTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">698  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">699  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Send or not debug information to the error stream."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">700  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">701  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">702  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String useResamplingTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">703  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">704  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Force the booster to use resampling even if the base classifier can handle weights."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">705  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">706  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">707  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String resampleSeedTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">708  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">709  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Set the seed to use when boosting with resampling."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">710  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">711  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">712  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String classifierTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">713  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">714  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"The base classifier which will be used."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">715  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">716  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">717  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String initialIterationsTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">718  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">719  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Set the number of iterations to perform in the first call."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">720  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">721  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">722  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">723  </FONT>   * Defines a "visual" order to the bean's properties of this booster. 
+<FONT COLOR=0 STYLE="font-style:normal">724  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">725  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The properties order 
+<FONT COLOR=0 STYLE="font-style:normal">726  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">727  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">CustomOrderDefiner</A> getPropertiesOrder(){ 
+<FONT COLOR=0 STYLE="font-style:normal">728  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">729  </FONT>    <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">CustomOrderDefiner</A> index = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">CustomOrderDefiner</A>(); 
+<FONT COLOR=0 STYLE="font-style:normal">730  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">731  </FONT>    index.add(</FONT><FONT COLOR="#008000"><B>"classifier"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">732  </FONT>    index.add(</FONT><FONT COLOR="#008000"><B>"initialIterations"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">733  </FONT>    index.add(</FONT><FONT COLOR="#008000"><B>"useResampling"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">734  </FONT>    index.add(</FONT><FONT COLOR="#008000"><B>"resampleSeed"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">735  </FONT>    index.add(</FONT><FONT COLOR="#008000"><B>"normFactor"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">736  </FONT>    index.add(</FONT><FONT COLOR="#008000"><B>"debug"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">737  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">738  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> index; 
+<FONT COLOR=0 STYLE="font-style:normal">739  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">740  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">741  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">742  </FONT>   * Sorts the properties that will be shown in a customizedWeka.PropertySheetPanel, 
+<FONT COLOR=0 STYLE="font-style:normal">743  </FONT>   * by default following the order defined by getPropertiesOrder(). It can be used for more 
+<FONT COLOR=0 STYLE="font-style:normal">744  </FONT>   * ambitious purposes since it will be used instead of getPropertiesDescriptor there, so it will 
+<FONT COLOR=0 STYLE="font-style:normal">745  </FONT>   * prevail even over an hypothetical customized BeanInfo class. 
+<FONT COLOR=0 STYLE="font-style:normal">746  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">747  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> properties The properties to be sort (commonly the own class properties). 
+<FONT COLOR=0 STYLE="font-style:normal">748  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">749  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The properties sorted (or even changed) according to an specified criterion. 
+<FONT COLOR=0 STYLE="font-style:normal">750  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">751  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> PropertyDescriptor[] sortProperties(PropertyDescriptor[] properties){ 
+<FONT COLOR=0 STYLE="font-style:normal">752  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.sortProperties(properties, getPropertiesOrder()); 
+<FONT COLOR=0 STYLE="font-style:normal">753  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">754  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

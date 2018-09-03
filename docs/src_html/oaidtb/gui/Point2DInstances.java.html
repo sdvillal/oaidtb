@@ -1,0 +1,997 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\Point2DInstances.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\Point2DInstances.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    Point2DInstances.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT></FONT><FONT COLOR="#808080"><I>//En desarrollo está una variación de la clase que se está mostrando sensiblemente más eficiente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui; 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\SimpleInteger.java.html">oaidtb.misc.SimpleInteger</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.*; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.geom.Rectangle2D; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.image.BufferedImage; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.Serializable; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.*; 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * A specialized weka's instances class to store bidimensional points and their colors; 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * several methods of the superclass should be not used directly if we want to preserve 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * the index construction (by example, the instances from reader loader). 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * TODO: Make it fully consistent with {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> weka.core.Instances} class methods; complicated, 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> *       because it has a lot of final methods. 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> * We maintain the following points orders: 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT> *   --  By insertion, so we can do undo & redo (implement the history buffer) operations. 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> *   --  By class (color). In every class space, by coordinates (x & y). 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT> *   --  By class index. 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> Point2DInstances </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> Instances{ 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Fast access by index (nominal class value). Class index --&GT; Color (real world significance) */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> FastVector m_Colors = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(); 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Fast acces by color & fast avoid duplicates. Color --&GT; class index  
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@associates</B></FONT><FONT COLOR="#808080"><I> SimpleInteger*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> HashMap m_ColorIndex = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> HashMap(); 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Comparador para el índice de puntos ordenados por colores y coordenadas */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Point2DInstanceComparator m_PointComparator = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Point2DInstanceComparator(); 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Index of all points, sorted by color as primary order and by coordinates as secondary one 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@associates</B></FONT><FONT COLOR="#808080"><I> Point2DInstance*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> TreeSet m_Points = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> TreeSet(m_PointComparator); 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Count of the number of instances of each color */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">[] m_NumberOfInstancesOfColor = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Array containing all the instances ordered by insertion */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> FastVector m_AllInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Array representing the train instances */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> FastVector m_TrainInstances = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(); 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Array representing the test instances */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> FastVector m_TestInstances = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(); 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Indicador de que las instancias han sido generadas sólo desde un subconjunto del total */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_TrainAndTestGeneratedFromregion = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#808080"><I>/** To perform the random partition of the instances set into the train and test datasets */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>long</B></FONT><FONT COLOR="#000000"> m_InstanceChooserSeed = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>  </FONT><FONT COLOR="#808080"><I>/** To perform the random partition of the instances set into the train and test datasets */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Random m_InstanceChooser = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random(m_InstanceChooserSeed); 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>  </FONT><FONT COLOR="#808080"><I>//Insert mode constants & setup</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Permitir la inserción de todos los puntos */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> ALLOW_ALL_POINTS_INSERT_MODE = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Permitir sólo un punto por coordenada y color */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> ONE_POINT_PER_CLASS_AND_COORDINATES_INSERT_MODE = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Permitir sólo un punto por coordenadas */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> ONE_POINT_PER_COORDINATES_INSERT_MODE = </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El modo de inserción elegido */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_InsertMode = ONE_POINT_PER_CLASS_AND_COORDINATES_INSERT_MODE; 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>   * Constructor; relation name will be prefixed with the string "oaidtb_". 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> name The name of the relation 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> capacity The initial capacity of the dataset. 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Point2DInstances(String name, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> capacity){ 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>    </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">(</FONT><FONT COLOR="#008000"><B>"oaidtb_"</B></FONT><FONT COLOR="#000000"> + name, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(), capacity); 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>    insertAttributeAt(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Attribute(</FONT><FONT COLOR="#008000"><B>"xPos"</B></FONT><FONT COLOR="#000000">), </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>    insertAttributeAt(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Attribute(</FONT><FONT COLOR="#008000"><B>"yPos"</B></FONT><FONT COLOR="#000000">), </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>    insertAttributeAt(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Attribute(</FONT><FONT COLOR="#008000"><B>"class"</B></FONT><FONT COLOR="#000000">), </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>    m_AllInstances = m_Instances; 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>    setClassIndex(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>   * Recrea la base de datos desde una imagen 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> bi La imagen 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception Si ocurre un error 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@deprecated</B></FONT><FONT COLOR="#808080"><I> Since a new version of the class much more faster is coming 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> createFromImage(BufferedImage bi) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>    </FONT><FONT COLOR="#808080"><I>//TODO: Make it really fast (burbuja con sacudida, no comparaciones para la inserción etc.)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>    </FONT><FONT COLOR="#808080"><I>//Borramos todas las instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>    removeAll(); 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>    </FONT><FONT COLOR="#808080"><I>//El modo más rápido de inserción</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> insertMode = m_InsertMode; 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>    m_InsertMode = ALLOW_ALL_POINTS_INSERT_MODE; 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>    </FONT><FONT COLOR="#808080"><I>//Vamos punto por punto metiéndolo en la base de datos; esto es extremadamente lento a medida que el árbol crece</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; bi.getWidth(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> j = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; j &LT; bi.getHeight(); j++) 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>        addPoint(i, j, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Color(bi.getRGB(i, j))); 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>    m_InsertMode = insertMode; 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>   * Recrea la base de datos desde una imagen; un punto en la imagen 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>   * se corresponde con el valor del array de rgbs con la siguiente fórmula: 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>   * (x,y)--&GT;rgbs[y*w + x] 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> rgbs El array de rgbs para cada punto 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> w La anchura de la imagen 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> h La altura de la imagen 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception Si ocurre un error 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO: Make it really fast (burbuja con sacudida, no comparaciones para la inserción etc.)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> createFromImage(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">[] rgbs, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> w, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> h) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>    removeAll(); 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> insertMode = m_InsertMode; 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>    m_InsertMode = ALLOW_ALL_POINTS_INSERT_MODE; 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>    </FONT><FONT COLOR="#808080"><I>//Vamos punto por punto metiéndolo en la base de datos; esto es extremadamente lento a medida que el árbol crece</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> j = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; j &LT; h; j++){ 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> base = j * w; 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; w; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>        addPoint(i, j, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Color(rgbs[base + i])); 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>    m_InsertMode = insertMode; 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO: Make it really fast; direct copy the fastvector (not use Point2DInstance, less legibility)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>   * Recrea la base de datos a partir de las instancias pasadas como argumento; este método 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>   * considera que las instancias han sido salvadas anteriormente por la aplicación 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>   * si y sólo si su nombre empieza por "oaidtb_", y en tal caso crea el array 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>   * de colores apartir de la información de la cabecera de las instancias; 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> Nota: este método puede cambiar las instancias pasadas como argumento, así que si 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>   * no se desea que esto ocurra, se deben copiar antes las mismas. 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instances Las instancias que queremos 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception Si el formato de las instancias no es válido o se produce un error en la inserción de las mismas 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> createFromInstances(Instances instances) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>    </FONT><FONT COLOR="#808080"><I>//Comprobamos que el formato de las instancias sea compatible con esta base de datos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (instances.numAttributes() != </FONT><FONT COLOR="#0000ff">3</FONT><FONT COLOR="#000000"> || 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>      !instances.attribute(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">).isNumeric() || 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>      !instances.attribute(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">).isNumeric() || 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>      !instances.attribute(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">).isNominal()) 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Invalid instances format"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>    </FONT><FONT COLOR="#808080"><I>//Comprobamos que al menos exista una clase</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>    instances.deleteWithMissingClass(); 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (instances.numInstances() == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"No instances without class missing"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>    </FONT><FONT COLOR="#808080"><I>//Creamos el array de colores</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numColors = instances.numClasses(); 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (instances.relationName().startsWith(</FONT><FONT COLOR="#008000"><B>"oaidtb_"</B></FONT><FONT COLOR="#000000">)){ 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT>      </FONT><FONT COLOR="#808080"><I>//En este caso, los colores estarán representados en la cabecera de las instancias por sus valores argb</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Color[] colorIndex = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Color[numColors]; 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; numColors; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>        colorIndex[i] = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Color(Integer.parseInt(instances.attribute(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">).value(i))); 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT>        ; 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>      </FONT><FONT COLOR="#808080"><I>//Borramos todas las instancias que existieran</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT>      removeAll(); 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>      </FONT><FONT COLOR="#808080"><I>//Metemos las nuevas instancias, creando los índices</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; instances.numInstances(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>        Instance instance = instances.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>        addPoint(instance.value(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">), instance.value(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">), colorIndex[(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.value(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">)]); 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>      setRelationName(instances.relationName()); 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>      Random random = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> HashMap colorIndex = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> HashMap(numColors); 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Color[] colorArray = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Color[numColors]; 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; numColors; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT>        Color color = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Color(random.nextInt(</FONT><FONT COLOR="#0000ff">256</FONT><FONT COLOR="#000000">), random.nextInt(</FONT><FONT COLOR="#0000ff">256</FONT><FONT COLOR="#000000">), random.nextInt(</FONT><FONT COLOR="#0000ff">256</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>        </FONT><FONT COLOR="#808080"><I>//En este caso, vamos a generar el color que representa a cada clase de manera aleatoria;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>        </FONT><FONT COLOR="#808080"><I>//TODO: Pensar en una manera más determinista y segura de hcerlo</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> != colorIndex.put(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\SimpleInteger.java.html">SimpleInteger</A>(i), color)) </FONT><FONT COLOR="#808080"><I>//Refine this</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"One color represents two distinct classes"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>        </FONT><FONT COLOR="#808080"><I>//throw new Exception("Same color represents two distinct classes");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>        colorArray[i] = color; 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT>      </FONT><FONT COLOR="#808080"><I>//Borramos todas las instancias que existieran</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>      removeAll(); 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>      </FONT><FONT COLOR="#808080"><I>//Metemos las nuevas instancias, creando los índices</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; instances.numInstances(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>        Instance instance = instances.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>        addPoint(instance.value(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">), instance.value(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">), colorArray[(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.value(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">)]); 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>      setRelationName(</FONT><FONT COLOR="#008000"><B>"oaidtb_"</B></FONT><FONT COLOR="#000000"> + instances.relationName()); 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT>   * Conocer cuántas instancias hay de un determinado color; por efeciencia, no se hace comprobación 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>   * de la validez de índice del color 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> colorIndex El índice del color 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El número de instancias que existen de ese color en la base de datos 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getNumPointsOfColor(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_NumberOfInstancesOfColor[colorIndex]; 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>   * Conocer cuántas instancias hay de un determinado color; por efeciencia, no se hace comprobación 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>   * de la validez de índice del color 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> color El color 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El número de instancias que existen de ese color en la base de datos 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getNumPointsOfColor(Color color){ 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (getColorIndex(color) == -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_NumberOfInstancesOfColor[getColorIndex(color)]; 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Un array con todos los colores existentes en la base de datos, ordenados según la clase que representen */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> FastVector getColors(){ 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Colors; 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT>   * Retorna un conjunto de datos con el mismo esquema que este objeto 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT>   * Point2DInstances y con las instancias en el FastVector que se pasa 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>   * como argumento. 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>   * No hace ningún tipo de comprobación acerca de la validez del formato de las instancias 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instances las instancias que queremos que contenga el conjunto de datos retornado 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Un objeto Instances con el esquema actual y las instancias pasadas 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Instances getInstances(FastVector instances){ 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT>    Instances tmp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instances(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">, instances.size()); 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>    </FONT><FONT COLOR="#808080"><I>//We must do this since m_instances has protected acces mode in the package weka.core,</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>    </FONT><FONT COLOR="#808080"><I>//so we can't assign directly "instances" to m_Instances</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>    </FONT><FONT COLOR="#808080"><I>//Another approach could be to return a Point2DInstances object, but it wouldn't</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT>    </FONT><FONT COLOR="#808080"><I>//be index-consistent unless we made extra (overload) ops.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; instances.size(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>      tmp.add((Instance) instances.elementAt(i)); 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> tmp; 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>   * Busca en la base de datos todas las instancias que representen puntos dentro 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>   * de una determinada región del espacio 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> region La región en que deben encontrarse los puntos 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El array de instancias de la base de datos que se encuentran en dicha región 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> FastVector getRegion(Rectangle2D.Double region){ 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> getRegion(region.x, region.y, region.width, region.height); 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>   * Busca en la base de datos todas las instancias que representen puntos dentro 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>   * de una determinada región del espacio 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> x La coordenada x de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> y La coordenada y de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> width La anchura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> height La altura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El array de instancias de la base de datos que se encuentran en dicha región 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> FastVector getRegion(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> y, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> width, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> height){ 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>    </FONT><FONT COLOR="#808080"><I>//Calculamos el máximo valor de cada coordenada para que el punto esté en la región</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> maxX = x + width; 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> maxY = y + height; 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT>    </FONT><FONT COLOR="#808080"><I>//El vector que retornaremos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT>    FastVector vector = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(); 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT>    </FONT><FONT COLOR="#808080"><I>//Iterador de instancias ordenadas por color y coordenadas</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT>    Iterator iterator = m_Points.iterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT>    </FONT><FONT COLOR="#808080"><I>//El color de las instancias que se está procesando en cada momento</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> currentColor = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT>    </FONT><FONT COLOR="#808080"><I>//El númedo de instancias que quedan por procesar del color actual</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> currentColorRem = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (iterator.hasNext()){ 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT>      </FONT><FONT COLOR="#808080"><I>//Procesamos el posible cambio de color de las instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (currentColorRem &LT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>        currentColor++; 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (currentColor &LT; getNumColors()) 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT>          currentColorRem = getNumPointsOfColor(currentColor); 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT>      </FONT><FONT COLOR="#808080"><I>//Actualizamos el índice del próximo punto a procesar</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT>      currentColorRem--; 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT>      </FONT><FONT COLOR="#808080"><I>//Recuperamos las coordenadas x e y del punto que representa la instancia</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT>      Point2DInstance point = (Point2DInstance) iterator.next(); 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> py = point.getY(); 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> px = point.getX(); 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT>      </FONT><FONT COLOR="#808080"><I>//Debido a la ordenación por coordenadas que se hace en las instancias de cada color,</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>      </FONT><FONT COLOR="#808080"><I>//sabemos que estamos iterando siempre en orden creciente de la coordenada y;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>      </FONT><FONT COLOR="#808080"><I>//por tanto, si ya hemos superado maxY con esa coordenada sabemos que no va</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT>      </FONT><FONT COLOR="#808080"><I>//a haber más puntos del color dentro de la región</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (py &GT; maxY){ 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT>        </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (--currentColorRem &GT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT>          iterator.next(); 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT>        </FONT><FONT COLOR="#000080"><B>continue</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT>      </FONT><FONT COLOR="#808080"><I>//El punto está a la derecha de la región</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (px &GT; maxX) 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT>        </FONT><FONT COLOR="#000080"><B>continue</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>      </FONT><FONT COLOR="#808080"><I>//El punto está encima o a la izquierda de la región</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (py &LT; y || px &LT; x) 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>        </FONT><FONT COLOR="#000080"><B>continue</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT>      </FONT><FONT COLOR="#808080"><I>//El punto está en la región</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT>      vector.addElement(point); 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> vector; 
+<FONT COLOR=0 STYLE="font-style:normal">382  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">383  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">384  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">385  </FONT>   * Preguntar si un punto está o no dentro de una determinada región del espacio seguún la política 
+<FONT COLOR=0 STYLE="font-style:normal">386  </FONT>   * aplicada en todos los métodos de la clase 
+<FONT COLOR=0 STYLE="font-style:normal">387  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">388  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> px La coordenada x del punto 
+<FONT COLOR=0 STYLE="font-style:normal">389  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> py La coordenada y del punto 
+<FONT COLOR=0 STYLE="font-style:normal">390  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> x La coordenada x de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">391  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> y La coordenada y de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">392  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> width La anchura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">393  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> height La altura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">394  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">395  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si el punto pertenece a la región 
+<FONT COLOR=0 STYLE="font-style:normal">396  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">397  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> inRegion(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> px, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> py, 
+<FONT COLOR=0 STYLE="font-style:normal">398  </FONT>                                       </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> y, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> width, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> height){ 
+<FONT COLOR=0 STYLE="font-style:normal">399  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> px &GT;= x && 
+<FONT COLOR=0 STYLE="font-style:normal">400  </FONT>      px &LT;= x + width && 
+<FONT COLOR=0 STYLE="font-style:normal">401  </FONT>      py &GT;= y && 
+<FONT COLOR=0 STYLE="font-style:normal">402  </FONT>      py &LT;= y + height; 
+<FONT COLOR=0 STYLE="font-style:normal">403  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">404  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">405  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">406  </FONT>   * Destruye los conjuntos de entrenamiento y de prueba 
+<FONT COLOR=0 STYLE="font-style:normal">407  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">408  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> destroyTrainAndTestInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">409  </FONT>    m_TrainInstances.removeAllElements(); 
+<FONT COLOR=0 STYLE="font-style:normal">410  </FONT>    m_TestInstances.removeAllElements(); 
+<FONT COLOR=0 STYLE="font-style:normal">411  </FONT>    m_TrainAndTestGeneratedFromregion = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">412  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">413  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">414  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">415  </FONT>   * En la clase {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> weka.core.Instances} la estratificación se hace ordenando 
+<FONT COLOR=0 STYLE="font-style:normal">416  </FONT>   * el conjunto de instancias por clase, pero esta ordenación la hacen por 
+<FONT COLOR=0 STYLE="font-style:normal">417  </FONT>   * el método de la burbula; nos aprovechamos de que con las estructuras de índices creadas 
+<FONT COLOR=0 STYLE="font-style:normal">418  </FONT>   * la tenemos hecha esa ordenación para crear una versión rápida del método estratificar de 
+<FONT COLOR=0 STYLE="font-style:normal">419  </FONT>   * la superclase y así mejorar la velocidad de la validación cruzada. 
+<FONT COLOR=0 STYLE="font-style:normal">420  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">421  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numFolds the number of folds in the cross-validation 
+<FONT COLOR=0 STYLE="font-style:normal">422  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">423  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> fastStratify(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numFolds) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">424  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">425  </FONT>    </FONT><FONT COLOR="#808080"><I>//Hacemos que m_Instances contenga todas las instancias ordenadas por clase</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">426  </FONT>    Iterator iterator = m_Points.iterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">427  </FONT>    m_Instances = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(m_Points.size()); 
+<FONT COLOR=0 STYLE="font-style:normal">428  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (iterator.hasNext()) 
+<FONT COLOR=0 STYLE="font-style:normal">429  </FONT>      m_Instances.addElement(iterator.next()); 
+<FONT COLOR=0 STYLE="font-style:normal">430  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">431  </FONT>    stratStep(numFolds); 
+<FONT COLOR=0 STYLE="font-style:normal">432  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">433  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">434  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">435  </FONT>   * Help function needed for stratification of set. 
+<FONT COLOR=0 STYLE="font-style:normal">436  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">437  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numFolds the number of folds for the stratification 
+<FONT COLOR=0 STYLE="font-style:normal">438  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">439  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stratStep(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numFolds){ 
+<FONT COLOR=0 STYLE="font-style:normal">440  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">441  </FONT>    FastVector newVec = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(m_Instances.capacity()); 
+<FONT COLOR=0 STYLE="font-style:normal">442  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> start = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, j; 
+<FONT COLOR=0 STYLE="font-style:normal">443  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">444  </FONT>    </FONT><FONT COLOR="#808080"><I>// create stratified batch</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">445  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (newVec.size() &LT; numInstances()){ 
+<FONT COLOR=0 STYLE="font-style:normal">446  </FONT>      j = start; 
+<FONT COLOR=0 STYLE="font-style:normal">447  </FONT>      </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (j &LT; numInstances()){ 
+<FONT COLOR=0 STYLE="font-style:normal">448  </FONT>        newVec.addElement(instance(j)); 
+<FONT COLOR=0 STYLE="font-style:normal">449  </FONT>        j = j + numFolds; 
+<FONT COLOR=0 STYLE="font-style:normal">450  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">451  </FONT>      start++; 
+<FONT COLOR=0 STYLE="font-style:normal">452  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">453  </FONT>    m_Instances = newVec; 
+<FONT COLOR=0 STYLE="font-style:normal">454  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">455  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">456  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">457  </FONT>   * Crea dos conjuntos: de entrenamiento y de prueba; lo hacemos sin complicarnos la 
+<FONT COLOR=0 STYLE="font-style:normal">458  </FONT>   * existencia, de manera aleatoria. 
+<FONT COLOR=0 STYLE="font-style:normal">459  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">460  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> trainingInstancesPercentage El porcentaje de instancias de entrenamiento a tomar como referencia 
+<FONT COLOR=0 STYLE="font-style:normal">461  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">462  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> createTrainAndTestInstances(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> trainingInstancesPercentage){ 
+<FONT COLOR=0 STYLE="font-style:normal">463  </FONT>    </FONT><FONT COLOR="#808080"><I>//Refine to stratification (faster than use stratify method, so override).</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">464  </FONT>    </FONT><FONT COLOR="#808080"><I>//Asegurar que siempre se cojen instancias de todos los colores en ambos conjuntos.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">465  </FONT>    </FONT><FONT COLOR="#808080"><I>//Preparar para cojer sólo de un porcentaje del total de las instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">466  </FONT>    </FONT><FONT COLOR="#808080"><I>//Test: Suma train + Suma Test = Suma Total</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">467  </FONT>    </FONT><FONT COLOR="#808080"><I>//Test: No hay instancias compartidas</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">468  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">469  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (trainingInstancesPercentage &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> || trainingInstancesPercentage &GT; </FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">470  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">471  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">472  </FONT>    </FONT><FONT COLOR="#808080"><I>//Cogemos las instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">473  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Iterator iterator = m_Points.iterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">474  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">475  </FONT>    </FONT><FONT COLOR="#808080"><I>//Destruimos los conjuntos de entrenamiento y de prueba que existiesen previamente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">476  </FONT>    destroyTrainAndTestInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">477  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">478  </FONT>    </FONT><FONT COLOR="#808080"><I>//Para cada instancia, asignamos la probabilidad de estar en uno u otro conjunto en función</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">479  </FONT>    </FONT><FONT COLOR="#808080"><I>//del porcentaje de instancias de entrenamiento que tenemos como referencia</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">480  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (iterator.hasNext()) 
+<FONT COLOR=0 STYLE="font-style:normal">481  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_InstanceChooser.nextDouble() &LT; trainingInstancesPercentage) 
+<FONT COLOR=0 STYLE="font-style:normal">482  </FONT>        m_TrainInstances.addElement(iterator.next()); 
+<FONT COLOR=0 STYLE="font-style:normal">483  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">484  </FONT>        m_TestInstances.addElement(iterator.next()); 
+<FONT COLOR=0 STYLE="font-style:normal">485  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">486  </FONT>    </FONT><FONT COLOR="#808080"><I>//Hemos generado los conjuntos usando todas las instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">487  </FONT>    m_TrainAndTestGeneratedFromregion = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">488  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">489  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">490  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">491  </FONT>   * Crea los conjuntos de entrenamiento y de prueba usando el método 
+<FONT COLOR=0 STYLE="font-style:normal">492  </FONT>   * procedimiento que {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> #createTrainAndTestInstances}, sólo que ahora 
+<FONT COLOR=0 STYLE="font-style:normal">493  </FONT>   * excuimos todas aquellas instancias que no se encuentren en la región especificada. 
+<FONT COLOR=0 STYLE="font-style:normal">494  </FONT>   * Levanta la bandera que indica que la partición ha sido generada utilizando 
+<FONT COLOR=0 STYLE="font-style:normal">495  </FONT>   * sólo un subconjunto del total de instancias en la base de datos 
+<FONT COLOR=0 STYLE="font-style:normal">496  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">497  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionX La coordenada x de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">498  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionY La coordenada y de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">499  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionWidth La anchura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">500  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionHeight La altura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">501  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> trainingInstancesPercentage El porcentaje de instancias de entrenamiento a tomar como referencia 
+<FONT COLOR=0 STYLE="font-style:normal">502  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">503  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> createTrainAndTestInstancesInRegion(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionX, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionY, 
+<FONT COLOR=0 STYLE="font-style:normal">504  </FONT>                                                  </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionWidth, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionHeight, 
+<FONT COLOR=0 STYLE="font-style:normal">505  </FONT>                                                  </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> trainingInstancesPercentage){ 
+<FONT COLOR=0 STYLE="font-style:normal">506  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">507  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (trainingInstancesPercentage &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> || trainingInstancesPercentage &GT; </FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">508  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">509  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">510  </FONT>    </FONT><FONT COLOR="#808080"><I>//Recuperamos todas las instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">511  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Iterator iterator = m_Points.iterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">512  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">513  </FONT>    </FONT><FONT COLOR="#808080"><I>//Destuimos los conjuntos de entrenamiento y prueba existentes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">514  </FONT>    destroyTrainAndTestInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">515  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">516  </FONT>    </FONT><FONT COLOR="#808080"><I>//Vamos añadiendo, según la probabilidad asignada por parámetro, las instancias al conjunto de prueba</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">517  </FONT>    </FONT><FONT COLOR="#808080"><I>//o al conjunto de test</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">518  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (iterator.hasNext()){ 
+<FONT COLOR=0 STYLE="font-style:normal">519  </FONT>      Point2DInstance p = (Point2DInstance) iterator.next(); 
+<FONT COLOR=0 STYLE="font-style:normal">520  </FONT>      </FONT><FONT COLOR="#808080"><I>//Sólo añadimos la instancia si se encuentra en la región</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">521  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (inRegion(p.getX(), p.getY(), regionX, regionY, regionWidth, regionHeight)) 
+<FONT COLOR=0 STYLE="font-style:normal">522  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_InstanceChooser.nextDouble() &LT; trainingInstancesPercentage) 
+<FONT COLOR=0 STYLE="font-style:normal">523  </FONT>          m_TrainInstances.addElement(p); 
+<FONT COLOR=0 STYLE="font-style:normal">524  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">525  </FONT>          m_TestInstances.addElement(p); 
+<FONT COLOR=0 STYLE="font-style:normal">526  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">527  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">528  </FONT>    </FONT><FONT COLOR="#808080"><I>//Levantamos la bandera que indica que esta partición ha sido generada usando</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">529  </FONT>    </FONT><FONT COLOR="#808080"><I>//sólo un subconjunto del total de instancias en la base de datos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">530  </FONT>    m_TrainAndTestGeneratedFromregion = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">531  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">532  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">533  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if exist a test set, false otherwise */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">534  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> existsTestSet(){ 
+<FONT COLOR=0 STYLE="font-style:normal">535  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_TestInstances.size() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">536  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">537  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">538  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if exist a train set, false otherwise */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">539  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> existsTrainSet(){ 
+<FONT COLOR=0 STYLE="font-style:normal">540  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_TrainInstances.size() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">541  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">542  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">543  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">544  </FONT>   * Select (if they exist) the train instances so that the dataset will appear to be 
+<FONT COLOR=0 STYLE="font-style:normal">545  </FONT>   * composed only of them for a weka class (classifiers, filters...) 
+<FONT COLOR=0 STYLE="font-style:normal">546  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">547  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> selectTrainInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">548  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (existsTrainSet()) 
+<FONT COLOR=0 STYLE="font-style:normal">549  </FONT>      m_Instances = m_TrainInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">550  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">551  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">552  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">553  </FONT>   * Select (if they exist) the test instances so that the dataset will appear to be 
+<FONT COLOR=0 STYLE="font-style:normal">554  </FONT>   * composed only of them for a weka class (classifiers, filters...) 
+<FONT COLOR=0 STYLE="font-style:normal">555  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">556  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> selectTestInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">557  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (existsTestSet()) 
+<FONT COLOR=0 STYLE="font-style:normal">558  </FONT>      m_Instances = m_TestInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">559  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">560  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">561  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Select all the instances so that the dataset will appear to have them all for weka classes */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">562  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> selectAllInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">563  </FONT>    m_Instances = m_AllInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">564  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">565  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">566  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The train instances FastVector  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">567  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> FastVector getTrainInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">568  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_TrainInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">569  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">570  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">571  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The test instances FastVector  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">572  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> FastVector getTestInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">573  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_TestInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">574  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">575  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">576  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true If the train and test sets were generated from a custom region  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">577  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isTrainAndTestGeneratedFromregion(){ 
+<FONT COLOR=0 STYLE="font-style:normal">578  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_TrainAndTestGeneratedFromregion; 
+<FONT COLOR=0 STYLE="font-style:normal">579  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">580  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">581  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> trainAndTestGeneratedFromregion Indicator for the client classes that the train and test instances 
+<FONT COLOR=0 STYLE="font-style:normal">582  </FONT>   *                                         were generated or not form a custom space region 
+<FONT COLOR=0 STYLE="font-style:normal">583  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">584  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setTrainAndTestGeneratedFromregion(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> trainAndTestGeneratedFromregion){ 
+<FONT COLOR=0 STYLE="font-style:normal">585  </FONT>    m_TrainAndTestGeneratedFromregion = trainAndTestGeneratedFromregion; 
+<FONT COLOR=0 STYLE="font-style:normal">586  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">587  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">588  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Reset the dataset to a virgin one  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">589  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> removeAll(){ 
+<FONT COLOR=0 STYLE="font-style:normal">590  </FONT>    m_AllInstances.removeAllElements(); 
+<FONT COLOR=0 STYLE="font-style:normal">591  </FONT>    destroyTrainAndTestInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">592  </FONT>    m_Points = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> TreeSet(m_PointComparator); 
+<FONT COLOR=0 STYLE="font-style:normal">593  </FONT>    m_Colors.removeAllElements(); 
+<FONT COLOR=0 STYLE="font-style:normal">594  </FONT>    m_ColorIndex = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> HashMap(); 
+<FONT COLOR=0 STYLE="font-style:normal">595  </FONT>    trickyChangeClassAttribute(); 
+<FONT COLOR=0 STYLE="font-style:normal">596  </FONT>    m_NumberOfInstancesOfColor = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">597  </FONT>    m_InstanceChooser = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random(m_InstanceChooserSeed); 
+<FONT COLOR=0 STYLE="font-style:normal">598  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">599  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">600  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">601  </FONT>   * Removes and returns the last numPoints points input to the dataset, 
+<FONT COLOR=0 STYLE="font-style:normal">602  </FONT>   * undo all possible changes made by those insertions and return 
+<FONT COLOR=0 STYLE="font-style:normal">603  </FONT>   * a bidimensional integer arrar of the form: 
+<FONT COLOR=0 STYLE="font-style:normal">604  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">605  </FONT>   * [insertionIndex]--&GT;[x,y,rgb] 
+<FONT COLOR=0 STYLE="font-style:normal">606  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">607  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numPoints The number of points to be removed 
+<FONT COLOR=0 STYLE="font-style:normal">608  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> An array containing a description of the points deleted 
+<FONT COLOR=0 STYLE="font-style:normal">609  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If numPoints is great than the total number of points in the dataset 
+<FONT COLOR=0 STYLE="font-style:normal">610  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">611  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[][] removeLastPoints(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numPoints) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">612  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numInstances = m_AllInstances.size(); 
+<FONT COLOR=0 STYLE="font-style:normal">613  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (numPoints &GT; numInstances) 
+<FONT COLOR=0 STYLE="font-style:normal">614  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Can't remove "</B></FONT><FONT COLOR="#000000"> + numPoints + </FONT><FONT COLOR="#008000"><B>" from "</B></FONT><FONT COLOR="#000000"> + numInstances); 
+<FONT COLOR=0 STYLE="font-style:normal">615  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[][] undoBuffer = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[numPoints][</FONT><FONT COLOR="#0000ff">3</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">616  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (numPoints-- &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">617  </FONT>      numInstances--; 
+<FONT COLOR=0 STYLE="font-style:normal">618  </FONT>      Point2DInstance instance = (Point2DInstance) m_AllInstances.lastElement(); 
+<FONT COLOR=0 STYLE="font-style:normal">619  </FONT>      m_AllInstances.removeElementAt(numInstances); 
+<FONT COLOR=0 STYLE="font-style:normal">620  </FONT>      m_Points.remove(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">621  </FONT>      undoBuffer[numPoints][</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">] = instance.getX(); 
+<FONT COLOR=0 STYLE="font-style:normal">622  </FONT>      undoBuffer[numPoints][</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">] = instance.getY(); 
+<FONT COLOR=0 STYLE="font-style:normal">623  </FONT>      undoBuffer[numPoints][</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">] = getColor((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.getColor()).getRGB(); 
+<FONT COLOR=0 STYLE="font-style:normal">624  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((--m_NumberOfInstancesOfColor[(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.getColor()]) == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">625  </FONT>        removeColor((Color) m_Colors.elementAt((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.getColor())); 
+<FONT COLOR=0 STYLE="font-style:normal">626  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">627  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">628  </FONT>    </FONT><FONT COLOR="#808080"><I>//Es muy radical, pero obliga al usuario a volver a crear estos conjuntos.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">629  </FONT>    destroyTrainAndTestInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">630  </FONT>    selectAllInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">631  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">632  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> undoBuffer; 
+<FONT COLOR=0 STYLE="font-style:normal">633  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">634  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">635  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">636  </FONT>   * Configura la semilla y resetea el generador de números aleatorios para generar los 
+<FONT COLOR=0 STYLE="font-style:normal">637  </FONT>   * conjuntos de entrenamiento y prueba 
+<FONT COLOR=0 STYLE="font-style:normal">638  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">639  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> seed La nueva semilla 
+<FONT COLOR=0 STYLE="font-style:normal">640  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">641  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setInstanceChooserSeed(</FONT><FONT COLOR="#000080"><B>long</B></FONT><FONT COLOR="#000000"> seed){ 
+<FONT COLOR=0 STYLE="font-style:normal">642  </FONT>    m_InstanceChooserSeed = seed; 
+<FONT COLOR=0 STYLE="font-style:normal">643  </FONT>    m_InstanceChooser = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random(seed); 
+<FONT COLOR=0 STYLE="font-style:normal">644  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">645  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">646  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">647  </FONT>   * Setup when a point will be accepted as a valid one. The possibilities are: </I></FONT><FONT COLOR="#808080"><I>&LT;PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">648  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">649  </FONT>   *   ALLOW_ALL_POINTS_INSERT_MODE 
+<FONT COLOR=0 STYLE="font-style:normal">650  </FONT>   *   ONE_POINT_PER_CLASS_AND_COORDINATES_INSERT_MODE 
+<FONT COLOR=0 STYLE="font-style:normal">651  </FONT>   *   ONE_POINT_PER_COORDINATES_INSERT_MODE 
+<FONT COLOR=0 STYLE="font-style:normal">652  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">653  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;/PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">654  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">655  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> mode The insert mode 
+<FONT COLOR=0 STYLE="font-style:normal">656  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">657  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setInsertMode(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> mode){ 
+<FONT COLOR=0 STYLE="font-style:normal">658  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (mode &GT; -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> || mode &LT; </FONT><FONT COLOR="#0000ff">3</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">659  </FONT>      m_InsertMode = mode; 
+<FONT COLOR=0 STYLE="font-style:normal">660  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">661  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">662  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The current insert mode */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">663  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getInsertMode(){ 
+<FONT COLOR=0 STYLE="font-style:normal">664  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_InsertMode; 
+<FONT COLOR=0 STYLE="font-style:normal">665  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">666  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">667  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">668  </FONT>   * Recrea el atributo de clase para que represente a todos los colores existentes 
+<FONT COLOR=0 STYLE="font-style:normal">669  </FONT>   * en la base de datos 
+<FONT COLOR=0 STYLE="font-style:normal">670  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">671  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> trickyChangeClassAttribute(){ 
+<FONT COLOR=0 STYLE="font-style:normal">672  </FONT>    </FONT><FONT COLOR="#808080"><I>// It seems like weka guys doesn't want anybody to exted the core classes, because they</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">673  </FONT>    </FONT><FONT COLOR="#808080"><I>// mark their methods and fields as friendly, private and/or final, so this can't be done</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">674  </FONT>    </FONT><FONT COLOR="#808080"><I>// from outside of the weka.core package:</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">675  </FONT>    </FONT><FONT COLOR="#808080"><I>//    newAtt.setIndex(2); &LT;--Friendly method</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">676  </FONT>    </FONT><FONT COLOR="#808080"><I>//    m_Attributes.removeElementAt(2);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">677  </FONT>    </FONT><FONT COLOR="#808080"><I>//    m_Attributes.insertElementAt(newAtt, 2);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">678  </FONT>    </FONT><FONT COLOR="#808080"><I>//</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">679  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">680  </FONT>    FastVector newClassAttributeInfo = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(m_Colors.size()); 
+<FONT COLOR=0 STYLE="font-style:normal">681  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_Colors.size(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">682  </FONT>      newClassAttributeInfo.addElement(Integer.toString(((Color) m_Colors.elementAt(i)).getRGB())); 
+<FONT COLOR=0 STYLE="font-style:normal">683  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">684  </FONT>    </FONT><FONT COLOR="#808080"><I>//We don't like that insert & delete attribute methods change anything in the instances</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">685  </FONT>    </FONT><FONT COLOR="#808080"><I>//(set class values as missing), so we deceive them with this trick.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">686  </FONT>    FastVector tmpInstances = m_Instances; 
+<FONT COLOR=0 STYLE="font-style:normal">687  </FONT>    m_Instances = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">688  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">689  </FONT>    setClassIndex(-</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">690  </FONT>    deleteAttributeAt(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">691  </FONT>    insertAttributeAt(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Attribute(</FONT><FONT COLOR="#008000"><B>"class"</B></FONT><FONT COLOR="#000000">, newClassAttributeInfo), </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">692  </FONT>    setClassIndex(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">693  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">694  </FONT>    m_Instances = tmpInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">695  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">696  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">697  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">698  </FONT>   * Añade, si no existía ya, un nuevo color a la base de datos; sólo debería hacerse 
+<FONT COLOR=0 STYLE="font-style:normal">699  </FONT>   * tras la inserción de la primera instancia de dicho color 
+<FONT COLOR=0 STYLE="font-style:normal">700  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">701  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> color El núevo color a añadir 
+<FONT COLOR=0 STYLE="font-style:normal">702  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">703  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addColor(Color color){ 
+<FONT COLOR=0 STYLE="font-style:normal">704  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">705  </FONT>    </FONT><FONT COLOR="#808080"><I>//Lo añadimos al índice (color--&GT;número de clase), con índices secuenciales</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">706  </FONT>    <A href="..\..\oaidtb\misc\SimpleInteger.java.html">SimpleInteger</A> integer = (<A href="..\..\oaidtb\misc\SimpleInteger.java.html">SimpleInteger</A>) m_ColorIndex.put(color, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\SimpleInteger.java.html">SimpleInteger</A>(m_Colors.size())); 
+<FONT COLOR=0 STYLE="font-style:normal">707  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">708  </FONT>    </FONT><FONT COLOR="#808080"><I>//El color ya estaba</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">709  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (integer != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">710  </FONT>      m_ColorIndex.put(color, integer); 
+<FONT COLOR=0 STYLE="font-style:normal">711  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">712  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">713  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">714  </FONT>    </FONT><FONT COLOR="#808080"><I>//Lo añadimos al array de colores (número de clase--&GT;color)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">715  </FONT>    m_Colors.addElement(color); 
+<FONT COLOR=0 STYLE="font-style:normal">716  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">717  </FONT>    </FONT><FONT COLOR="#808080"><I>//Preparamos el invento para poder almacenar el número de instancias de un color determinado</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">718  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">[] tmp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">[m_NumberOfInstancesOfColor.length + </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">719  </FONT>    System.arraycopy(m_NumberOfInstancesOfColor, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, tmp, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_NumberOfInstancesOfColor.length); 
+<FONT COLOR=0 STYLE="font-style:normal">720  </FONT>    m_NumberOfInstancesOfColor = tmp; 
+<FONT COLOR=0 STYLE="font-style:normal">721  </FONT>    m_NumberOfInstancesOfColor[m_Colors.size() - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">] = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">722  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">723  </FONT>    </FONT><FONT COLOR="#808080"><I>//Actualizar el esquema de atributos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">724  </FONT>    trickyChangeClassAttribute(); 
+<FONT COLOR=0 STYLE="font-style:normal">725  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">726  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">727  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">728  </FONT>   * Elimina un color de la base de datos; sólo debería hacerse cuando ya no 
+<FONT COLOR=0 STYLE="font-style:normal">729  </FONT>   * existan instancias asociadas a dicho color 
+<FONT COLOR=0 STYLE="font-style:normal">730  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">731  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> color El color a eliminar 
+<FONT COLOR=0 STYLE="font-style:normal">732  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">733  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> removeColor(Color color){ 
+<FONT COLOR=0 STYLE="font-style:normal">734  </FONT>    <A href="..\..\oaidtb\misc\SimpleInteger.java.html">SimpleInteger</A> integer = (<A href="..\..\oaidtb\misc\SimpleInteger.java.html">SimpleInteger</A>) m_ColorIndex.remove(color); 
+<FONT COLOR=0 STYLE="font-style:normal">735  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">736  </FONT>    </FONT><FONT COLOR="#808080"><I>//El color no estaba</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">737  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (integer == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">738  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">739  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">740  </FONT>    m_Colors.removeElementAt(integer.value); 
+<FONT COLOR=0 STYLE="font-style:normal">741  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">742  </FONT>    </FONT><FONT COLOR="#808080"><I>// Como será secuencial, sabemos que siempre va a ser el último color añadido.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">743  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">[] tmp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">[m_NumberOfInstancesOfColor.length - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">744  </FONT>    System.arraycopy(m_NumberOfInstancesOfColor, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, tmp, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_NumberOfInstancesOfColor.length - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">745  </FONT>    m_NumberOfInstancesOfColor = tmp; 
+<FONT COLOR=0 STYLE="font-style:normal">746  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">747  </FONT>    </FONT><FONT COLOR="#808080"><I>//Actualizar el esquema de atributos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">748  </FONT>    trickyChangeClassAttribute(); 
+<FONT COLOR=0 STYLE="font-style:normal">749  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">750  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">751  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">752  </FONT>   * Añade una nueva instancia a la base de datos respetando la política de inserción configurada 
+<FONT COLOR=0 STYLE="font-style:normal">753  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">754  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> x La coordenada x de la instancia 
+<FONT COLOR=0 STYLE="font-style:normal">755  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> y La coordenada y de la instancia 
+<FONT COLOR=0 STYLE="font-style:normal">756  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> colorIndex El índice del color que representa la instancia 
+<FONT COLOR=0 STYLE="font-style:normal">757  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">758  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si la inserción se ha completado, falso en otro caso 
+<FONT COLOR=0 STYLE="font-style:normal">759  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">760  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> addPoint(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> y, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">761  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">762  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Point2DInstance tmpPoint = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Point2DInstance(x, y, colorIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">763  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">764  </FONT>    </FONT><FONT COLOR="#808080"><I>//Better have an index by coordinates?</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">765  </FONT>    </FONT><FONT COLOR="#808080"><I>//Caso de permitir sólo una instancia por cada par de coordenadas (x,y)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">766  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_InsertMode == ONE_POINT_PER_COORDINATES_INSERT_MODE){ 
+<FONT COLOR=0 STYLE="font-style:normal">767  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">768  </FONT>      </FONT><FONT COLOR="#808080"><I>//Comprobamos que no exista ya una instancia con esas coordenadas en la base de datos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">769  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; getNumColors(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">770  </FONT>        tmpPoint.setColor(i); 
+<FONT COLOR=0 STYLE="font-style:normal">771  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Points.contains(tmpPoint)) 
+<FONT COLOR=0 STYLE="font-style:normal">772  </FONT>          </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">773  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">774  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">775  </FONT>      </FONT><FONT COLOR="#808080"><I>//Todo ok, metemos la instancia en la base de datos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">776  </FONT>      tmpPoint.setDataset(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">777  </FONT>      tmpPoint.setColor(colorIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">778  </FONT>      m_Points.add(tmpPoint); 
+<FONT COLOR=0 STYLE="font-style:normal">779  </FONT>      m_AllInstances.addElement(tmpPoint); 
+<FONT COLOR=0 STYLE="font-style:normal">780  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (existsTrainSet()) 
+<FONT COLOR=0 STYLE="font-style:normal">781  </FONT>        m_TrainInstances.addElement(tmpPoint); 
+<FONT COLOR=0 STYLE="font-style:normal">782  </FONT>      m_NumberOfInstancesOfColor[colorIndex]++; 
+<FONT COLOR=0 STYLE="font-style:normal">783  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">784  </FONT>    }</FONT><FONT COLOR="#808080"><I>//FIN del Caso de permitir sólo una instancia por cada par de coordenadas (x,y)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">785  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">786  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">787  </FONT>    </FONT><FONT COLOR="#808080"><I>// Añadimos el punto dependiendo de que nos deje añadirlo al índice principal</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">788  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Points.add(tmpPoint)){ 
+<FONT COLOR=0 STYLE="font-style:normal">789  </FONT>      tmpPoint.setDataset(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">790  </FONT>      m_AllInstances.addElement(tmpPoint); 
+<FONT COLOR=0 STYLE="font-style:normal">791  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (existsTrainSet()) 
+<FONT COLOR=0 STYLE="font-style:normal">792  </FONT>        m_TrainInstances.addElement(tmpPoint); 
+<FONT COLOR=0 STYLE="font-style:normal">793  </FONT>      m_NumberOfInstancesOfColor[colorIndex]++; 
+<FONT COLOR=0 STYLE="font-style:normal">794  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">795  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">796  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">797  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">798  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">799  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">800  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">801  </FONT>   * Añade una nueva instancia a la base de datos respetando la política de inserción configurada 
+<FONT COLOR=0 STYLE="font-style:normal">802  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">803  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> x La coordenada x de la instancia 
+<FONT COLOR=0 STYLE="font-style:normal">804  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> y La coordenada y de la instancia 
+<FONT COLOR=0 STYLE="font-style:normal">805  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> color El color que representa la instancia 
+<FONT COLOR=0 STYLE="font-style:normal">806  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">807  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si la inserción se ha completado, falso en otro caso 
+<FONT COLOR=0 STYLE="font-style:normal">808  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">809  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> addPoint(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> y, Color color){ 
+<FONT COLOR=0 STYLE="font-style:normal">810  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex = getColorIndex(color); 
+<FONT COLOR=0 STYLE="font-style:normal">811  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (colorIndex == -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">812  </FONT>      </FONT><FONT COLOR="#808080"><I>//Es un nuevo color, .lo añadimos a la base de datos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">813  </FONT>      addColor(color); 
+<FONT COLOR=0 STYLE="font-style:normal">814  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> addPoint(x, y, getColorIndex(color)); 
+<FONT COLOR=0 STYLE="font-style:normal">815  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">816  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">817  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">818  </FONT>   * Acceder al índice que representa a un determinado color en la base de datos 
+<FONT COLOR=0 STYLE="font-style:normal">819  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">820  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> color El color 
+<FONT COLOR=0 STYLE="font-style:normal">821  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">822  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El índice (valor de la clase) que representa a dicho color ó -1 si no existe dicho color en la BD 
+<FONT COLOR=0 STYLE="font-style:normal">823  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">824  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getColorIndex(Color color){ 
+<FONT COLOR=0 STYLE="font-style:normal">825  </FONT>    <A href="..\..\oaidtb\misc\SimpleInteger.java.html">SimpleInteger</A> index = (<A href="..\..\oaidtb\misc\SimpleInteger.java.html">SimpleInteger</A>) m_ColorIndex.get(color); 
+<FONT COLOR=0 STYLE="font-style:normal">826  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> index == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> ? -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> : index.value; 
+<FONT COLOR=0 STYLE="font-style:normal">827  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">828  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">829  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">830  </FONT>   * Retorna todas las instancias existentes en la base de datos ordenadas por color y, dentro 
+<FONT COLOR=0 STYLE="font-style:normal">831  </FONT>   * de cada color, ordenadas por coordenadas 
+<FONT COLOR=0 STYLE="font-style:normal">832  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">833  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Un iterador sobre el total de las instancias ordenadas por color y por coordenadas 
+<FONT COLOR=0 STYLE="font-style:normal">834  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">835  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Iterator getAllInstancesIterator(){ 
+<FONT COLOR=0 STYLE="font-style:normal">836  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Points.iterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">837  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">838  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">839  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">840  </FONT>   * Retorna un array con todas las instancias en el orden en que se insertaron en la base de datos 
+<FONT COLOR=0 STYLE="font-style:normal">841  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">842  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Un array con todas las instancias en el orden en que se insertaron en la base de datos 
+<FONT COLOR=0 STYLE="font-style:normal">843  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">844  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> FastVector getAllInstancesFastVector(){ 
+<FONT COLOR=0 STYLE="font-style:normal">845  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_AllInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">846  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">847  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">848  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">849  </FONT>   * Retorna un array con todas las instancias existentes en la base de datos ordenadas por color y, dentro 
+<FONT COLOR=0 STYLE="font-style:normal">850  </FONT>   * de cada color, ordenadas por coordenadas 
+<FONT COLOR=0 STYLE="font-style:normal">851  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">852  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Un array sobre el total de las instancias ordenadas por color y por coordenadas 
+<FONT COLOR=0 STYLE="font-style:normal">853  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">854  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> FastVector getAllInstancesSortedFastVector(){ 
+<FONT COLOR=0 STYLE="font-style:normal">855  </FONT>    FastVector vector = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(m_Points.size()); 
+<FONT COLOR=0 STYLE="font-style:normal">856  </FONT>    Iterator iterator = m_Points.iterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">857  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (iterator.hasNext()) 
+<FONT COLOR=0 STYLE="font-style:normal">858  </FONT>      vector.addElement(iterator.next()); 
+<FONT COLOR=0 STYLE="font-style:normal">859  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> vector; 
+<FONT COLOR=0 STYLE="font-style:normal">860  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">861  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">862  </FONT>  </FONT><FONT COLOR="#808080"><I>/**</I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The total number of colors (classes) in the dataset  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">863  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getNumColors(){ 
+<FONT COLOR=0 STYLE="font-style:normal">864  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Colors.size(); 
+<FONT COLOR=0 STYLE="font-style:normal">865  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">866  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">867  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">868  </FONT>   * No index correctness is done 
+<FONT COLOR=0 STYLE="font-style:normal">869  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">870  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> colorIndex a color (class) index 
+<FONT COLOR=0 STYLE="font-style:normal">871  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The color associated to that class index 
+<FONT COLOR=0 STYLE="font-style:normal">872  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">873  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Color getColor(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">874  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (Color) m_Colors.elementAt(colorIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">875  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">876  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">877  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">878  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> A copy of this dataset 
+<FONT COLOR=0 STYLE="font-style:normal">879  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If a serialization error happens 
+<FONT COLOR=0 STYLE="font-style:normal">880  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">881  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Point2DInstances getCopy() </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">882  </FONT>    SerializedObject so = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> SerializedObject(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">883  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (Point2DInstances) so.getObject(); 
+<FONT COLOR=0 STYLE="font-style:normal">884  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">885  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">886  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">887  </FONT>   * Class which stores a point in a 2D space into weka's Instance format. 
+<FONT COLOR=0 STYLE="font-style:normal">888  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">889  </FONT>   * R x R --&GT; N. 
+<FONT COLOR=0 STYLE="font-style:normal">890  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">891  </FONT>   * For legibility. 
+<FONT COLOR=0 STYLE="font-style:normal">892  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">893  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> Point2DInstance </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> Instance{ 
+<FONT COLOR=0 STYLE="font-style:normal">894  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">895  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Point2DInstance(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> y, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> pointColor){ 
+<FONT COLOR=0 STYLE="font-style:normal">896  </FONT>      </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">(</FONT><FONT COLOR="#0000ff">3</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">897  </FONT>      m_AttValues[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">] = x; 
+<FONT COLOR=0 STYLE="font-style:normal">898  </FONT>      m_AttValues[</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">] = y; 
+<FONT COLOR=0 STYLE="font-style:normal">899  </FONT>      m_AttValues[</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">] = pointColor; 
+<FONT COLOR=0 STYLE="font-style:normal">900  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">901  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">902  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getX(){ 
+<FONT COLOR=0 STYLE="font-style:normal">903  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_AttValues[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">904  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">905  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">906  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setX(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x){ 
+<FONT COLOR=0 STYLE="font-style:normal">907  </FONT>      m_AttValues[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">] = x; 
+<FONT COLOR=0 STYLE="font-style:normal">908  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">909  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">910  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getXInt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">911  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(m_AttValues[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">]); 
+<FONT COLOR=0 STYLE="font-style:normal">912  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">913  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">914  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getY(){ 
+<FONT COLOR=0 STYLE="font-style:normal">915  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_AttValues[</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">916  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">917  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">918  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setY(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> y){ 
+<FONT COLOR=0 STYLE="font-style:normal">919  </FONT>      m_AttValues[</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">] = y; 
+<FONT COLOR=0 STYLE="font-style:normal">920  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">921  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">922  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getYInt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">923  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(m_AttValues[</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">]); 
+<FONT COLOR=0 STYLE="font-style:normal">924  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">925  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">926  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getColor(){ 
+<FONT COLOR=0 STYLE="font-style:normal">927  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_AttValues[</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">928  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">929  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">930  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setColor(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> colorIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">931  </FONT>      m_AttValues[</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">] = colorIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">932  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">933  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">934  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">935  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">936  </FONT>   * Defines the order by class index, putting together all the points 
+<FONT COLOR=0 STYLE="font-style:normal">937  </FONT>   * of the same class (color); in every class subtree, it 
+<FONT COLOR=0 STYLE="font-style:normal">938  </FONT>   * defines the order in a two dimensional space, where a point is of 
+<FONT COLOR=0 STYLE="font-style:normal">939  </FONT>   * order less than other if its Y coordinate is lesser 
+<FONT COLOR=0 STYLE="font-style:normal">940  </FONT>   * or, if their Y coordinates are equal, if its X coordinate is lesser. 
+<FONT COLOR=0 STYLE="font-style:normal">941  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">942  </FONT>   * Respects the insert setup if all points insertion must be allowed, 
+<FONT COLOR=0 STYLE="font-style:normal">943  </FONT>   * it will never return 0. 
+<FONT COLOR=0 STYLE="font-style:normal">944  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">945  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> Point2DInstanceComparator </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> Comparator, Serializable{ 
+<FONT COLOR=0 STYLE="font-style:normal">946  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">947  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> compare(Object o1, Object o2){ 
+<FONT COLOR=0 STYLE="font-style:normal">948  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">949  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Point2DInstance p1 = (Point2DInstance) o1; 
+<FONT COLOR=0 STYLE="font-style:normal">950  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Point2DInstance p2 = (Point2DInstance) o2; 
+<FONT COLOR=0 STYLE="font-style:normal">951  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> coordinatesOrder = compareCoordinates(p1, p2); 
+<FONT COLOR=0 STYLE="font-style:normal">952  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classOrder = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) (p1.getColor() - p2.getColor()); 
+<FONT COLOR=0 STYLE="font-style:normal">953  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">954  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_InsertMode == ALLOW_ALL_POINTS_INSERT_MODE) 
+<FONT COLOR=0 STYLE="font-style:normal">955  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> classOrder != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> ? classOrder : coordinatesOrder != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> ? coordinatesOrder : </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">956  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">957  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_InsertMode == ONE_POINT_PER_CLASS_AND_COORDINATES_INSERT_MODE 
+<FONT COLOR=0 STYLE="font-style:normal">958  </FONT>        && coordinatesOrder == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">959  </FONT>        || classOrder != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">960  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> classOrder; 
+<FONT COLOR=0 STYLE="font-style:normal">961  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">962  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> coordinatesOrder; 
+<FONT COLOR=0 STYLE="font-style:normal">963  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">964  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">965  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Computes the coordinates order.  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">966  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> compareCoordinates(Point2DInstance p1, Point2DInstance p2){ 
+<FONT COLOR=0 STYLE="font-style:normal">967  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">968  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> yDifference = p1.getY() - p2.getY(); 
+<FONT COLOR=0 STYLE="font-style:normal">969  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">970  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (yDifference != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">971  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> yDifference &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> ? -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> : </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">972  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">973  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> xDifference = p1.getX() - p2.getX(); 
+<FONT COLOR=0 STYLE="font-style:normal">974  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">975  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (xDifference != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">976  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> xDifference &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> ? -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> : </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">977  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">978  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">979  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">980  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">981  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

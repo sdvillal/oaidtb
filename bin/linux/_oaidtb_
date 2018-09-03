@@ -1,0 +1,97 @@
+#!/bin/bash
+#----------------------------------------------------------------------
+# OAIDTB Script de inicio
+#----------------------------------------------------------------------
+# Este es un script genérico para ejecutar cualquiera de las aplicaciones
+# de weka o de la librería oaidtb; para usarlo:
+#  -Definir la variable MAIN_CLASS_NAME (posiblemente en otro script)
+#  -Llamar a este script.
+#  -Si se quiere redirigir la salida a un archivo, 
+#   llamar a este script con el nombre de dicho archivo como parámetro.
+#----------------------------------------------------------------------
+
+#----------------------------------------------------------------------
+# Antes de poder ejecutar nada es necesario especificar
+# la localización de la máquina virtual java
+# ---------------------------------------------------------------------
+# Si se ha configurado correctamente la variable JAVA_HOME en
+# el entorno no necesitarás cambiar la configuraciñon
+# de la variable JAVA_EXE
+# ---------------------------------------------------------------------
+if [ -z "$JAVA_HOME" ]; then
+  JAVA_EXE=usr/local/java/jdk1.3.1/bin/java
+else
+  JAVA_EXE=$JAVA_HOME/bin/java
+fi 
+
+if [ ! -x $JAVA_EXE ]; then 
+  echo ---------------------------------------------------------------------
+  echo ERROR: No se puede iniciar la máquina virtual de java
+  echo Por favor, especifica la variable JAVA_EXE en este script
+  echo ---------------------------------------------------------------------
+  return -1
+fi         
+
+# ---------------------------------------------------------------------
+# Aquí se debe especificar el directorio donde se 
+# ha instalado la aplicación
+# ---------------------------------------------------------------------
+#OAIDTB_HOME=/home/santi/pfc/app
+OAIDTB_HOME=../..
+
+OAIDTB_LIBS_HOME=$OAIDTB_HOME/libs
+
+#Indica aquí los parámetros opcionales para la máquina virtual java
+#JVM_ARGS="-ms32m -mx128m"
+
+#Configura el lugar en el que se encuentra la librería weka;
+#tener en cuenta que si la librería es una versión igual
+#o posterior a la 3.3.1 sólo funcionarán correctamente
+#sus aplicaciones gráficas si se ha aplicado el parche que viene con
+#esta aplicación
+if [ -z "$WEKA_HOME" ]; then
+  if [ -z "$OAIDTB_WEKA_HOME" ]; then
+    OAIDTB_WEKA_HOME=$OAIDTB_HOME/libs/weka_patched.jar
+  fi  
+else
+  OAIDTB_WEKA_HOME=$WEKA_HOME
+fi 
+
+#---------------------------------------------------------------------
+#Las siguientes variables sólo es necesario configurarlas 
+#en el caso de usar el ClassifierPanel o el AllContainerPanel 
+#y de no usar las librerías que acompañan a la aplicación
+#---------------------------------------------------------------------
+#if [ -z "$COLT_HOME" ]; then
+# COLT_HOME=$OAIDTB_HOME/libs/colt_only_used_classes.jar
+#fi
+#if [ -z "$JFREECHART_HOME" ]; then
+#  JFREECHART_HOME=$OAIDTB_HOME/libs/jfreechart-0.9.2.jar
+#fi
+#if [ -z "$JCOMMON_HOME" ]; then
+#  JCOMMON_HOME=$OAIDTB_HOME/libs/jcommon-0.6.4.jar
+#fi
+
+AUTOMATIC_OAIDTB_CLASSPATH=""
+for libfile in $OAIDTB_LIBS_HOME/*; do	   # Metemos todos los archivos en el directorio en el classpath
+  AUTOMATIC_OAIDTB_CLASSPATH=$AUTOMATIC_OAIDTB_CLASSPATH$libfile:
+done
+
+OAIDTB_CLASSPATH=$OAIDTB_WEKA_HOME:$COLT_HOME:$JFREECHART_HOME:$JCOMMON_HOME:$AUTOMATIC_OAIDTB_CLASSPATH
+
+if [ -z "$MAIN_CLASS_NAME" ]; then
+  MAIN_CLASS_NAME="oaidtb.gui.AllContainerPanel\$AppMainFrame"
+fi
+
+#---------------------------------------------------------------------
+# Especificar la localización del archivo de propiedades para el GOE
+# No mola--> Cambiarlo en el código fuente
+#---------------------------------------------------------------------
+GOE_CFG_FILE_DIR=../cfg
+
+#-Duser.dir=$OAIDTB_HOME
+if [ -z "$1" ]; then
+  exec ${JAVA_EXE} $JVM_ARGS -cp ${OAIDTB_CLASSPATH} -Duser.home=${GOE_CFG_FILE_DIR} $MAIN_CLASS_NAME
+else
+  exec ${JAVA_EXE} $JVM_ARGS -cp ${OAIDTB_CLASSPATH} -Duser.home=${GOE_CFG_FILE_DIR} $MAIN_CLASS_NAME >${1} 2>${1}
+fi

@@ -1,0 +1,1102 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\DrawingPanel.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\DrawingPanel.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    DrawingPanel.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Arbitrable.java.html">oaidtb.misc.mediator.Arbitrable</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Colleague.java.html">oaidtb.misc.mediator.Colleague</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Mediator.java.html">oaidtb.misc.mediator.Mediator</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.FastVector; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Instance; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.*; 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.geom.Rectangle2D; 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.image.BufferedImage; 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Iterator; 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * Panel que permite representar un conjunto de puntos bidimensionales (instancias), así 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * como representar una imagen de hipótesis. 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> Siempre se mantiene sincronizado con la base de datos de puntos. 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> Utiliza una representación en tres niveles; se dibujan, de abajo a arriba: 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;ol&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;li&GT;</I></FONT><FONT COLOR="#808080"><I> La imagen de hipótesis 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;li&GT;</I></FONT><FONT COLOR="#808080"><I> La imagen de la rejilla utilizada para crear dicha imagen de hipótesis 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;li&GT;</I></FONT><FONT COLOR="#808080"><I> La imagen que representa las instancias 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/ol&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.1 $ 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> DrawingPanel </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> JPanel </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Arbitrable.java.html">Arbitrable</A>{ 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#808080"><I>// It's fast!</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO: Make it even faster (testImage etc., volatileImages con JDK 1.4 etc.)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO: Allow customized sprite instance representation</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO: Limitar el tamaño mínimo que ha de tener una región de zoom (configurable)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO: Preparar para poder representar clases mediante sprites (ver DrawInstancesWithSprites en el paquete de pruebas)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Las instancias que vamos a representar en este panel */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances</A> m_Points; 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>   * Imagen que representa las instancias. 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>   * Pintar directamente en la pantalla es lento por 2 motivos: 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;ol&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>   *   </I></FONT><FONT COLOR="#808080"><I>&LT;li&GT;</I></FONT><FONT COLOR="#808080"><I> Tener que repintar cada vez que se repinta el panel todos los óvalos que representan las instancias 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>   *   </I></FONT><FONT COLOR="#808080"><I>&LT;li&GT;</I></FONT><FONT COLOR="#808080"><I> Pintar en la memoria gráfica directamente es más lento 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;/ol&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>   * Por lo tanto, dibujamos las instancias en una imgen en memoria principal (con un color transparente de fondo) 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>   * y después la volcamos a la pantalla si es preciso 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> BufferedImage m_InstancesImage = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BufferedImage(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, BufferedImage.TYPE_INT_ARGB); 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>  </FONT><FONT COLOR="#808080"><I>/** La imagen de hipótesis */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> BufferedImage m_HypothesisImage = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>   * La imagen de la rejilla utilizada para pintar la hipotesis (podemos quitarla, 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>   * pues no es un proceso muy costoso el redibujarla) 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> BufferedImage m_GridImage = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Un color transparente */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Color m_TransparentColor = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Color(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>  </FONT><FONT COLOR="#808080"><I>//What must be updated</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Bandera que indica si se debe repintar la imagen de instancias */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_UpdateInstances = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Bandera que indica si se debe repintar la imagen de la rejilla */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_UpdateGrid = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>  </FONT><FONT COLOR="#808080"><I>//What to show</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Bandera que indica si se deben mostrar o no las instancias de entrenamiento */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_ShowTrainInstances = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Bandera que indica si se deben mostrar o no las instancias de prueba */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_ShowTestInstances = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Bandera que indica si se debe mostrar o no la imagen de hipótesis */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_ShowHypothesisImage = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Bandera que indica si se debe mostrar o no la imagen de la rejilla */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_ShowGrid = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>  </FONT><FONT COLOR="#808080"><I>//Configuración de la rejilla</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>  </FONT><FONT COLOR="#808080"><I>// Para cada rectángulo (i) que lo forma:</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>  </FONT><FONT COLOR="#808080"><I>//           Esquina superior izquierda: (i * m_GridColumnWidth, i * m_GridRowHeight)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>  </FONT><FONT COLOR="#808080"><I>//           Anchura: m_GridColumnWidth</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>  </FONT><FONT COLOR="#808080"><I>//           Altura: m_GridRowHeight</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>  </FONT><FONT COLOR="#808080"><I>/** La anchura de la rejilla en pixeles */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_GridWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>  </FONT><FONT COLOR="#808080"><I>/** La altura de la rejilla en pixeles */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_GridHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>  </FONT><FONT COLOR="#808080"><I>/** La anchura de cada columna en pixeles */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_GridColumnWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>  </FONT><FONT COLOR="#808080"><I>/** La altura de cada fila en pixeles */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_GridRowHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El tamaño de los círculos que representan las instancias */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_PointsRadius = </FONT><FONT COLOR="#0000ff">3</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>  </FONT><FONT COLOR="#808080"><I>///////////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>  </FONT><FONT COLOR="#808080"><I>//Zoom manage</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>  </FONT><FONT COLOR="#808080"><I>//////////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>  </FONT><FONT COLOR="#808080"><I>/** A listener to visually select a region in the panel */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>  RegionSelector m_RegionSelector = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> RegionSelector(); 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>  </FONT><FONT COLOR="#808080"><I>/** If true, the panel is showing a region rather than be in a natural scale */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_IsZoomedIn = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>  </FONT><FONT COLOR="#808080"><I>// The region we currently have made zoom over</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>  </FONT><FONT COLOR="#808080"><I>/** La coordenada x de la primera columna por la izquierda de la región (modo zoom)*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_RegionX = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>  </FONT><FONT COLOR="#808080"><I>/** La coordenada y de la primera fila por arriba de la región (modo zoom)*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_RegionY = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>  </FONT><FONT COLOR="#808080"><I>/** La anchura de la región (modo zoom)*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_RegionWidth = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>  </FONT><FONT COLOR="#808080"><I>/** La altura de la región (modo zoom)*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_RegionHeight = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>  </FONT><FONT COLOR="#808080"><I>/** The factors needed to translate and scale points from/to the region */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_xScaleFactor = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, m_yScaleFactor = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; </FONT><FONT COLOR="#808080"><I>//m_xScaleFactorMid, m_yScaleFactorMid;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>   * Map the x coordinate of a point in a region to the x coordinate of the 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>   * same point as if the region is scaled and translated to the current drawing panel. 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>   * Por ejemplo, x(región) = 3.5 ==&GT; x(pantalla) = 9 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> x An x coordinate of a point in the region 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The corresponding x coordinate in the screen 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getXInPanel(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x){ 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>    x -= m_RegionX; </FONT><FONT COLOR="#808080"><I>//Translate</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> x * m_xScaleFactor; </FONT><FONT COLOR="#808080"><I>//Scale</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>   * Map the y coordinate of a point in a region to the y coordinate of the 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>   * same point as if the region is scaled and translated to the current drawing panel. 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>   * Por ejemplo, y(región) = 3.5 ==&GT; y(pantalla) = 9 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> y An y coordinate of a point in the region 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The corresponding y coordinate in the screen 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getYInPanel(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> y){ 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>    y -= m_RegionY; </FONT><FONT COLOR="#808080"><I>//Translate</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> y * m_yScaleFactor; </FONT><FONT COLOR="#808080"><I>//Scale</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>   * Map the x coordinate of a point in the panel to the x coordinate of the 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>   * same point as if the panel is scaled and translated to the current region selected. 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>   * Por ejemplo, x(pantalla) = 9 ==&GT;  x(región) = 3.5 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> x An x coordinate of a point in the screen 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The corresponding x coordinate in the region 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getXFromPanel(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x){ 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (x + m_RegionX * m_xScaleFactor) / m_xScaleFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>   * Map the y coordinate of a point in the panel to the y coordinate of the 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>   * same point as if the panel is scaled and translated to the current region selected. 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>   * Por ejemplo, y(pantalla) = 9 ==&GT;  y(región) = 3.5 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> y An y coordinate of a point in the screen 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The corresponding y coordinate in the region 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getYFromPanel(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> y){ 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (y + m_RegionY * m_yScaleFactor) / m_yScaleFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>   * Constructor 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> pointsDataSet La base de datos de instancias que representaremos 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> DrawingPanel(<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances</A> pointsDataSet){ 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>    m_Points = pointsDataSet; 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>    </FONT><FONT COLOR="#808080"><I>//Tenemos que controlar los cambios de tamaño del componente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>    addComponentListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ComponentAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> componentResized(ComponentEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>        </FONT><FONT COLOR="#808080"><I>//La imagen que representa a las instancias siempre tendrá el máximo tamaño</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT>        </FONT><FONT COLOR="#808080"><I>//que ha llegado a alcanzar el panel en la pantalla</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>        </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> imgW = m_InstancesImage.getWidth(); 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT>        </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> imgH = m_InstancesImage.getHeight(); 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT>        </FONT><FONT COLOR="#808080"><I>//Máxima anchura que se ha alcanzado hasta ahora</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>        </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> w = Math.max(imgW, getWidth()); 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT>        </FONT><FONT COLOR="#808080"><I>//Máxima altura que se ha alcanzado hasta ahora</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>        </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> h = Math.max(imgH, getHeight()); 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>        </FONT><FONT COLOR="#808080"><I>//Si el nuevo tamaño del panel en cualquiera de las dos dimensiones</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>        </FONT><FONT COLOR="#808080"><I>//es mayor que cualquiera alcanzado hasta ahora</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (w != imgW || h != imgH){ 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT>          </FONT><FONT COLOR="#808080"><I>//Aumentamos el tamaño de la imagen</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>          </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> BufferedImage bi = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB); 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>          </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Graphics2D g = bi.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>          </FONT><FONT COLOR="#808080"><I>//Rellenamos la imagen con un color transparente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>          g.setColor(m_TransparentColor); 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>          g.fillRect(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, w, h); 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>          </FONT><FONT COLOR="#808080"><I>//Pintamos la imagen anterior</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>          g.drawImage(m_InstancesImage, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, imgW, imgH, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT>          m_InstancesImage = bi; 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>          g.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_IsZoomedIn){ 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>          </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>          Teniemdo en mente la siguiente relación, que debe cumplirse siempre: 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>            m_xScaleFactor * m_regionWidth = getWidth() 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT>          es necesario cambiar el tamaño de la región sobre la que se ha hecho zoom 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT>          para preservar la lógica del programa (por ejemplo, para que la imagen de hipótesis 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>          recreada no salga "movida" o para que realmente aparezcan todas las 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>          instancias en la región) 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>          */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>          m_RegionWidth = (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) getWidth() / m_xScaleFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>          m_RegionHeight = (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) getHeight() / m_yScaleFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>          m_UpdateInstances = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>          repaint();  </FONT><FONT COLOR="#808080"><I>//Mete un "chasquido visual" bastante desagradable, pero no hay otra...</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>   * Levantar o bajar la bandera que indica si se deben redibujar las instancias 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> updateInstances true si se debe redibujar la imagen de instancias 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setUpdateInstances(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> updateInstances){ 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>    m_UpdateInstances = updateInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>   * Levantar o bajar la bandera que indica si se debe redibujar la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> updateGrid true si se debe redibujar la imagen de la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setUpdateGrid(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> updateGrid){ 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>    m_UpdateGrid = updateGrid; 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si se están mostrando las instancias de test */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> getShowTestInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ShowTestInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT>   * Mostrar o no las instancias de test 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> showTestInstances true si se deben mostrar las instancias de test 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setShowTestInstances(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> showTestInstances){ 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>    m_ShowTestInstances = showTestInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si se están mostrando las instancias de entrenamiento */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> getShowTrainInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ShowTrainInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT>   * Mostrar o no las instancias de entrenamiento 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> showTrainInstances true si se deben mostrar las instancias de entrenamiento 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setShowTrainInstances(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> showTrainInstances){ 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>    m_ShowTrainInstances = showTrainInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si se está mostrando la imagen de hipótesis */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> getShowHypothesisImage(){ 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ShowHypothesisImage; 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>   * Mostrar o no la imagen de hipótesis 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> showHypothesisImage true si se debe mostrar la imagen de hipótesis 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setShowHypothesisImage(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> showHypothesisImage){ 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>    m_ShowHypothesisImage = showHypothesisImage; 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si se está mostrando la imagen de la rejilla */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> getShowGrid(){ 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ShowGrid; 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>   * Mostrar o no la imagen de la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> showGrid true si se debe mostrar la imagen de la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setShowGrid(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> showGrid){ 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>    m_ShowGrid = showGrid; 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La base de datos de instancias que se está representando  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances</A> getPoints(){ 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Points; 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>   * Configurar la base de datos de instancias que se representarán 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> points La base de datos de instancias que se representarán 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setPoints(<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances</A> points){ 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT>    m_Points = points; 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La imagen de la rejilla */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> BufferedImage getGridImage(){ 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_GridImage; 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT>   * Configurar la imajen de la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> gridImage La nueva imagen de la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setGridImage(BufferedImage gridImage){ 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT>    m_GridImage = gridImage; 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La imagen de hipótesis */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> BufferedImage getHypothesisImage(){ 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_HypothesisImage; 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT>   * Configurar la imajen de hipótesis 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> image La nueva imagen de hipótesis 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setHypothesisImage(BufferedImage image){ 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>    m_HypothesisImage = image; 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El ancho de columna de la rejilla en pixeles */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getGridColumnWidth(){ 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_GridColumnWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT>   * Configurar el ancho de columna de la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> gridColumnWidth El nuevo ancho de columna de la rejilla en pixeles 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setGridColumnWidth(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> gridColumnWidth){ 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT>    m_GridColumnWidth = gridColumnWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT>    m_UpdateGrid = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La altura de fila de la rejilla en pixeles */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">382  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getGridRowHeight(){ 
+<FONT COLOR=0 STYLE="font-style:normal">383  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_GridRowHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">384  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">385  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">386  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">387  </FONT>   * Configurar la altura de fila de la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">388  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">389  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> gridRowHeight La nueva altura de fila de la rejilla en pixeles 
+<FONT COLOR=0 STYLE="font-style:normal">390  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">391  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setGridRowHeight(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> gridRowHeight){ 
+<FONT COLOR=0 STYLE="font-style:normal">392  </FONT>    m_GridRowHeight = gridRowHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">393  </FONT>    m_UpdateGrid = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">394  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">395  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">396  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La altura de la rejilla en pixeles */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">397  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getGridHeight(){ 
+<FONT COLOR=0 STYLE="font-style:normal">398  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_GridHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">399  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">400  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">401  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">402  </FONT>   * Configurar la altura de la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">403  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">404  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> gridHeight La nueva altura de la rejilla en pixeles 
+<FONT COLOR=0 STYLE="font-style:normal">405  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">406  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setGridHeight(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> gridHeight){ 
+<FONT COLOR=0 STYLE="font-style:normal">407  </FONT>    m_GridHeight = gridHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">408  </FONT>    m_UpdateGrid = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">409  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">410  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">411  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La anchura de la rejilla en pixeles */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">412  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getGridWidth(){ 
+<FONT COLOR=0 STYLE="font-style:normal">413  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_GridWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">414  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">415  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">416  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">417  </FONT>   * Configurar la anchura de la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">418  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">419  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> gridWidth La nueva anchura de la rejilla en pixeles 
+<FONT COLOR=0 STYLE="font-style:normal">420  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">421  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setGridWidth(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> gridWidth){ 
+<FONT COLOR=0 STYLE="font-style:normal">422  </FONT>    m_GridWidth = gridWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">423  </FONT>    m_UpdateGrid = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">424  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">425  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">426  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">427  </FONT>   * Set the point's ovals size. 
+<FONT COLOR=0 STYLE="font-style:normal">428  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">429  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> pointSize The size (radius) in pixels. 
+<FONT COLOR=0 STYLE="font-style:normal">430  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">431  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setPointSize(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> pointSize){ 
+<FONT COLOR=0 STYLE="font-style:normal">432  </FONT>    m_PointsRadius = pointSize; 
+<FONT COLOR=0 STYLE="font-style:normal">433  </FONT>    m_UpdateInstances = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">434  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">435  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">436  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">437  </FONT>   * Get the point's ovals size. 
+<FONT COLOR=0 STYLE="font-style:normal">438  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">439  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The size (radius) in pixels. 
+<FONT COLOR=0 STYLE="font-style:normal">440  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">441  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getPointSize(){ 
+<FONT COLOR=0 STYLE="font-style:normal">442  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_PointsRadius; 
+<FONT COLOR=0 STYLE="font-style:normal">443  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">444  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">445  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">446  </FONT>   * Este es el método principal de la clase; en él se encuentra 
+<FONT COLOR=0 STYLE="font-style:normal">447  </FONT>   * toda la lógica de representación 
+<FONT COLOR=0 STYLE="font-style:normal">448  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">449  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> g Un objeto graphics en que se pintará el panel 
+<FONT COLOR=0 STYLE="font-style:normal">450  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">451  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> paint(Graphics g){ 
+<FONT COLOR=0 STYLE="font-style:normal">452  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">453  </FONT>    </FONT><FONT COLOR="#808080"><I>//Llamamos al método de la superclase, para luego pintar encima lo que sea necesario</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">454  </FONT>    </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.paint(g); 
+<FONT COLOR=0 STYLE="font-style:normal">455  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">456  </FONT>    </FONT><FONT COLOR="#808080"><I>//Pintamos la imagen de hipótesis (abajo del todo)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">457  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ShowHypothesisImage && m_HypothesisImage != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">458  </FONT>      g.drawImage(m_HypothesisImage, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_HypothesisImage.getWidth(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">), m_HypothesisImage.getHeight(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">), </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">459  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">460  </FONT>    </FONT><FONT COLOR="#808080"><I>//Pintamos la imajen de la rejilla (encima de la imagen de hipótesis)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">461  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ShowGrid){ 
+<FONT COLOR=0 STYLE="font-style:normal">462  </FONT>      </FONT><FONT COLOR="#808080"><I>//Si es necesario la recreamos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">463  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_UpdateGrid) 
+<FONT COLOR=0 STYLE="font-style:normal">464  </FONT>        drawGrid(); 
+<FONT COLOR=0 STYLE="font-style:normal">465  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_GridImage != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">466  </FONT>        g.drawImage(m_GridImage, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_GridImage.getWidth(), m_GridImage.getHeight(), </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">467  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">468  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">469  </FONT>    </FONT><FONT COLOR="#808080"><I>//Si tenemos que repintar las instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">470  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_UpdateInstances){ 
+<FONT COLOR=0 STYLE="font-style:normal">471  </FONT>      </FONT><FONT COLOR="#808080"><I>//Este puede ser un trabajo costoso, avisamos a los mediadores</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">472  </FONT>      notifyMediators(INSTANCES_REPAINT_BEGIN, m_Points); 
+<FONT COLOR=0 STYLE="font-style:normal">473  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_IsZoomedIn) 
+<FONT COLOR=0 STYLE="font-style:normal">474  </FONT>        </FONT><FONT COLOR="#808080"><I>//Elegimos el método más adecuado (y rápido) para pintar las instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">475  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_Points.isTrainAndTestGeneratedFromregion()) 
+<FONT COLOR=0 STYLE="font-style:normal">476  </FONT>          drawRegionInstances(m_RegionX, m_RegionY, m_RegionWidth, m_RegionHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">477  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">478  </FONT>          drawRegionTrainAndTestInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">479  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Points.existsTestSet()) 
+<FONT COLOR=0 STYLE="font-style:normal">480  </FONT>        drawTrainAndTestInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">481  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">482  </FONT>        drawAllInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">483  </FONT>      notifyMediators(INSTANCES_REPAINT_FINISH, m_Points); 
+<FONT COLOR=0 STYLE="font-style:normal">484  </FONT>      </FONT><FONT COLOR="#808080"><I>//Ya no tenemos que hacerlo</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">485  </FONT>      m_UpdateInstances = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">486  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">487  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">488  </FONT>    </FONT><FONT COLOR="#808080"><I>//Si procede, pintamos en la pantalla la imagen de instancias (encima del resto de imágenes)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">489  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((m_ShowTrainInstances || m_ShowTestInstances && m_Points.existsTestSet()) && m_InstancesImage != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">490  </FONT>      g.drawImage(m_InstancesImage, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_InstancesImage.getWidth(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">), m_InstancesImage.getHeight(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">), </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">491  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">492  </FONT>    </FONT><FONT COLOR="#808080"><I>//Pintamos el "rectángulo transparente" que representa la selección actual</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">493  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_RegionSelector.existsSelection) 
+<FONT COLOR=0 STYLE="font-style:normal">494  </FONT>      m_RegionSelector.drawSelection((Graphics2D) g); 
+<FONT COLOR=0 STYLE="font-style:normal">495  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">496  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">497  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Dibujar la rejilla en la imagen de rejilla */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">498  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawGrid(){ 
+<FONT COLOR=0 STYLE="font-style:normal">499  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">500  </FONT>    </FONT><FONT COLOR="#808080"><I>//No valid grid has been set up</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">501  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_GridWidth &LT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> || m_GridHeight &LT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> || m_GridRowHeight &LT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> || m_GridColumnWidth &LT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">502  </FONT>      m_GridImage = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">503  </FONT>      m_UpdateGrid = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">504  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">505  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">506  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">507  </FONT>    </FONT><FONT COLOR="#808080"><I>//Creamos la imagen</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">508  </FONT>    m_GridImage = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BufferedImage(m_GridWidth, m_GridHeight, BufferedImage.TYPE_INT_ARGB); 
+<FONT COLOR=0 STYLE="font-style:normal">509  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">510  </FONT>    </FONT><FONT COLOR="#808080"><I>//La rellenamos con un color transparente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">511  </FONT>    Graphics2D g = m_GridImage.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">512  </FONT>    g.setColor(m_TransparentColor); 
+<FONT COLOR=0 STYLE="font-style:normal">513  </FONT>    g.fillRect(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_GridWidth, m_GridHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">514  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">515  </FONT>    </FONT><FONT COLOR="#808080"><I>//Pintamos las líneas de color negro</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">516  </FONT>    g.setColor(Color.black); 
+<FONT COLOR=0 STYLE="font-style:normal">517  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">518  </FONT>    </FONT><FONT COLOR="#808080"><I>//Poner un stroke güeno</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">519  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">520  </FONT>    </FONT><FONT COLOR="#808080"><I>//Vertical lines</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">521  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> coord = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">522  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (coord &LT; m_GridWidth){ 
+<FONT COLOR=0 STYLE="font-style:normal">523  </FONT>      g.drawLine(coord, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, coord, m_GridHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">524  </FONT>      coord += m_GridColumnWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">525  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">526  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">527  </FONT>    </FONT><FONT COLOR="#808080"><I>//Horizontal lines</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">528  </FONT>    coord = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">529  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (coord &LT; m_GridHeight){ 
+<FONT COLOR=0 STYLE="font-style:normal">530  </FONT>      g.drawLine(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, coord, m_GridWidth, coord); 
+<FONT COLOR=0 STYLE="font-style:normal">531  </FONT>      coord += m_GridRowHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">532  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">533  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">534  </FONT>    </FONT><FONT COLOR="#808080"><I>//Ya la hemos actualizado</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">535  </FONT>    m_UpdateGrid = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">536  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">537  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">538  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">539  </FONT>   * Dibujar una nueva instancia 
+<FONT COLOR=0 STYLE="font-style:normal">540  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">541  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> x La coordenada x 
+<FONT COLOR=0 STYLE="font-style:normal">542  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> y La coordenada y 
+<FONT COLOR=0 STYLE="font-style:normal">543  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> color El color que representa la clase de la instancia 
+<FONT COLOR=0 STYLE="font-style:normal">544  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">545  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawInstance(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> x, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> y, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Color color){ 
+<FONT COLOR=0 STYLE="font-style:normal">546  </FONT>    </FONT><FONT COLOR="#808080"><I>//La dibujamos en la pantalla...</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">547  </FONT>    Graphics2D g2 = (Graphics2D) getGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">548  </FONT>    g2.setColor(color); 
+<FONT COLOR=0 STYLE="font-style:normal">549  </FONT>    g2.fillOval(x, y, m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">550  </FONT>    </FONT><FONT COLOR="#808080"><I>//...y en la imagen de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">551  </FONT>    g2 = m_InstancesImage.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">552  </FONT>    g2.setColor(color); 
+<FONT COLOR=0 STYLE="font-style:normal">553  </FONT>    g2.fillOval(x, y, m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">554  </FONT>    g2.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">555  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">556  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">557  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">558  </FONT>   * Dibujar las últimas instancias añadidas a la base de datos en la imagen de 
+<FONT COLOR=0 STYLE="font-style:normal">559  </FONT>   * instancias; método pensado para dibujar de golpe y rápidamente un conjunto de instancias 
+<FONT COLOR=0 STYLE="font-style:normal">560  </FONT>   * del mismo color añadidas secuencialmente; no se llama a repaint(), así 
+<FONT COLOR=0 STYLE="font-style:normal">561  </FONT>   * que si se quiere actualizar también el contenido de la 
+<FONT COLOR=0 STYLE="font-style:normal">562  </FONT>   * pantalla se debe llamar a ese método externamente. 
+<FONT COLOR=0 STYLE="font-style:normal">563  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">564  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> num El número de instancias a pintar 
+<FONT COLOR=0 STYLE="font-style:normal">565  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> color El color de dichas instancias 
+<FONT COLOR=0 STYLE="font-style:normal">566  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">567  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawLastInstances(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> num, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Color color){ 
+<FONT COLOR=0 STYLE="font-style:normal">568  </FONT>    </FONT><FONT COLOR="#808080"><I>//Seleccionamos todas las instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">569  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> FastVector vector = m_Points.getAllInstancesFastVector(); 
+<FONT COLOR=0 STYLE="font-style:normal">570  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numInstances = vector.size(); 
+<FONT COLOR=0 STYLE="font-style:normal">571  </FONT>    </FONT><FONT COLOR="#808080"><I>//Las pintamos en la imagen de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">572  </FONT>    Graphics2D g2 = m_InstancesImage.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">573  </FONT>    g2.setColor(color); 
+<FONT COLOR=0 STYLE="font-style:normal">574  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (num &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">575  </FONT>      Instance instance = (Instance) vector.elementAt(numInstances - num); 
+<FONT COLOR=0 STYLE="font-style:normal">576  </FONT>      g2.setColor(color); 
+<FONT COLOR=0 STYLE="font-style:normal">577  </FONT>      g2.fillOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.value(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.value(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">), m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">578  </FONT>      num--; 
+<FONT COLOR=0 STYLE="font-style:normal">579  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">580  </FONT>    g2.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">581  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">582  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">583  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">584  </FONT>   * Dibuja un conjunto de instancias de un determinado color en la imagen de hipótesis; 
+<FONT COLOR=0 STYLE="font-style:normal">585  </FONT>   * no se llama a repaint(), así que si se quiere actualizar también el contenido de la 
+<FONT COLOR=0 STYLE="font-style:normal">586  </FONT>   * pantalla se debe llamar a ese método externamente. 
+<FONT COLOR=0 STYLE="font-style:normal">587  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">588  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instances Las instancias a pintar 
+<FONT COLOR=0 STYLE="font-style:normal">589  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> color El color de dichas instancias 
+<FONT COLOR=0 STYLE="font-style:normal">590  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">591  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawInstances(FastVector instances, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Color color){ 
+<FONT COLOR=0 STYLE="font-style:normal">592  </FONT>    Graphics2D g2 = m_InstancesImage.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">593  </FONT>    g2.setColor(color); 
+<FONT COLOR=0 STYLE="font-style:normal">594  </FONT>    </FONT><FONT COLOR="#808080"><I>//Dibujamos todas las instancias en la imagen de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">595  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; instances.size(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">596  </FONT>      Instance instance = (Instance) instances.elementAt(i); 
+<FONT COLOR=0 STYLE="font-style:normal">597  </FONT>      g2.setColor(color); 
+<FONT COLOR=0 STYLE="font-style:normal">598  </FONT>      g2.fillOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.value(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.value(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">), m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">599  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">600  </FONT>    g2.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">601  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">602  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">603  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">604  </FONT>   * Borra una instancia de la imagen de instancias pintando encima un círculo 
+<FONT COLOR=0 STYLE="font-style:normal">605  </FONT>   * igual con color transparente. ¡Ojo!, puede borrar instancias que haya "debajo" 
+<FONT COLOR=0 STYLE="font-style:normal">606  </FONT>   * de la que estamos borrando, y no aparecerán hasta que repintemos la imagen 
+<FONT COLOR=0 STYLE="font-style:normal">607  </FONT>   * de instancias 
+<FONT COLOR=0 STYLE="font-style:normal">608  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">609  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> x La coordenada x de la instancia 
+<FONT COLOR=0 STYLE="font-style:normal">610  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> y La coordenada y de la instancia 
+<FONT COLOR=0 STYLE="font-style:normal">611  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">612  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> erasePoint(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> y){ 
+<FONT COLOR=0 STYLE="font-style:normal">613  </FONT>    Graphics2D g2 = m_InstancesImage.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">614  </FONT>    g2.setComposite(AlphaComposite.Src); 
+<FONT COLOR=0 STYLE="font-style:normal">615  </FONT>    g2.setColor(m_TransparentColor); 
+<FONT COLOR=0 STYLE="font-style:normal">616  </FONT>    g2.fillOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(x), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(y), m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">617  </FONT>    g2.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">618  </FONT>    repaint(); 
+<FONT COLOR=0 STYLE="font-style:normal">619  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">620  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">621  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">622  </FONT>   * Pinta todas las intancias que existan en la base de datos en la imagen de instancias 
+<FONT COLOR=0 STYLE="font-style:normal">623  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">624  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawAllInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">625  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">626  </FONT>    </FONT><FONT COLOR="#808080"><I>//Si no hay que pintarlas, salimos sin hacer nada</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">627  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ShowTrainInstances) 
+<FONT COLOR=0 STYLE="font-style:normal">628  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">629  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">630  </FONT>    </FONT><FONT COLOR="#808080"><I>//Recogemos todas las instancias ordenadas por color</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">631  </FONT>    Iterator iterator = m_Points.getAllInstancesIterator(); 
+<FONT COLOR=0 STYLE="font-style:normal">632  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">633  </FONT>    Graphics2D g = m_InstancesImage.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">634  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">635  </FONT>    </FONT><FONT COLOR="#808080"><I>//"Limpiamos" la imagen de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">636  </FONT>    g.setColor(m_TransparentColor); 
+<FONT COLOR=0 STYLE="font-style:normal">637  </FONT>    g.setComposite(AlphaComposite.Src); 
+<FONT COLOR=0 STYLE="font-style:normal">638  </FONT>    g.fillRect(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_InstancesImage.getWidth(), m_InstancesImage.getHeight()); 
+<FONT COLOR=0 STYLE="font-style:normal">639  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">640  </FONT>    </FONT><FONT COLOR="#808080"><I>//Nos aprovechamos de que están ordenadas por color</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">641  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">642  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (iterator.hasNext()){ 
+<FONT COLOR=0 STYLE="font-style:normal">643  </FONT>      colorIndex++; 
+<FONT COLOR=0 STYLE="font-style:normal">644  </FONT>      </FONT><FONT COLOR="#808080"><I>//Preguntamos por cuántas instancias hay de ese color</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">645  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> countDown = m_Points.getNumPointsOfColor(colorIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">646  </FONT>      g.setColor(m_Points.getColor(colorIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">647  </FONT>      </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (countDown-- &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">648  </FONT>        <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A> p = (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A>) iterator.next(); 
+<FONT COLOR=0 STYLE="font-style:normal">649  </FONT>        g.fillOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getX(), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getY(), m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">650  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">651  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">652  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">653  </FONT>    g.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">654  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">655  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">656  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">657  </FONT>   * Pinta las instancias que pertenecen a la región representada por el panel, 
+<FONT COLOR=0 STYLE="font-style:normal">658  </FONT>   * haciendo las correspondientes transformaciones de coordenadas 
+<FONT COLOR=0 STYLE="font-style:normal">659  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">660  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionX La coordenada x de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">661  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionY La coordenada y de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">662  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionWidth La anchura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">663  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionHeight La altura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">664  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">665  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawRegionInstances(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionX, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionY, 
+<FONT COLOR=0 STYLE="font-style:normal">666  </FONT>                                   </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionWidth, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionHeight){ 
+<FONT COLOR=0 STYLE="font-style:normal">667  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">668  </FONT>    Graphics2D g = m_InstancesImage.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">669  </FONT>    </FONT><FONT COLOR="#808080"><I>//Limpiamos la imagen de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">670  </FONT>    g.setColor(m_TransparentColor); 
+<FONT COLOR=0 STYLE="font-style:normal">671  </FONT>    g.setComposite(AlphaComposite.Src); 
+<FONT COLOR=0 STYLE="font-style:normal">672  </FONT>    g.fillRect(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_InstancesImage.getWidth(), m_InstancesImage.getHeight()); 
+<FONT COLOR=0 STYLE="font-style:normal">673  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">674  </FONT>    </FONT><FONT COLOR="#808080"><I>//Si tenemos que representar tanto el conjunto de entrenamiento como el de test...</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">675  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Points.existsTestSet() && m_ShowTestInstances){ 
+<FONT COLOR=0 STYLE="font-style:normal">676  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">677  </FONT>      </FONT><FONT COLOR="#808080"><I>//Recuperamos las instancias de entrenamiento y de test</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">678  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> FastVector train = m_Points.getTrainInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">679  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> FastVector test = m_Points.getTestInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">680  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">681  </FONT>      </FONT><FONT COLOR="#808080"><I>//Pintamos las instancias de entrenamiento</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">682  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ShowTrainInstances){ 
+<FONT COLOR=0 STYLE="font-style:normal">683  </FONT>        </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; train.size(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">684  </FONT>          <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A> p = (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A>) train.elementAt(i); 
+<FONT COLOR=0 STYLE="font-style:normal">685  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances</A>.inRegion(p.getX(), p.getY(), 
+<FONT COLOR=0 STYLE="font-style:normal">686  </FONT>                                        regionX, regionY, regionWidth, regionHeight)){ 
+<FONT COLOR=0 STYLE="font-style:normal">687  </FONT>            </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getColor(); 
+<FONT COLOR=0 STYLE="font-style:normal">688  </FONT>            g.setColor(m_Points.getColor(colorIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">689  </FONT>            </FONT><FONT COLOR="#808080"><I>//Hacemos la transformación de coordenadas correspondiente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">690  </FONT>            g.fillOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getXInPanel(p.getX())), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getYInPanel(p.getY())), 
+<FONT COLOR=0 STYLE="font-style:normal">691  </FONT>                       m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">692  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">693  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">694  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">695  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">696  </FONT>      </FONT><FONT COLOR="#808080"><I>//Pintamos las instancias de test</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">697  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; test.size(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">698  </FONT>        <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A> p = (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A>) test.elementAt(i); 
+<FONT COLOR=0 STYLE="font-style:normal">699  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances</A>.inRegion(p.getX(), p.getY(), 
+<FONT COLOR=0 STYLE="font-style:normal">700  </FONT>                                      regionX, regionY, regionWidth, regionHeight)){ 
+<FONT COLOR=0 STYLE="font-style:normal">701  </FONT>          </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getColor(); 
+<FONT COLOR=0 STYLE="font-style:normal">702  </FONT>          g.setColor(m_Points.getColor(colorIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">703  </FONT>          </FONT><FONT COLOR="#808080"><I>//Hacemos la transformación de coordenadas correspondiente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">704  </FONT>          g.drawOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getXInPanel(p.getX())), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getYInPanel(p.getY())), 
+<FONT COLOR=0 STYLE="font-style:normal">705  </FONT>                     m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">706  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">707  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">708  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">709  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ </FONT><FONT COLOR="#808080"><I>//Si tenemos que pintar todas las instancias en la región</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">710  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">711  </FONT>      </FONT><FONT COLOR="#808080"><I>//Recuperamos todas las instancias que están en la región</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">712  </FONT>      FastVector regionInstances = m_Points.getRegion(regionX, regionY, regionWidth, regionHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">713  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">714  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ShowTrainInstances) 
+<FONT COLOR=0 STYLE="font-style:normal">715  </FONT>        </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; regionInstances.size(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">716  </FONT>          <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A> p = (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A>) regionInstances.elementAt(i); 
+<FONT COLOR=0 STYLE="font-style:normal">717  </FONT>          </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getColor(); 
+<FONT COLOR=0 STYLE="font-style:normal">718  </FONT>          g.setColor(m_Points.getColor(colorIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">719  </FONT>          </FONT><FONT COLOR="#808080"><I>//Hacemos la transformación de coordenadas correspondiente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">720  </FONT>          g.fillOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getXInPanel(p.getX())), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getYInPanel(p.getY())), 
+<FONT COLOR=0 STYLE="font-style:normal">721  </FONT>                     m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">722  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">723  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">724  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">725  </FONT>    g.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">726  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">727  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">728  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">729  </FONT>   * Dibuja las instancias de entrenamiento y de test en la imagen de instancias 
+<FONT COLOR=0 STYLE="font-style:normal">730  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">731  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawTrainAndTestInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">732  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">733  </FONT>    </FONT><FONT COLOR="#808080"><I>//Recuperamos los conjuntos de entrenamiento y de test</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">734  </FONT>    FastVector train = m_Points.getTrainInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">735  </FONT>    FastVector test = m_Points.getTestInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">736  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">737  </FONT>    Graphics2D g = m_InstancesImage.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">738  </FONT>    </FONT><FONT COLOR="#808080"><I>//"Limpiamos" la imagen de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">739  </FONT>    g.setColor(m_TransparentColor); 
+<FONT COLOR=0 STYLE="font-style:normal">740  </FONT>    g.setComposite(AlphaComposite.Src); 
+<FONT COLOR=0 STYLE="font-style:normal">741  </FONT>    g.fillRect(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_InstancesImage.getWidth(), m_InstancesImage.getHeight()); 
+<FONT COLOR=0 STYLE="font-style:normal">742  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">743  </FONT>    </FONT><FONT COLOR="#808080"><I>//Dibujamos si procede las instancias de entrenamiento</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">744  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ShowTrainInstances) 
+<FONT COLOR=0 STYLE="font-style:normal">745  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; train.size(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">746  </FONT>        <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A> p = (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A>) train.elementAt(i); 
+<FONT COLOR=0 STYLE="font-style:normal">747  </FONT>        </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getColor(); 
+<FONT COLOR=0 STYLE="font-style:normal">748  </FONT>        g.setColor(m_Points.getColor(colorIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">749  </FONT>        g.fillOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getX(), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getY(), m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">750  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">751  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">752  </FONT>    </FONT><FONT COLOR="#808080"><I>//Dibujamos si procede las instancias de test</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">753  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ShowTestInstances) 
+<FONT COLOR=0 STYLE="font-style:normal">754  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; test.size(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">755  </FONT>        <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A> p = (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A>) test.elementAt(i); 
+<FONT COLOR=0 STYLE="font-style:normal">756  </FONT>        </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getColor(); 
+<FONT COLOR=0 STYLE="font-style:normal">757  </FONT>        g.setColor(m_Points.getColor(colorIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">758  </FONT>        g.drawOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getX(), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getY(), m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">759  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">760  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">761  </FONT>    g.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">762  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">763  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">764  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">765  </FONT>   * Este método se aprovecha de que los conjuntos de entrenamiento y test que existen 
+<FONT COLOR=0 STYLE="font-style:normal">766  </FONT>   * en la base de datos hayan sido creados utilizando sólo las instancias 
+<FONT COLOR=0 STYLE="font-style:normal">767  </FONT>   * que pertenecen a la región actualmente representada por el panel. 
+<FONT COLOR=0 STYLE="font-style:normal">768  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">769  </FONT>   * Hace las transformaciones de coordenadas necesarias- 
+<FONT COLOR=0 STYLE="font-style:normal">770  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">771  </FONT>   * Sólo se diferencia de drawTrainAndTestInstances() en que transforma las coordenadas 
+<FONT COLOR=0 STYLE="font-style:normal">772  </FONT>   * de los puntos. 
+<FONT COLOR=0 STYLE="font-style:normal">773  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">774  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawRegionTrainAndTestInstances(){ 
+<FONT COLOR=0 STYLE="font-style:normal">775  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">776  </FONT>    </FONT><FONT COLOR="#808080"><I>//Recuperamos las instancias de entrenamiento y test</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">777  </FONT>    FastVector train = m_Points.getTrainInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">778  </FONT>    FastVector test = m_Points.getTestInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">779  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">780  </FONT>    Graphics2D g = m_InstancesImage.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">781  </FONT>    </FONT><FONT COLOR="#808080"><I>//"Limpiamos" la imagen de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">782  </FONT>    g.setColor(m_TransparentColor); 
+<FONT COLOR=0 STYLE="font-style:normal">783  </FONT>    g.setComposite(AlphaComposite.Src); 
+<FONT COLOR=0 STYLE="font-style:normal">784  </FONT>    g.fillRect(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_InstancesImage.getWidth(), m_InstancesImage.getHeight()); 
+<FONT COLOR=0 STYLE="font-style:normal">785  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">786  </FONT>    </FONT><FONT COLOR="#808080"><I>//Pintamos si es necesario las instancias de entrenamiento</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">787  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ShowTrainInstances) 
+<FONT COLOR=0 STYLE="font-style:normal">788  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; train.size(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">789  </FONT>        <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A> p = (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A>) train.elementAt(i); 
+<FONT COLOR=0 STYLE="font-style:normal">790  </FONT>        </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getColor(); 
+<FONT COLOR=0 STYLE="font-style:normal">791  </FONT>        g.setColor(m_Points.getColor(colorIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">792  </FONT>        </FONT><FONT COLOR="#808080"><I>//Tenemos que trasladar las coordenadas reales del punto a las de la pantalla</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">793  </FONT>        g.fillOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getXInPanel(p.getX())), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getYInPanel(p.getY())), 
+<FONT COLOR=0 STYLE="font-style:normal">794  </FONT>                   m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">795  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">796  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">797  </FONT>    </FONT><FONT COLOR="#808080"><I>//Pintamos si es necesario las instancias de test</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">798  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ShowTestInstances) 
+<FONT COLOR=0 STYLE="font-style:normal">799  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; test.size(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">800  </FONT>        <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A> p = (<A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances.Point2DInstance</A>) test.elementAt(i); 
+<FONT COLOR=0 STYLE="font-style:normal">801  </FONT>        </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> colorIndex = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) p.getColor(); 
+<FONT COLOR=0 STYLE="font-style:normal">802  </FONT>        g.setColor(m_Points.getColor(colorIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">803  </FONT>        </FONT><FONT COLOR="#808080"><I>//Tenemos que trasladar las coordenadas reales del punto a las de la pantalla</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">804  </FONT>        g.drawOval((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getXInPanel(p.getX())), (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(getYInPanel(p.getY())), 
+<FONT COLOR=0 STYLE="font-style:normal">805  </FONT>                   m_PointsRadius, m_PointsRadius); 
+<FONT COLOR=0 STYLE="font-style:normal">806  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">807  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">808  </FONT>    g.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">809  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">810  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">811  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">812  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Borra el "rectángulo transparente" que representa la región seleccionada */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">813  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> clearSelection(){ 
+<FONT COLOR=0 STYLE="font-style:normal">814  </FONT>    m_RegionSelector.resetSelection(); 
+<FONT COLOR=0 STYLE="font-style:normal">815  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">816  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">817  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Permite seleccionar gráficamente una región dentro del panel. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">818  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> RegionSelector </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> MouseAdapter </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> MouseMotionListener{ 
+<FONT COLOR=0 STYLE="font-style:normal">819  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">820  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> origX,origY; 
+<FONT COLOR=0 STYLE="font-style:normal">821  </FONT>    </FONT><FONT COLOR="#808080"><I>//Siempre en coordenadas absolutas de la pantalla</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">822  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> regionX, regionY, regionWidth, regionHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">823  </FONT>    Color selectionColor = Color.blue.darker(); 
+<FONT COLOR=0 STYLE="font-style:normal">824  </FONT>    </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> existsSelection = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">825  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">826  </FONT>    </FONT><FONT COLOR="#808080"><I>//Los tamaños mínimos de una selección</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">827  </FONT>    </FONT><FONT COLOR="#808080"><I>//TODO: Permitir que sea configurable</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">828  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> minWidth = </FONT><FONT COLOR="#0000ff">0.02</FONT><FONT COLOR="#000000">, minHeight = </FONT><FONT COLOR="#0000ff">0.02</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">829  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">830  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Recogemos las coordenada donde hemos pulsado el ratón */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">831  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mousePressed(MouseEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">832  </FONT>      origX = e.getX(); 
+<FONT COLOR=0 STYLE="font-style:normal">833  </FONT>      origY = e.getY(); 
+<FONT COLOR=0 STYLE="font-style:normal">834  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">835  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">836  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Cancelar la selección */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">837  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mouseClicked(MouseEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">838  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (existsSelection) 
+<FONT COLOR=0 STYLE="font-style:normal">839  </FONT>        resetSelection(); 
+<FONT COLOR=0 STYLE="font-style:normal">840  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">841  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">842  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">843  </FONT>     * Controlamos si hemos realizado una selección (arrastre del ratón con el botón izquierdo) 
+<FONT COLOR=0 STYLE="font-style:normal">844  </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">845  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> e El evento del ratón 
+<FONT COLOR=0 STYLE="font-style:normal">846  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">847  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mouseReleased(MouseEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">848  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (SwingUtilities.isRightMouseButton(e)) </FONT><FONT COLOR="#808080"><I>//Canceled selection process</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">849  </FONT>        resetSelection(); 
+<FONT COLOR=0 STYLE="font-style:normal">850  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (existsSelection){ 
+<FONT COLOR=0 STYLE="font-style:normal">851  </FONT>        Rectangle2D.Double sel = getLastSelection(); 
+<FONT COLOR=0 STYLE="font-style:normal">852  </FONT>        </FONT><FONT COLOR="#808080"><I>//Evitamos la selección de una región muy pequeña</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">853  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (sel.width &LT; minWidth || sel.height &LT; minHeight) 
+<FONT COLOR=0 STYLE="font-style:normal">854  </FONT>          resetSelection(); 
+<FONT COLOR=0 STYLE="font-style:normal">855  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">856  </FONT>          notifyMediators(REGION_SELECTED, getLastSelection()); 
+<FONT COLOR=0 STYLE="font-style:normal">857  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">858  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">859  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">860  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">861  </FONT>     * Actualizar la selección actual 
+<FONT COLOR=0 STYLE="font-style:normal">862  </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">863  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> e El evento del ratón 
+<FONT COLOR=0 STYLE="font-style:normal">864  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">865  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mouseDragged(MouseEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">866  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">867  </FONT>      existsSelection = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">868  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">869  </FONT>      </FONT><FONT COLOR="#808080"><I>//No permitimos que la selección se "salga del panel"</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">870  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> w = getWidth(); 
+<FONT COLOR=0 STYLE="font-style:normal">871  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> x = e.getX(); 
+<FONT COLOR=0 STYLE="font-style:normal">872  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">873  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(x &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">874  </FONT>        regionWidth = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">875  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(x &GT; w) 
+<FONT COLOR=0 STYLE="font-style:normal">876  </FONT>        regionWidth = w; 
+<FONT COLOR=0 STYLE="font-style:normal">877  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">878  </FONT>        regionWidth = x; 
+<FONT COLOR=0 STYLE="font-style:normal">879  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">880  </FONT>      </FONT><FONT COLOR="#808080"><I>//No permitimos que la selección se "salga del panel"</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">881  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> h = getHeight(); 
+<FONT COLOR=0 STYLE="font-style:normal">882  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> y = e.getY(); 
+<FONT COLOR=0 STYLE="font-style:normal">883  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">884  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(y &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">885  </FONT>        regionHeight = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">886  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(y &GT; h) 
+<FONT COLOR=0 STYLE="font-style:normal">887  </FONT>        regionHeight = h; 
+<FONT COLOR=0 STYLE="font-style:normal">888  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">889  </FONT>        regionHeight = y; 
+<FONT COLOR=0 STYLE="font-style:normal">890  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">891  </FONT>      </FONT><FONT COLOR="#808080"><I>//Actualizamos los valores de la región seleccionada</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">892  </FONT>      regionX = Math.min(origX, regionWidth); 
+<FONT COLOR=0 STYLE="font-style:normal">893  </FONT>      regionY = Math.min(origY, regionHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">894  </FONT>      regionWidth = Math.abs(origX - regionWidth); 
+<FONT COLOR=0 STYLE="font-style:normal">895  </FONT>      regionHeight = Math.abs(origY - regionHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">896  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">897  </FONT>      </FONT><FONT COLOR="#808080"><I>//Repintamos el "rectángulo transparente" que representa la selección</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">898  </FONT>      repaint(); 
+<FONT COLOR=0 STYLE="font-style:normal">899  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">900  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">901  </FONT>    </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La última región seleccionada, en coordenadas del dominio del problema  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">902  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double getLastSelection(){ 
+<FONT COLOR=0 STYLE="font-style:normal">903  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_IsZoomedIn) 
+<FONT COLOR=0 STYLE="font-style:normal">904  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double(regionX, regionY, regionWidth, regionHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">905  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">906  </FONT>        </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> trueX = getXFromPanel(regionX); 
+<FONT COLOR=0 STYLE="font-style:normal">907  </FONT>        </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> trueY = getYFromPanel(regionY); 
+<FONT COLOR=0 STYLE="font-style:normal">908  </FONT>        </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> trueWidth = regionWidth / m_xScaleFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">909  </FONT>        </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> trueHeight = regionHeight / m_yScaleFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">910  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double(trueX, trueY, trueWidth, trueHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">911  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">912  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">913  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">914  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">915  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mouseMoved(MouseEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">916  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">917  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">918  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Dibuja el "rectángulo transparente" que representa la región seleccionada */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">919  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawSelection(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Graphics2D g2){ 
+<FONT COLOR=0 STYLE="font-style:normal">920  </FONT>      g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, </FONT><FONT COLOR="#0000ff">0.2F</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">921  </FONT>      g2.setColor(selectionColor); 
+<FONT COLOR=0 STYLE="font-style:normal">922  </FONT>      g2.fillRect(regionX, regionY, regionWidth, regionHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">923  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">924  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">925  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Borra el "rectángulo transparente" que representa la región seleccionada */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">926  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> resetSelection(){ 
+<FONT COLOR=0 STYLE="font-style:normal">927  </FONT>      repaint(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, regionX, regionY, regionWidth, regionHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">928  </FONT>      existsSelection = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">929  </FONT>      regionX = regionY = regionWidth = regionHeight = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">930  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">931  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">932  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">933  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">934  </FONT>   * Añade los oyentes del ratón que permiten seleccionar visualmente una región del espacio representado 
+<FONT COLOR=0 STYLE="font-style:normal">935  </FONT>   * por el panel 
+<FONT COLOR=0 STYLE="font-style:normal">936  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">937  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> enterSelectionMode(){ 
+<FONT COLOR=0 STYLE="font-style:normal">938  </FONT>    addMouseListener(m_RegionSelector); 
+<FONT COLOR=0 STYLE="font-style:normal">939  </FONT>    addMouseMotionListener(m_RegionSelector); 
+<FONT COLOR=0 STYLE="font-style:normal">940  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">941  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">942  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">943  </FONT>   * Elimina los oyentes del ratón que permiten seleccionar visualmente una región del espacio representado 
+<FONT COLOR=0 STYLE="font-style:normal">944  </FONT>   * por el panel 
+<FONT COLOR=0 STYLE="font-style:normal">945  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">946  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> exitSelectionMode(){ 
+<FONT COLOR=0 STYLE="font-style:normal">947  </FONT>    removeMouseListener(m_RegionSelector); 
+<FONT COLOR=0 STYLE="font-style:normal">948  </FONT>    removeMouseMotionListener(m_RegionSelector); 
+<FONT COLOR=0 STYLE="font-style:normal">949  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">950  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">951  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">952  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">953  </FONT>   * Hace zoom sobre una región. Las coordenadas deben ser absolutas en relación al dominio del problema 
+<FONT COLOR=0 STYLE="font-style:normal">954  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">955  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionX La coordenada x de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">956  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionY La coordenada y de la esquina superior izquierda de la región 
+<FONT COLOR=0 STYLE="font-style:normal">957  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionWidth La anchura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">958  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> regionHeight La altura de la región 
+<FONT COLOR=0 STYLE="font-style:normal">959  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">960  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> zoomIn(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionX, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionY, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionWidth, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> regionHeight){ 
+<FONT COLOR=0 STYLE="font-style:normal">961  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">962  </FONT>    m_RegionX = regionX; 
+<FONT COLOR=0 STYLE="font-style:normal">963  </FONT>    m_RegionY = regionY; 
+<FONT COLOR=0 STYLE="font-style:normal">964  </FONT>    m_RegionWidth = regionWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">965  </FONT>    m_RegionHeight = regionHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">966  </FONT>    m_xScaleFactor = (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) getWidth() / regionWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">967  </FONT>    m_yScaleFactor = (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) getHeight() / regionHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">968  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">969  </FONT>    m_IsZoomedIn = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">970  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">971  </FONT>    </FONT><FONT COLOR="#808080"><I>//Tenemos que redibujar</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">972  </FONT>    m_UpdateInstances = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">973  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">974  </FONT>    notifyMediators(ZOOM_IN, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double(regionX, regionY, regionWidth, regionHeight)); 
+<FONT COLOR=0 STYLE="font-style:normal">975  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">976  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">977  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">978  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">979  </FONT>   * Hace zoom out; resetea las variables que indican la región seleccionada 
+<FONT COLOR=0 STYLE="font-style:normal">980  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">981  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> zoomOut(){ 
+<FONT COLOR=0 STYLE="font-style:normal">982  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">983  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(!m_IsZoomedIn) 
+<FONT COLOR=0 STYLE="font-style:normal">984  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">985  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">986  </FONT>    m_RegionX = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">987  </FONT>    m_RegionY = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">988  </FONT>    m_RegionWidth = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">989  </FONT>    m_RegionHeight = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">990  </FONT>    m_xScaleFactor = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">991  </FONT>    m_yScaleFactor = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">992  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">993  </FONT>    m_IsZoomedIn = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">994  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">995  </FONT>    m_UpdateInstances = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">996  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">997  </FONT>    notifyMediators(ZOOM_OUT, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double(m_RegionX, m_RegionY, m_RegionWidth, m_RegionHeight)); 
+<FONT COLOR=0 STYLE="font-style:normal">998  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">999  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1000 </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si el panel está representando una región interior del dominio del problema, salvo que represente 
+<FONT COLOR=0 STYLE="font-style:normal">1001 </FONT>   *          el problema a escala natural 
+<FONT COLOR=0 STYLE="font-style:normal">1002 </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1003 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isZoomedIn(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1004 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_IsZoomedIn; 
+<FONT COLOR=0 STYLE="font-style:normal">1005 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1006 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1007 </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La coordenada x de la esquina superior izquierda de la región representada */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1008 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getRegionX(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1009 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_RegionX; 
+<FONT COLOR=0 STYLE="font-style:normal">1010 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1011 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1012 </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La coordenada y de la esquina superior izquierda de la región representada */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1013 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getRegionY(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1014 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_RegionY; 
+<FONT COLOR=0 STYLE="font-style:normal">1015 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1016 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1017 </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La anchura de la región representada   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1018 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getRegionWidth(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1019 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_RegionWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">1020 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1021 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1022 </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La altura de la región representada   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1023 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getRegionHeight(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1024 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_RegionHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">1025 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1026 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1027 </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El factor de escalado horizontal (relación tamaño_del_panel / tamaño_de_la_región) */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1028 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getXScaleFactor(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1029 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_xScaleFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">1030 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1031 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1032 </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El factor de escalado vertical (relación tamaño_del_panel / tamaño_de_la_región) */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1033 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getYScaleFactor(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1034 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_yScaleFactor; 
+<FONT COLOR=0 STYLE="font-style:normal">1035 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1036 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1037 </FONT>  </FONT><FONT COLOR="#808080"><I>//-----------------------------///////////////////////////////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1038 </FONT>  </FONT><FONT COLOR="#808080"><I>//------------------ ARBITRABLE IMPLEMENTATION ///////////////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1039 </FONT>  </FONT><FONT COLOR="#808080"><I>//-----------------------------///////////////////////////////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1040 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1041 </FONT>  </FONT><FONT COLOR="#808080"><I>// Private field which will be used to implement the Arbitable interface.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1042 </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Colleague.java.html">Colleague</A> m_Colleague = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Colleague.java.html">Colleague</A>(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1043 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1044 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Arbitrable.java.html">Arbitrable</A> getColleague(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1045 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Colleague; 
+<FONT COLOR=0 STYLE="font-style:normal">1046 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1047 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1048 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addMediator(<A href="..\..\oaidtb\misc\mediator\Mediator.java.html">Mediator</A> mediator){ 
+<FONT COLOR=0 STYLE="font-style:normal">1049 </FONT>    m_Colleague.addMediator(mediator); 
+<FONT COLOR=0 STYLE="font-style:normal">1050 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1051 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1052 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> removeMediator(<A href="..\..\oaidtb\misc\mediator\Mediator.java.html">Mediator</A> mediator){ 
+<FONT COLOR=0 STYLE="font-style:normal">1053 </FONT>    m_Colleague.removeMediator(mediator); 
+<FONT COLOR=0 STYLE="font-style:normal">1054 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1055 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1056 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> notifyMediators(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> whatChanged, Object object){ 
+<FONT COLOR=0 STYLE="font-style:normal">1057 </FONT>    m_Colleague.notifyMediators(whatChanged, object); 
+<FONT COLOR=0 STYLE="font-style:normal">1058 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1059 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1060 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numberOfMediators(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1061 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Colleague.numberOfMediators(); 
+<FONT COLOR=0 STYLE="font-style:normal">1062 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1063 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1064 </FONT>  </FONT><FONT COLOR="#808080"><I>// Change indicator constants</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1065 </FONT>  </FONT><FONT COLOR="#808080"><I>/** Indicador de mensaje para los mediadores, acompañado de la base de datos de puntos */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1066 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1067 </FONT>    INSTANCES_REPAINT_BEGIN = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">1068 </FONT>    INSTANCES_REPAINT_FINISH = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">1069 </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">1070 </FONT>   * Indicador de mensaje para los mediadores, 
+<FONT COLOR=0 STYLE="font-style:normal">1071 </FONT>   * acompañado de la región seleccionada, en coordenadas de pantalla, 
+<FONT COLOR=0 STYLE="font-style:normal">1072 </FONT>   * almacenada en un {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> Rectangle2D.Double} 
+<FONT COLOR=0 STYLE="font-style:normal">1073 </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1074 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1075 </FONT>    REGION_SELECTED = </FONT><FONT COLOR="#0000ff">20</FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">1076 </FONT>    REGION_DESELECTED = </FONT><FONT COLOR="#0000ff">21</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">1077 </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">1078 </FONT>   * Indicador de mensaje para los mediadores, 
+<FONT COLOR=0 STYLE="font-style:normal">1079 </FONT>   * acompañado de la región sobre la que se ha hecho/deshecho zoom, 
+<FONT COLOR=0 STYLE="font-style:normal">1080 </FONT>   * en coordenadas del dominio del problema, 
+<FONT COLOR=0 STYLE="font-style:normal">1081 </FONT>   * almacenada en un {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> Rectangle2D.Double} 
+<FONT COLOR=0 STYLE="font-style:normal">1082 </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1083 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1084 </FONT>    ZOOM_IN = </FONT><FONT COLOR="#0000ff">30</FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">1085 </FONT>    ZOOM_OUT = </FONT><FONT COLOR="#0000ff">31</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">1086 </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

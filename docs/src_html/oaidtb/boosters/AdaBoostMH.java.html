@@ -1,0 +1,612 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\boosters\AdaBoostMH.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\boosters\AdaBoostMH.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    AdaBoostMH.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.boosters; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.DistributionClassifier; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Evaluation; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.*; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Enumeration; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Vector; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> * Class for boosting using Schapire & Singer's AdaBoostMH. For more information see:</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="http://www.research.att.com/~schapire/cgi-bin/uncompress-papers/SchapireSi98.ps"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * Schapire R.E. & & Singer Y.: 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> *  </I></FONT><FONT COLOR="#808080"><I>&LT;i&GT;</I></FONT><FONT COLOR="#808080"><I>Improved boosting algorithms using confidence rated-predictions</I></FONT><FONT COLOR="#808080"><I>&LT;/i&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * Machine Learning, 37(3):297-336, 1999 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;&LT;/p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * This implementation follows the guidelines given in:</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="http://www-stat.stanford.edu/~jhf/ftp/boost.ps"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> * Jerome Friedman, Trevor Hastie and Robert Tibshirani: 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> *  </I></FONT><FONT COLOR="#808080"><I>&LT;i&GT;</I></FONT><FONT COLOR="#808080"><I>Additive logistic regression: a statistical view of boosting</I></FONT><FONT COLOR="#808080"><I>&LT;/i&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> * The Annals of Statistics, 38(2): 337-374, April 2000. 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;&LT;/p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> AdaBoostMH </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> DistributionClassifier 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>  </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> OptionHandler, WeightedInstancesHandler, <A href="..\..\oaidtb\boosters\IterativeUpdatableClassifier.java.html">IterativeUpdatableClassifier</A>{ 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The number of different classes in the original dataset. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_NumClasses; 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The instance classes in the original dataset. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] m_OriginalDataClasses; 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The number of instances in the original dataset. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_NumInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The training instances. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> Instances m_TrainData; 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The instances weights for the nth booster {m_NumClasse x m_NumInstances}--&GT;R. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[][] m_InstanceWeights; 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The base (MultiClassExtensible) booster. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A> m_Booster = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\RealAdaBoost.java.html">RealAdaBoost</A>(); 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The base (MultiClassExtensible) boosters. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A>[] m_Boosters = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A>[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Default constructor: inform the base booster it will be used by a meta-algorithm */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> AdaBoostMH(){ 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> != m_Booster) 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>      ((<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>) m_Booster).setUseOwnTrainData(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>   * Calculates the class membership probabilities for the given test instance. 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance the instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> predicted class probability distribution 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if instance could not be classified successfully 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance(Instance instance) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[m_NumClasses]; 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> minValue = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>    instance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>    instance.setDataset(m_TrainData); 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>      distributionForInstance[i] = ((<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>) m_Boosters[i]).confidenceAndSign(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (minValue &GT; distributionForInstance[i]) 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>        minValue = distributionForInstance[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>    </FONT><FONT COLOR="#808080"><I>//Normalize.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> sumTmp = <A href="..\..\oaidtb\boosters\Booster.java.html">oaidtb.boosters.Booster</A>.NO_DIVISION_BY_ZERO; 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>      distributionForInstance[i] -= minValue; 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>      sumTmp += distributionForInstance[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>      distributionForInstance[i] /= sumTmp; 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> distributionForInstance; 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>   * Get the classifier's vote for the instance; the (vectorial) sum of all base classifiers vote vectors must be 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>   * the final combined hypothesis of the booster. 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifierIndex The base classifier index 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The vote of the base classifier to the overall classifier 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if an error occurs 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] getClassifierVote(Instance instance, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classifierIndex) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[m_NumClasses]; 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> minValue = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>    instance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>    instance.setDataset(m_TrainData); 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>      distributionForInstance[i] = ((<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>) m_Boosters[i]).confidenceAndSign(instance, classifierIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (minValue &GT; distributionForInstance[i]) 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>        minValue = distributionForInstance[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>      distributionForInstance[i] -= minValue; 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> distributionForInstance; 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>   * Classifies the given test instance. The instance has to belong to a 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>   * dataset when it's being classified. 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance the instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> the predicted most likely class for the instance or 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>   * Instance.missingValue() if no prediction is made 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if an error occurred during the prediction 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> classifyInstance(Instance instance) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>    instance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>    instance.setDataset(m_TrainData); 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> maxValue = ((<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>) m_Boosters[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">]).confidenceAndSign(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> maxIndex = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> currentValue = ((<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>) m_Boosters[i]).confidenceAndSign(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (maxValue &LT; currentValue){ 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>        maxIndex = i; 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>        maxValue = currentValue; 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> maxIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>   * Boosting method. 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>   * Reset the model and initialize data. 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> data the training data to be used for generating the 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>   * boosted classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if the classifier could not be built successfully 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> buildClassifier(Instances data) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>    </FONT><FONT COLOR="#808080"><I>//Check glogal settings.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Booster == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"A base classifier has not been specified!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!(m_Booster </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>)) 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Base classifier must be a \"Multiclass Extensible Booster\"."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!data.classAttribute().isNominal()) 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"AdaBoostMH can't handle not nominal classes!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>    </FONT><FONT COLOR="#808080"><I>//We copy them thus ensuring AdaBoostMH nor other class mess it up.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>    m_TrainData = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instances(data); 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>    m_TrainData.deleteWithMissingClass(); 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((m_NumInstances = m_TrainData.numInstances()) == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"No train instances without class missing!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000"> &GT; (m_NumClasses = m_TrainData.numClasses())) 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"AdaBoostMH could not be useful with binary class problems."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>    ((<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>) m_Booster).setUseOwnTrainData(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT>    m_OriginalDataClasses = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[m_NumInstances]; 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumInstances; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>      m_OriginalDataClasses[i] = m_TrainData.instance(i).classValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT>    </FONT><FONT COLOR="#808080"><I>//Creamos el nuevo atributo que representará la "metaclase".</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>    FastVector my_nominal_values = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>    my_nominal_values.addElement(</FONT><FONT COLOR="#008000"><B>"0"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>    my_nominal_values.addElement(</FONT><FONT COLOR="#008000"><B>"1"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classIndex = m_TrainData.classIndex(); 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT>    m_TrainData.setClassIndex(-</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>    m_TrainData.deleteAttributeAt(classIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>    m_TrainData.insertAttributeAt(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Attribute(</FONT><FONT COLOR="#008000"><B>"PseudoClass"</B></FONT><FONT COLOR="#000000">, my_nominal_values), classIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>    m_TrainData.setClassIndex(classIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>    </FONT><FONT COLOR="#808080"><I>//Create the boosters via serialization</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>    m_Boosters = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A>[m_NumClasses]; 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT>    SerializedObject serializedBooster = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> SerializedObject(m_Booster); 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>      m_Boosters[i] = (<A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A>) serializedBooster.getObject(); 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>    m_InstanceWeights = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[m_NumClasses][m_NumInstances]; 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>    </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> showDebugInfo = m_Booster.getDebug(); 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (showDebugInfo) 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"\n*-*-*-*-*Building booster for class "</B></FONT><FONT COLOR="#000000"> + i + </FONT><FONT COLOR="#008000"><B>"*-*-*-*-*"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>      relabel(i); 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>      m_Boosters[i].buildClassifier(m_TrainData); 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>      saveBoosterWeights(i); 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT>   * Get the number of iterations performed. 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The number of iterations performed. 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getNumIterationsPerformed(){ 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Boosters.length == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Boosters[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">].getNumIterationsPerformed(); 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>   * Make numIterations iterations. 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterations The number of iterations to perform. 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error occurs (ej. Booster not initialized). 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> nextIterations(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterations) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Boosters == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> || !m_Boosters[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">].isReadyToIterate()) 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Booster is not initialized properly."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>    </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> showDebugInfo = m_Booster.getDebug(); 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (showDebugInfo) 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"\n*-*-*-*-*Updating booster for class "</B></FONT><FONT COLOR="#000000"> + i + </FONT><FONT COLOR="#008000"><B>"*-*-*-*-*"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT>      loadBoosterWeights(i); 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>      relabel(i); 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>      m_Boosters[i].nextIterations(numIterations); 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>      saveBoosterWeights(i); 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>   * Assign "PseudoClass = 1" to those instances which originally belongs to class 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT>   * "oldClassValue" and "PseudoClass = 0" to the rest. 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> oldClassValue The class value index to be set as 1 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> relabel(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> oldClassValue){ 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumInstances; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>      Instance instance = m_TrainData.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>      instance.setClassValue(m_OriginalDataClasses[i] == oldClassValue ? </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> : </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT>   * Load the train instances weights associated to the booster indicated 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> boosterIndex The booster index to which those weights are related 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> loadBoosterWeights(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> boosterIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumInstances; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>      m_TrainData.instance(i).setWeight(m_InstanceWeights[boosterIndex][i]); 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>   * Save the train instances weights associated to the booster indicated 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> boosterIndex The booster index to which those weights are related 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> saveBoosterWeights(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> boosterIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumInstances; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>      m_InstanceWeights[boosterIndex][i] = m_TrainData.instance(i).weight(); 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>   * Free the memory reserved to the train dataset. 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>   * WARNING: After a call to this function the booster will not be ready to perform more 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT>   *          iterations. 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> purgeTrainData(){ 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT>      m_Boosters[i].purgeTraindata(); 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>    m_TrainData = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT>   * Eliminate the last numIterations performed from the final combined hypothesis. 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>   * Note: To free the memory allocated, this method must be overriden 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterations The number of iterations to get rid of 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If numIterations parameter is incorrect 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> purgeIterations(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterations) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT>      m_Boosters[i].purgeIterations(numIterations); 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setDebug(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> debug){ 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT>      m_Boosters[i].setDebug(debug); 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> getDebug(){ 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Boosters.length &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Boosters[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">].getDebug(); 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT>   * Returns an enumeration of all the available options. 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an enumeration of all available options 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Enumeration listOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT>    Vector newVector = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Vector(); 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tSpecify a class (must be an MulticlassExtensibleBooster subclass) for use as the basis for AdaBoostMH."</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT>      + </FONT><FONT COLOR="#008000"><B>"\n\t(default RealAdaBoost).\n."</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>      </FONT><FONT COLOR="#008000"><B>"B"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-B"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((m_Booster != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">)){ 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT>      newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT>        </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT>        </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"\nOptions specific to booster "</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT>               + m_Booster.getClass().getName() + </FONT><FONT COLOR="#008000"><B>":"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT>      Enumeration enum = m_Booster.listOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT>      </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (enum.hasMoreElements()){ 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT>        newVector.addElement(enum.nextElement()); 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> newVector.elements(); 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT>   * Parses a given list of options. Valid options are:</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT>   * -B classname</I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">382  </FONT>   * Specify a class (must be an MulticlassExtensibleBooster subclass) for 
+<FONT COLOR=0 STYLE="font-style:normal">383  </FONT>   * use as the base Booster. 
+<FONT COLOR=0 STYLE="font-style:normal">384  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">385  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">386  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> options the list of options as an array of strings 
+<FONT COLOR=0 STYLE="font-style:normal">387  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">388  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> java.lang.Exception if an option is not supported 
+<FONT COLOR=0 STYLE="font-style:normal">389  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">390  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setOptions(String[] options) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">391  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">392  </FONT>    String boosterName = Utils.getOption(</FONT><FONT COLOR="#008000"><B>'B'</B></FONT><FONT COLOR="#000000">, options); 
+<FONT COLOR=0 STYLE="font-style:normal">393  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (boosterName.length() == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">394  </FONT>      setBooster((<A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A>) Utils.forName(<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">395  </FONT>                                         </FONT><FONT COLOR="#008000"><B>"oaidtb.boosters.RealAdaBoost"</B></FONT><FONT COLOR="#000000">, options)); 
+<FONT COLOR=0 STYLE="font-style:normal">396  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">397  </FONT>      setBooster((<A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A>) Utils.forName(<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, boosterName, options)); 
+<FONT COLOR=0 STYLE="font-style:normal">398  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">399  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> != m_Booster) 
+<FONT COLOR=0 STYLE="font-style:normal">400  </FONT>      ((<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>) m_Booster).setUseOwnTrainData(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">401  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">402  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">403  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">404  </FONT>   * Gets the current settings of the Classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">405  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">406  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an array of strings suitable for passing to setOptions 
+<FONT COLOR=0 STYLE="font-style:normal">407  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">408  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String[] getOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">409  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">410  </FONT>    String[] boosterOptions = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">411  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Booster != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">412  </FONT>      boosterOptions = m_Booster.getOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">413  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">414  </FONT>    String[] options = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String[boosterOptions.length + </FONT><FONT COLOR="#0000ff">3</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">415  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">416  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> current = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">417  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">418  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Booster != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">419  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>"-B"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">420  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> + m_Booster.getClass().getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">421  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">422  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">423  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>"--"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">424  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">425  </FONT>    System.arraycopy(boosterOptions, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, options, current, boosterOptions.length); 
+<FONT COLOR=0 STYLE="font-style:normal">426  </FONT>    current += boosterOptions.length; 
+<FONT COLOR=0 STYLE="font-style:normal">427  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (current &LT; options.length) 
+<FONT COLOR=0 STYLE="font-style:normal">428  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">429  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">430  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> options; 
+<FONT COLOR=0 STYLE="font-style:normal">431  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">432  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">433  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">434  </FONT>   * Set the booster used to perform the classification. 
+<FONT COLOR=0 STYLE="font-style:normal">435  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">436  </FONT>   * No check about the booster class is made here, but it must be a MulticlassExtensibleBooster. 
+<FONT COLOR=0 STYLE="font-style:normal">437  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">438  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> booster The base (MulticlassExtensibleBooster) booster class to be used 
+<FONT COLOR=0 STYLE="font-style:normal">439  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">440  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setBooster(<A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A> booster){ 
+<FONT COLOR=0 STYLE="font-style:normal">441  </FONT>    m_Booster = booster; 
+<FONT COLOR=0 STYLE="font-style:normal">442  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">443  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">444  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The base booster used.  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">445  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A> getBooster(){ 
+<FONT COLOR=0 STYLE="font-style:normal">446  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Booster; 
+<FONT COLOR=0 STYLE="font-style:normal">447  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">448  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">449  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Instances getTrainData(){ 
+<FONT COLOR=0 STYLE="font-style:normal">450  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_TrainData; 
+<FONT COLOR=0 STYLE="font-style:normal">451  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">452  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">453  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">454  </FONT>   * Get the booster used to classify the instances belonging to the class specified 
+<FONT COLOR=0 STYLE="font-style:normal">455  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">456  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> boosterIndex The index of the booster (class value) 
+<FONT COLOR=0 STYLE="font-style:normal">457  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">458  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The booster 
+<FONT COLOR=0 STYLE="font-style:normal">459  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">460  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If boosterIndex is invalid. 
+<FONT COLOR=0 STYLE="font-style:normal">461  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">462  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A> getBooster(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> boosterIndex) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">463  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (boosterIndex &GT; m_Boosters.length) 
+<FONT COLOR=0 STYLE="font-style:normal">464  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Invalid booster index."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">465  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">466  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Boosters[boosterIndex]; 
+<FONT COLOR=0 STYLE="font-style:normal">467  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">468  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">469  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">470  </FONT>   * Returns a DistributionClassifier that represents the classifier at iteration 
+<FONT COLOR=0 STYLE="font-style:normal">471  </FONT>   * itIndex 
+<FONT COLOR=0 STYLE="font-style:normal">472  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">473  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> The distribution classifier obtained is equivalent to 
+<FONT COLOR=0 STYLE="font-style:normal">474  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I> secNormalize(getClassifierVote(instance, itIndex) 
+<FONT COLOR=0 STYLE="font-style:normal">475  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;/p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">476  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">477  </FONT>   * TODO: Control the persistence of the classifier returned even after the enclosing 
+<FONT COLOR=0 STYLE="font-style:normal">478  </FONT>   * MH class have been reset or dropped (maintain the references). 
+<FONT COLOR=0 STYLE="font-style:normal">479  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">480  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> itIndex The iteration index 
+<FONT COLOR=0 STYLE="font-style:normal">481  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">482  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The distribution classifier 
+<FONT COLOR=0 STYLE="font-style:normal">483  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">484  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if an error happens 
+<FONT COLOR=0 STYLE="font-style:normal">485  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">486  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> DistributionClassifier getClassifier(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> itIndex) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">487  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">488  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (itIndex &GT; getNumIterationsPerformed()) 
+<FONT COLOR=0 STYLE="font-style:normal">489  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Invalid iteration index."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">490  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">491  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> DistributionClassifier(){ 
+<FONT COLOR=0 STYLE="font-style:normal">492  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance(Instance instance) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">493  </FONT>        </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[m_NumClasses]; 
+<FONT COLOR=0 STYLE="font-style:normal">494  </FONT>        </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> minValue = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">495  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">496  </FONT>        instance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">497  </FONT>        instance.setDataset(m_TrainData); 
+<FONT COLOR=0 STYLE="font-style:normal">498  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">499  </FONT>        </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">500  </FONT>          distributionForInstance[i] = ((<A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>) m_Boosters[i]).confidenceAndSign(instance, itIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">501  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (minValue &GT; distributionForInstance[i]) 
+<FONT COLOR=0 STYLE="font-style:normal">502  </FONT>            minValue = distributionForInstance[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">503  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">504  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">505  </FONT>        </FONT><FONT COLOR="#808080"><I>//Normalize.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">506  </FONT>        </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> sumTmp = <A href="..\..\oaidtb\boosters\Booster.java.html">oaidtb.boosters.Booster</A>.NO_DIVISION_BY_ZERO; 
+<FONT COLOR=0 STYLE="font-style:normal">507  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">508  </FONT>        </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">509  </FONT>          distributionForInstance[i] -= minValue; 
+<FONT COLOR=0 STYLE="font-style:normal">510  </FONT>          sumTmp += distributionForInstance[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">511  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">512  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">513  </FONT>        </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">514  </FONT>          distributionForInstance[i] /= sumTmp; 
+<FONT COLOR=0 STYLE="font-style:normal">515  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">516  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> distributionForInstance; 
+<FONT COLOR=0 STYLE="font-style:normal">517  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">518  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">519  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> buildClassifier(Instances data) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">520  </FONT>        </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Read only classifier"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">521  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">522  </FONT>    }; 
+<FONT COLOR=0 STYLE="font-style:normal">523  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">524  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">525  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The number of classes of the train data */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">526  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getNumClasses(){ 
+<FONT COLOR=0 STYLE="font-style:normal">527  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_NumClasses; 
+<FONT COLOR=0 STYLE="font-style:normal">528  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">529  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">530  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">531  </FONT>   * Returns description of the boosted classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">532  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">533  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> description of the boosted classifier as a string 
+<FONT COLOR=0 STYLE="font-style:normal">534  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">535  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String toString(){ 
+<FONT COLOR=0 STYLE="font-style:normal">536  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">537  </FONT>    StringBuffer text = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringBuffer(); 
+<FONT COLOR=0 STYLE="font-style:normal">538  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">539  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Boosters.length == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> || m_Boosters[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">].getNumIterationsPerformed() == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">540  </FONT>      text.append(</FONT><FONT COLOR="#008000"><B>"AdaBoostOC: No model built yet.\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">541  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">542  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">543  </FONT>      text.append(</FONT><FONT COLOR="#008000"><B>"AdaBoostMH: Base boosters. \n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">544  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">545  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">546  </FONT>        text.append(</FONT><FONT COLOR="#008000"><B>"Booster: "</B></FONT><FONT COLOR="#000000"> + i + </FONT><FONT COLOR="#008000"><B>".\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">547  </FONT>        text.append(m_Boosters[i].toString() + </FONT><FONT COLOR="#008000"><B>"\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">548  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">549  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">550  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> text.toString(); 
+<FONT COLOR=0 STYLE="font-style:normal">551  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">552  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">553  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------------------------*************************************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">554  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------- Configure the "GUI side" methods ********************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">555  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------------------------*************************************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">556  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">557  </FONT></FONT><FONT COLOR="#808080"><I>//  //We need to inform about how to manage Booster classes.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">558  </FONT>  </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">559  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> == java.beans.PropertyEditorManager.findEditor(<A href="..\..\oaidtb\boosters\Booster.java.html">oaidtb.boosters.Booster</A>.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">)) 
+<FONT COLOR=0 STYLE="font-style:normal">560  </FONT>      java.beans.PropertyEditorManager.registerEditor(<A href="..\..\oaidtb\boosters\Booster.java.html">oaidtb.boosters.Booster</A>.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">561  </FONT>                                                      weka.gui.GenericObjectEditor.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">562  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">563  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">564  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">565  </FONT>   * Returns a string describing this classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">566  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">567  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> a description of the filter suitable for 
+<FONT COLOR=0 STYLE="font-style:normal">568  </FONT>   * displaying in the explorer/experimenter gui 
+<FONT COLOR=0 STYLE="font-style:normal">569  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">570  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String globalInfo(){ 
+<FONT COLOR=0 STYLE="font-style:normal">571  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">572  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"An implementation of AdaBoostMH."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">573  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">574  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">575  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------- ToolTips text ********************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">576  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">577  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String boosterTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">578  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">579  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"The base (MulticlassExtensibleBooster) booster which will be used."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">580  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">581  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">582  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">583  </FONT>   * Main method for testing this class. 
+<FONT COLOR=0 STYLE="font-style:normal">584  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">585  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> argv the options 
+<FONT COLOR=0 STYLE="font-style:normal">586  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">587  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> main(String[] argv){ 
+<FONT COLOR=0 STYLE="font-style:normal">588  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">589  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">590  </FONT>      System.out.println(Evaluation.evaluateModel(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> AdaBoostMH(), argv)); 
+<FONT COLOR=0 STYLE="font-style:normal">591  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">592  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">593  </FONT>      System.err.println(e.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">594  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">595  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">596  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

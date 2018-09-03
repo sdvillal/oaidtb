@@ -1,0 +1,397 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\filters\AbstractNominalToOCFilter.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\filters\AbstractNominalToOCFilter.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    AbstractNominalToOCFilter.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.filters; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.*; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.filters.Filter; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.BitSet; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Enumeration; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Vector; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> * Abstract class defining the structure and common code to our nominal to output codes classes. 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * For an approach to output codes in machine learning theory, see: 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="ftp://ftp.cs.orst.edu/pub/tgd/papers/jair-ecoc.ps.gz"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * Dietterich, T. G., Bakiri, G. (1995) Solving Multiclass Learning Problems via Error-Correcting Output Codes. 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * Journal of Artificial Intelligence Research 2: 263-286. 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * How is stored the code?. We use a fixed array of Java's ArrayBits, where: 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> *   - Each BitSet correspond to one attribute's value (normally the class). Of course, it must be nominal. 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> *   - A bit in the nth position of a BitSet informs about in with subset is a value in the nth partition. 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> *   - We call "code word" to each BitSet. 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT> * Look at this matrix: 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> * BitSet (Class Value) --&GT;               0 1 2 3 4 ... numDistinctValues() 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT> *------------------------------------------------------------------------- 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> * Partition 0                      |     1 0 1 0 1 ... 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> * Partition 1                      |     0 0 1 0 1 ... 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT> * Partition 2                      |     1 1 0 0 0 ... 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> * Partition ...                    |     ............. 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT> *   ** Each row is a partition. 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT> *   ** Each column is a code word. 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT> * Of course, this hold method can be changed by subclasses. 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT> * Why program them with the appearance of a weka's filter, when obviously it's unnecessary complex? 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT> *   - Learn about how weka filters work. 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> *   - It could be useful for other purposes than simply use them in AdaBoostOC; 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT> *     output codes are a standalone topic in machine learning theory. 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> AbstractNominalToOCFilter </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> Filter </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> OptionHandler{ 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>  </FONT><FONT COLOR="#808080"><I>// TO DO: Prepare for string attributes.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Generated code.*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> BitSet[] m_OutputCode; 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Number of generated partitions. It must be compact/not fragmented (it doesn't exist not generated partitions).*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_NumGeneratedPartitions; 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>   * Index of processed attribute in the input dataset (it will be transformed into a binary one 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>   * in the output dataset). 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_ProcessedAttribute = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Flag to know if m_ProcessedAttribute has been set by the user explicitly. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_IsCustomProcessedAttribute = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>   * Generate a new partition incrementing the number of partitions generated, 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>   * and so incrementing by 1 the length of all code words. It's equivalent 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>   * to newPartition(instances, m_NumGeneratedPartitions), but it must be implemented to 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>   * be faster. 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instances Perhaps a subclasss will use some information of them. 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error occurs. 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> newPartition(Instances instances) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>    newPartition(instances, m_NumGeneratedPartitions); 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>   * Generate a new partition at specified position even though it has already been generated 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>   * (it will be overwritten). 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instances Perhaps a subclasss will use some information of them. 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> partitionNumber The number of the partition to generate. 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If partitionNumber is incorrect or another error occurs. 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> newPartition(Instances instances, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> partitionNumber) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception; 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>   * Get the partitionNumber'nth partition. 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> partitionNumber Index of the partition. 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The corresponding partition. 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if index is invalid. 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> BitSet getPartition(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> partitionNumber) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (partitionNumber &LT; m_NumGeneratedPartitions && partitionNumber &GT; -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>      BitSet partition = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BitSet(m_OutputCode.length); 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_OutputCode.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_OutputCode[i].get(partitionNumber)) 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>          partition.set(i); 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> partition; 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>    </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Partition index incorrect, not computed yet."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>   * Set the partitionNumber partition. 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> partitionNumber Index of the partition. 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> newPartition The new partition to put in the partitionNumber index. 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if index is invalid. 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setPartition(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> partitionNumber, BitSet newPartition) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (partitionNumber &GT; m_NumGeneratedPartitions || partitionNumber &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Partition number must be between 0 and "</B></FONT><FONT COLOR="#000000"> + (m_NumGeneratedPartitions - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_OutputCode.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (newPartition.get(i)) 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>        m_OutputCode[i].set(partitionNumber); 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>        m_OutputCode[i].clear(partitionNumber); 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>   * Get the i code word. 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> i Index of the code word.. 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The code word. 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if index is invalid. 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> BitSet getCodeWord(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (i &GT;= m_OutputCode.length) 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Index of code word is incorrect."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_OutputCode[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>   * Set the i code word. 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> i Index of the code word.. 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> codeWord The code word to put at i. 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if index is invalid. 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setCodeWord(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i, BitSet codeWord) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (i &GT;= m_OutputCode.length) 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Index of code word is incorrect."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>    m_OutputCode[i] = codeWord; 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>  </FONT><FONT COLOR="#808080"><I>/*** 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>   * Get to which subset (0 or 1) belongs the attribute value "attValue" at partition "numPartition". 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>   * It doesn't make any parameter error control, so be careful. 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numPartition The partition to look at. 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> attValue The value we ask to which set belongs. 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The set (0 or 1). 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getCode(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numPartition, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> attValue){ 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_OutputCode[attValue].get(numPartition) ? </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> : </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>   * Sets the format of the input instances. 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instanceInfo an Instances object containing the input instance structure. 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if the outputFormat may be collected immediately 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if the format couldn't be set successfully 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> setInputFormat(Instances instanceInfo) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i; 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT>    Instances outputFormat; 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>    </FONT><FONT COLOR="#808080"><I>// Prepare to manage string attributes (eg. see AttributeFilter.java).</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (instanceInfo.checkForStringAttributes()) 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Can´t manage string attributes yet."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>    </FONT><FONT COLOR="#808080"><I>//"calling inputFormat() should initialize the filter's internal state, but</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>    </FONT><FONT COLOR="#808080"><I>// not alter any variables corresponding to user-provided command line options".</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_IsCustomProcessedAttribute){ 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((m_ProcessedAttribute = instanceInfo.classIndex()) &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>        m_ProcessedAttribute = instanceInfo.numAttributes() - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ProcessedAttribute &GT;= instanceInfo.numAttributes()) 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Attribute choose is incorrect: it doesn't exist."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!instanceInfo.attribute(m_ProcessedAttribute).isNominal()) 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"The attribute isn't nominal."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>    </FONT><FONT COLOR="#808080"><I>//Ojito con esto.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (instanceInfo.numDistinctValues(m_ProcessedAttribute) &LT; </FONT><FONT COLOR="#0000ff">3</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"Choosen attribute has less than 3 classes, it's not useful to apply the filter."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT>    </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.setInputFormat(instanceInfo); 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>    </FONT><FONT COLOR="#808080"><I>//Create the output structure.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>    FastVector atributos = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(instanceInfo.numAttributes()); 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_ProcessedAttribute; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>      atributos.addElement(instanceInfo.attribute(i).copy()); 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>    </FONT><FONT COLOR="#808080"><I>//We create the new binary attribute which will represent the "metaclass".</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>    FastVector my_nominal_values = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FastVector(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT>    my_nominal_values.addElement(</FONT><FONT COLOR="#008000"><B>"0"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>    my_nominal_values.addElement(</FONT><FONT COLOR="#008000"><B>"1"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>    atributos.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Attribute(instanceInfo.attribute(m_ProcessedAttribute).name(), my_nominal_values)); 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (i = m_ProcessedAttribute + </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; i &LT; instanceInfo.numAttributes(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>      atributos.addElement(instanceInfo.attribute(i).copy()); 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>    outputFormat = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instances(instanceInfo.relationName(), atributos, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>    outputFormat.setClassIndex(instanceInfo.classIndex()); 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>    setOutputFormat(outputFormat); 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>    m_NumGeneratedPartitions = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>   * Input an instance for filtering. Ordinarily the instance is processed 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT>   * and made available for output immediately. Some filters require all 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT>   * instances be read before producing output. 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance the input instance 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if the filtered instance may now be 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>   * collected with output(). 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> IllegalStateException if no input format has been defined. 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> input(Instance instance) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i; 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (getInputFormat() == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> IllegalStateException(</FONT><FONT COLOR="#008000"><B>"No input instance format defined"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] vals = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[getOutputFormat().numAttributes()]; 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_ProcessedAttribute; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>      vals[i] = instance.value(i); 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>    vals[m_ProcessedAttribute] = getCode(m_NumGeneratedPartitions - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.value(m_ProcessedAttribute)); 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (i = m_ProcessedAttribute + </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; i &LT; getOutputFormat().numAttributes(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>      vals[i] = instance.value(i); 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>    Instance inst; 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (instance </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> SparseInstance){ 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>      inst = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> SparseInstance(instance.weight(), vals); 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>      inst = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instance(instance.weight(), vals); 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT>    inst.setDataset(getOutputFormat()); 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>    push(inst); 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>   * Parses a given list of options controlling the behaviour of this object. 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>   * Valid options are:</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT>   * -C index </I></FONT><FONT COLOR="#808080"><I>&LT;br&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>   * Specify attribute index to be processed. 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>   * (default last attribute or class attribute if it's set)</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> options the list of options as an array of strings 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if an option is not supported 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setOptions(String[] options) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT>    String atributoProcesado = Utils.getOption(</FONT><FONT COLOR="#008000"><B>'C'</B></FONT><FONT COLOR="#000000">, options); 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (atributoProcesado.length() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>      setProcessedAttribute(Integer.parseInt(atributoProcesado)); 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>   * Gets the current settings of the filter. 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an array of strings suitable for passing to setOptions 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String[] getOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>    String[] options = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String[</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> current = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>"-C"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT>    options[current++] = String.valueOf(m_ProcessedAttribute); 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (current &LT; options.length) 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> options; 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT>   * Returns an enumeration describing the available options 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an enumeration of all the available options 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Enumeration listOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT>    Vector newVector = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Vector(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tSpecify what attribute will be processed."</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT>      + </FONT><FONT COLOR="#008000"><B>"\tDefault: class attribute or last attribute if class is missing."</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT>      </FONT><FONT COLOR="#008000"><B>"C"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-C &LT;index&GT;"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> newVector.elements(); 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>   * Sets the (nominal, numDifferentValues &GT; 2) attribute which will be processed. 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>   * A priori, it doesn't know anything about the dataset, so no error control is done. 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT>   * If it's called with a value less than 0, the filter will choose the class attribute or the last 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>   * attribute if class isn't defined when a call to setInputFormat() is done. 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> processedAttribute The attribute (index) which will be processed. 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setProcessedAttribute(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> processedAttribute){ 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT>    m_ProcessedAttribute = processedAttribute; 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT>    m_IsCustomProcessedAttribute = processedAttribute &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> ? </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000"> : </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>   * Get the processed attribute index. 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The processed attribute index. 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getProcessedAttribute(){ 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ProcessedAttribute; 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT>} 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT></FONT></PRE>
+</BODY>
+</HTML>

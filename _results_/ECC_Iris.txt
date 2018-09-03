@@ -1,0 +1,2451 @@
+
+Options: -D -F oaidtb.filters.NominalToRandomPermutationOfEvenSplitOCFilter -U 1 -I 100 -S 1 -N 0 -W weka.classifiers.trees.DecisionStump -- 2 
+
+AdaBoostECC: Base classifiers and their weights: 
+
+Classifier: 0.
+Classes in the subset "1": {1}
+	 Alfa: 0.34644863039763985   Beta: -8.719988231507742.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 0
+petallength > 2.45 : 1
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+1.0	0.0	
+petallength > 2.45
+0	1	
+0.3333888704098521	0.6666111295901479	
+petallength is missing
+0	1	
+0.5000624766087575	0.4999375233912426	
+
+
+Classifier: 1.
+Classes in the subset "1": {2}
+	 Alfa: 1.5282320524351658   Beta: -1.8413500235819182.
+Decision Stump
+
+Classifications
+
+petallength <= 4.75 : 0
+petallength > 4.75 : 1
+petallength is missing : 1
+
+Class distributions
+
+petallength <= 4.75
+0	1	
+0.9754622962503446	0.024537703749655304	
+petallength > 4.75
+0	1	
+0.04493920771517882	0.9550607922848211	
+petallength is missing
+0	1	
+0.45687149149043854	0.5431285085095615	
+
+
+Classifier: 2.
+Classes in the subset "1": {0}
+	 Alfa: 8.68634390360527   Beta: -9.279942664816804.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.7662394722603642	0.2337605277396358	
+
+
+Classifier: 3.
+Classes in the subset "1": {2}
+	 Alfa: 1.026549666729844   Beta: -1.1488331999306056.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.65 : 0
+petalwidth > 1.65 : 1
+petalwidth is missing : 1
+
+Class distributions
+
+petalwidth <= 1.65
+0	1	
+0.9086835992584592	0.09131640074154079	
+petalwidth > 1.65
+0	1	
+0.1137395761725379	0.8862604238274621	
+petalwidth is missing
+0	1	
+0.4596678277262394	0.5403321722737606	
+
+
+Classifier: 4.
+Classes in the subset "1": {2}
+	 Alfa: 1.3678209269443202   Beta: -0.6141868737557401.
+Decision Stump
+
+Classifications
+
+petallength <= 5.05 : 0
+petallength > 5.05 : 1
+petallength is missing : 1
+
+Class distributions
+
+petallength <= 5.05
+0	1	
+0.7735338216418102	0.2264661783581898	
+petallength > 5.05
+0	1	
+0.060902670874650844	0.9390973291253492	
+petallength is missing
+0	1	
+0.47129122483289965	0.5287087751671005	
+
+
+Classifier: 5.
+Classes in the subset "1": {0}
+	 Alfa: 8.558726537192864   Beta: -9.3131748302451.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	-7.230683378202433E-18	
+petallength is missing
+0	1	
+0.8188976276457467	0.18110237235425336	
+
+
+Classifier: 6.
+Classes in the subset "1": {0}
+	 Alfa: 8.774837772960577   Beta: -9.249500702617341.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	-2.6691276901416795E-17	
+petallength is missing
+0	1	
+0.7209795856243891	0.2790204143756108	
+
+
+Classifier: 7.
+Classes in the subset "1": {0}
+	 Alfa: 8.862741510527743   Beta: -9.210852230240686.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	-1.3309044763192857E-17	
+petallength is missing
+0	1	
+0.6673494871370845	0.3326505128629154	
+
+
+Classifier: 8.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376491595408   Beta: -9.210341314844618.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	2.4424860727098228E-17	
+petallength is missing
+0	1	
+0.6666679171590985	0.33333208284090154	
+
+
+Classifier: 9.
+Classes in the subset "1": {1}
+	 Alfa: 0.293275919973806   Beta: -8.658550224081067.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.85 : 1
+petalwidth > 1.85 : 0
+petalwidth is missing : 1
+
+Class distributions
+
+petalwidth <= 1.85
+0	1	
+0.35742641041575374	0.6425735895842463	
+petalwidth > 1.85
+0	1	
+0.9999999999999959	4.070264673610446E-15	
+petalwidth is missing
+0	1	
+0.4995128941339766	0.5004871058660234	
+
+
+Classifier: 10.
+Classes in the subset "1": {2}
+	 Alfa: 1.5742980131810231   Beta: -0.31061107894203877.
+Decision Stump
+
+Classifications
+
+sepallength <= 4.95 : 1
+sepallength > 4.95 : 0
+sepallength is missing : 0
+
+Class distributions
+
+sepallength <= 4.95
+0	1	
+0.04114658761500428	0.9588534123849957	
+sepallength > 4.95
+0	1	
+0.6504964605566065	0.3495035394433934	
+sepallength is missing
+0	1	
+0.5706903116576872	0.42930968834231287	
+
+
+Classifier: 11.
+Classes in the subset "1": {2}
+	 Alfa: 8.416076757850785   Beta: -0.271042978927227.
+Decision Stump
+
+Classifications
+
+petallength <= 5.15 : 0
+petallength > 5.15 : 1
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 5.15
+0	1	
+0.6322975331785313	0.3677024668214687	
+petallength > 5.15
+0	1	
+4.6969139433914764E-15	0.9999999999999953	
+petallength is missing
+0	1	
+0.546209735529174	0.45379026447082604	
+
+
+Classifier: 12.
+Classes in the subset "1": {2}
+	 Alfa: 0.10445270795547816   Beta: -2.951750325502877.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.45 : 0
+petalwidth > 1.45 : 1
+petalwidth is missing : 0
+
+Class distributions
+
+petalwidth <= 1.45
+0	1	
+0.9972775910361166	0.002722408963883477	
+petalwidth > 1.45
+0	1	
+0.44796275612383646	0.5520372438761636	
+petalwidth is missing
+0	1	
+0.5659510337077553	0.43404896629224465	
+
+
+Classifier: 13.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376631978838   Beta: -9.210340612929931.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	2.6645340016864882E-17	
+petallength is missing
+0	1	
+0.6666669812717442	0.3333330187282558	
+
+
+Classifier: 14.
+Classes in the subset "1": {0}
+	 Alfa: 8.863766787825146   Beta: -9.210340378911715.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+0.9999999999999997	2.797762011225081E-16	
+petallength is missing
+0	1	
+0.6666666692473759	0.333333330752624	
+
+
+Classifier: 15.
+Classes in the subset "1": {0}
+	 Alfa: 8.863766791667583   Beta: -9.210340376990494.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	-3.9968028885361576E-17	
+petallength is missing
+0	1	
+0.6666666666857506	0.33333333331424947	
+
+
+Classifier: 16.
+Classes in the subset "1": {2}
+	 Alfa: 0.19923557048587143   Beta: -2.619199961159098.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 3.05 : 1
+sepalwidth > 3.05 : 0
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 3.05
+0	1	
+0.4016797184739575	0.5983202815260424	
+sepalwidth > 3.05
+0	1	
+0.9947193279417055	0.005280672058294482	
+sepalwidth is missing
+0	1	
+0.5034279464299363	0.49657205357006384	
+
+
+Classifier: 17.
+Classes in the subset "1": {1}
+	 Alfa: 1.758262443947374   Beta: -0.26702496613960913.
+Decision Stump
+
+Classifications
+
+sepallength <= 6.35 : 0
+sepallength > 6.35 : 1
+sepallength is missing : 0
+
+Class distributions
+
+sepallength <= 6.35
+0	1	
+0.6304272001272304	0.3695727998727695	
+sepallength > 6.35
+0	1	
+0.028845652235488194	0.9711543477645118	
+sepallength is missing
+0	1	
+0.5221663479204488	0.47783365207955125	
+
+
+Classifier: 18.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169557   Beta: -9.210340376976502.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0000000000000002	-1.0658141036394713E-16	
+petallength is missing
+0	1	
+0.6666666666670927	0.3333333333329073	
+
+
+Classifier: 19.
+Classes in the subset "1": {1}
+	 Alfa: 0.30366695982675035   Beta: -0.560989391099767.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.65 : 1
+petalwidth > 1.65 : 0
+petalwidth is missing : 0
+
+Class distributions
+
+petalwidth <= 1.65
+0	1	
+0.35266760304384415	0.6473323969561557	
+petalwidth > 1.65
+0	1	
+0.7543555835910761	0.24564441640892395	
+petalwidth is missing
+0	1	
+0.5259575165563433	0.4740424834436567	
+
+
+Classifier: 20.
+Classes in the subset "1": {2}
+	 Alfa: 1.256555181042793   Beta: -0.17339136684494283.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.25 : 1
+sepalwidth > 2.25 : 0
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 2.25
+0	1	
+0.0749441608020668	0.9250558391979332	
+sepalwidth > 2.25
+0	1	
+0.5858371848326653	0.41416281516733466	
+sepalwidth is missing
+0	1	
+0.48795956222803843	0.5120404377719615	
+
+
+Classifier: 21.
+Classes in the subset "1": {2}
+	 Alfa: 0.6371874568817353   Beta: -0.2189453644396441.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.75 : 0
+petalwidth > 1.75 : 1
+petalwidth is missing : 0
+
+Class distributions
+
+petalwidth <= 1.75
+0	1	
+0.607756321035632	0.3922436789643679	
+petalwidth > 1.75
+0	1	
+0.21850924523203485	0.7814907547679651	
+petalwidth is missing
+0	1	
+0.5008171506722384	0.4991828493277616	
+
+
+Classifier: 22.
+Classes in the subset "1": {2}
+	 Alfa: 1.533115231501915   Beta: -0.12791864107858705.
+Decision Stump
+
+Classifications
+
+sepallength <= 4.95 : 1
+sepallength > 4.95 : 0
+sepallength is missing : 0
+
+Class distributions
+
+sepallength <= 4.95
+0	1	
+0.044521856253636825	0.9554781437463632	
+sepallength > 4.95
+0	1	
+0.5636127305917309	0.436387269408269	
+sepallength is missing
+0	1	
+0.5021594720588043	0.4978405279411957	
+
+
+Classifier: 23.
+Classes in the subset "1": {0}
+	 Alfa: 8.863766791696207   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0000000000000009	-7.83817455385362E-16	
+petallength is missing
+0	1	
+0.6666666666666677	0.3333333333333322	
+
+
+Classifier: 24.
+Classes in the subset "1": {2}
+	 Alfa: 0.06562993171555724   Beta: -8.125865771759354.
+Decision Stump
+
+Classifications
+
+petallength <= 4.45 : 0
+petallength > 4.45 : 1
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 4.45
+0	1	
+1.0	0.0	
+petallength > 4.45
+0	1	
+0.4672320671384593	0.5327679328615407	
+petallength is missing
+0	1	
+0.5078281481569924	0.49217185184300766	
+
+
+Classifier: 25.
+Classes in the subset "1": {1}
+	 Alfa: 1.5568462048313254   Beta: -0.1466676256631524.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 3.1500000000000004 : 0
+sepalwidth > 3.1500000000000004 : 1
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 3.1500000000000004
+0	1	
+0.572812461987829	0.42718753801217085	
+sepalwidth > 3.1500000000000004
+0	1	
+0.04254591995367037	0.9574540800463295	
+sepalwidth is missing
+0	1	
+0.5156891905041661	0.484310809495834	
+
+
+Classifier: 26.
+Classes in the subset "1": {0}
+	 Alfa: 8.863766791696209   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+0.9999999999999997	2.309263891220326E-16	
+petallength is missing
+0	1	
+0.6666666666666666	0.33333333333333326	
+
+
+Classifier: 27.
+Classes in the subset "1": {2}
+	 Alfa: 0.1584380832351001   Beta: -1.1246446486585067.
+Decision Stump
+
+Classifications
+
+sepallength <= 6.55 : 1
+sepallength > 6.55 : 0
+sepallength is missing : 1
+
+Class distributions
+
+sepallength <= 6.55
+0	1	
+0.4214372368873297	0.5785627631126704	
+sepallength > 6.55
+0	1	
+0.9045892543297405	0.09541074567025955	
+sepallength is missing
+0	1	
+0.48561152802328184	0.5143884719767181	
+
+
+Classifier: 28.
+Classes in the subset "1": {1}
+	 Alfa: 0.16747370369702091   Beta: -0.6578813061064165.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.75 : 1
+petalwidth > 1.75 : 0
+petalwidth is missing : 0
+
+Class distributions
+
+petalwidth <= 1.75
+0	1	
+0.41703733042642843	0.5829626695735716	
+petalwidth > 1.75
+0	1	
+0.7884758668609924	0.21152413313900778	
+petalwidth is missing
+0	1	
+0.5115051446205324	0.4884948553794676	
+
+
+Classifier: 29.
+Classes in the subset "1": {1}
+	 Alfa: 0.14875021096106067   Beta: -0.8767766189961306.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.25 : 0
+sepalwidth > 2.25 : 1
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 2.25
+0	1	
+0.8524004345722402	0.14759956542775984	
+sepalwidth > 2.25
+0	1	
+0.42616863802296	0.57383136197704	
+sepalwidth is missing
+0	1	
+0.504142008455301	0.49585799154469895	
+
+
+Classifier: 30.
+Classes in the subset "1": {1}
+	 Alfa: 0.07936101494967271   Beta: -2.7877780205839016.
+Decision Stump
+
+Classifications
+
+sepallength <= 4.95 : 0
+sepallength > 4.95 : 1
+sepallength is missing : 1
+
+Class distributions
+
+sepallength <= 4.95
+0	1	
+0.9962250284339995	0.0037749715660005574	
+sepallength > 4.95
+0	1	
+0.46040258749203333	0.5395974125079667	
+sepallength is missing
+0	1	
+0.499239619718977	0.5007603802810229	
+
+
+Classifier: 31.
+Classes in the subset "1": {2}
+	 Alfa: 0.0762625342205597   Beta: -0.8639984720062249.
+Decision Stump
+
+Classifications
+
+petallength <= 4.75 : 0
+petallength > 4.75 : 1
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 4.75
+0	1	
+0.8491560651118384	0.15084393488816153	
+petallength > 4.75
+0	1	
+0.4619424842260156	0.5380575157739845	
+petallength is missing
+0	1	
+0.5106172115769957	0.4893827884230045	
+
+
+Classifier: 32.
+Classes in the subset "1": {1}
+	 Alfa: 0.10844331831045763   Beta: -0.6750158313469317.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.25 : 0
+sepalwidth > 2.25 : 1
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 2.25
+0	1	
+0.7941348316205956	0.20586516837940436	
+sepalwidth > 2.25
+0	1	
+0.4459898929763457	0.5540101070236543	
+sepalwidth is missing
+0	1	
+0.4965458270221539	0.5034541729778461	
+
+
+Classifier: 33.
+Classes in the subset "1": {0}
+	 Alfa: 8.863766791696209   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	2.2204460492503135E-18	
+petallength is missing
+0	1	
+0.6666666666666667	0.33333333333333337	
+
+
+Classifier: 34.
+Classes in the subset "1": {2}
+	 Alfa: 0.27375415581451934   Beta: -0.3088544884523526.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.75 : 0
+sepalwidth > 2.75 : 1
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 2.75
+0	1	
+0.6496973161203484	0.3503026838796516	
+sepalwidth > 2.75
+0	1	
+0.36644268927370144	0.6335573107262985	
+sepalwidth is missing
+0	1	
+0.5030348891253337	0.4969651108746662	
+
+
+Classifier: 35.
+Classes in the subset "1": {1}
+	 Alfa: 0.9827977647524251   Beta: -0.09182510170359727.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 3.1500000000000004 : 0
+sepalwidth > 3.1500000000000004 : 1
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 3.1500000000000004
+0	1	
+0.5457839427155206	0.45421605728447945	
+sepalwidth > 3.1500000000000004
+0	1	
+0.12286271256599565	0.8771372874340044	
+sepalwidth is missing
+0	1	
+0.4986558154880568	0.5013441845119431	
+
+
+Classifier: 36.
+Classes in the subset "1": {2}
+	 Alfa: 0.6036792785536444   Beta: -0.18918865395636297.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.75 : 0
+petalwidth > 1.75 : 1
+petalwidth is missing : 1
+
+Class distributions
+
+petalwidth <= 1.75
+0	1	
+0.5934816714815688	0.4065183285184312	
+petalwidth > 1.75
+0	1	
+0.23016874374279456	0.7698312562572055	
+petalwidth is missing
+0	1	
+0.4984673264894051	0.5015326735105948	
+
+
+Classifier: 37.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 38.
+Classes in the subset "1": {2}
+	 Alfa: 0.29801450081301445   Beta: -0.24185911208403982.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.55 : 1
+petalwidth > 1.55 : 0
+petalwidth is missing : 0
+
+Class distributions
+
+petalwidth <= 1.55
+0	1	
+0.35525271589975377	0.6447472841002462	
+petalwidth > 1.55
+0	1	
+0.6186254968825381	0.3813745031174619	
+petalwidth is missing
+0	1	
+0.5006502160507957	0.4993497839492042	
+
+
+Classifier: 39.
+Classes in the subset "1": {1}
+	 Alfa: 0.054195496850091174   Beta: -2.0717464332774993.
+Decision Stump
+
+Classifications
+
+sepallength <= 4.95 : 0
+sepallength > 4.95 : 1
+sepallength is missing : 1
+
+Class distributions
+
+sepallength <= 4.95
+0	1	
+0.9843806311409379	0.015619368859062137	
+sepallength > 4.95
+0	1	
+0.47292875012954494	0.527071249870455	
+sepallength is missing
+0	1	
+0.49965491055337763	0.5003450894466225	
+
+
+Classifier: 40.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 41.
+Classes in the subset "1": {1}
+	 Alfa: 0.8548069036551067   Beta: -0.08676366168008169.
+Decision Stump
+
+Classifications
+
+petallength <= 4.75 : 1
+petallength > 4.75 : 0
+petallength is missing : 1
+
+Class distributions
+
+petallength <= 4.75
+0	1	
+0.1532137760773851	0.8467862239226148	
+petallength > 4.75
+0	1	
+0.5432732997894133	0.4567267002105868	
+petallength is missing
+0	1	
+0.4950015131668993	0.5049984868331007	
+
+
+Classifier: 42.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 43.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 44.
+Classes in the subset "1": {2}
+	 Alfa: 7.86226515413792   Beta: -0.0489335019318023.
+Decision Stump
+
+Classifications
+
+petallength <= 5.15 : 0
+petallength > 5.15 : 1
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 5.15
+0	1	
+0.5244472415493262	0.4755527584506737	
+petallength > 5.15
+0	1	
+-2.5803558894402812E-14	1.0000000000000258	
+petallength is missing
+0	1	
+0.5008594530255714	0.4991405469744285	
+
+
+Classifier: 45.
+Classes in the subset "1": {1}
+	 Alfa: 1.5620734101977312   Beta: -0.068135532877054.
+Decision Stump
+
+Classifications
+
+sepallength <= 6.55 : 0
+sepallength > 6.55 : 1
+sepallength is missing : 1
+
+Class distributions
+
+sepallength <= 6.55
+0	1	
+0.5340151453432409	0.4659848546567591	
+sepallength > 6.55
+0	1	
+0.04212207264423796	0.957877927355762	
+sepallength is missing
+0	1	
+0.4883773546733701	0.5116226453266298	
+
+
+Classifier: 46.
+Classes in the subset "1": {2}
+	 Alfa: 0.0941660640922801   Beta: -1.2519858969480127.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 3.1500000000000004 : 1
+sepalwidth > 3.1500000000000004 : 0
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 3.1500000000000004
+0	1	
+0.4530556410508895	0.5469443589491105	
+sepalwidth > 3.1500000000000004
+0	1	
+0.9244198447023997	0.0755801552976003	
+sepalwidth is missing
+0	1	
+0.500821962449177	0.49917803755082313	
+
+
+Classifier: 47.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 48.
+Classes in the subset "1": {1}
+	 Alfa: 0.18238961947213717   Beta: -0.6637018110934678.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.75 : 1
+petalwidth > 1.75 : 0
+petalwidth is missing : 0
+
+Class distributions
+
+petalwidth <= 1.75
+0	1	
+0.40980313967991683	0.5901968603200832	
+petalwidth > 1.75
+0	1	
+0.7904108548897749	0.2095891451102252	
+petalwidth is missing
+0	1	
+0.5033927485402617	0.4966072514597383	
+
+
+Classifier: 49.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 50.
+Classes in the subset "1": {1}
+	 Alfa: 0.2488681075366142   Beta: -0.3010958188135697.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.75 : 1
+sepalwidth > 2.75 : 0
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 2.75
+0	1	
+0.3780728109734248	0.6219271890265752	
+sepalwidth > 2.75
+0	1	
+0.6461575624487856	0.35384243755121425	
+sepalwidth is missing
+0	1	
+0.4999571288443827	0.5000428711556173	
+
+
+Classifier: 51.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 52.
+Classes in the subset "1": {2}
+	 Alfa: 0.7696700467048443   Beta: -0.14964294376767495.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.25 : 1
+sepalwidth > 2.25 : 0
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 2.25
+0	1	
+0.17663120309880953	0.8233687969011905	
+sepalwidth > 2.25
+0	1	
+0.574267938027681	0.425732061972319	
+sepalwidth is missing
+0	1	
+0.5002306261246634	0.49976937387533665	
+
+
+Classifier: 53.
+Classes in the subset "1": {1}
+	 Alfa: 1.0284261908786663   Beta: -0.08007091054959053.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 3.1500000000000004 : 0
+sepalwidth > 3.1500000000000004 : 1
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 3.1500000000000004
+0	1	
+0.5399501142727436	0.4600498857272563	
+sepalwidth > 3.1500000000000004
+0	1	
+0.11336176298323632	0.8866382370167637	
+sepalwidth is missing
+0	1	
+0.49787273365362456	0.5021272663463754	
+
+
+Classifier: 54.
+Classes in the subset "1": {1}
+	 Alfa: 0.25405538698203395   Beta: -0.3109256763287837.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.75 : 1
+sepalwidth > 2.75 : 0
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 2.75
+0	1	
+0.375636505483195	0.6243634945168051	
+sepalwidth > 2.75
+0	1	
+0.6506394970430802	0.3493605029569197	
+sepalwidth is missing
+0	1	
+0.5011945384608396	0.4988054615391602	
+
+
+Classifier: 55.
+Classes in the subset "1": {1}
+	 Alfa: 0.05653143906786471   Beta: -1.7845952209377551.
+Decision Stump
+
+Classifications
+
+sepallength <= 4.95 : 0
+sepallength > 4.95 : 1
+sepallength is missing : 0
+
+Class distributions
+
+sepallength <= 4.95
+0	1	
+0.972593728202305	0.02740627179769508	
+sepallength > 4.95
+0	1	
+0.4717643521882154	0.5282356478117847	
+sepallength is missing
+0	1	
+0.5004825100922725	0.49951748990772754	
+
+
+Classifier: 56.
+Classes in the subset "1": {2}
+	 Alfa: 0.09798755046434858   Beta: -0.7951347313860346.
+Decision Stump
+
+Classifications
+
+petallength <= 4.75 : 0
+petallength > 4.75 : 1
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 4.75
+0	1	
+0.8306540428697735	0.16934595713022652	
+petallength > 4.75
+0	1	
+0.45116242966977377	0.5488375703302263	
+petallength is missing
+0	1	
+0.5040116420940457	0.49598835790595436	
+
+
+Classifier: 57.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 58.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 59.
+Classes in the subset "1": {1}
+	 Alfa: 0.11754437541757087   Beta: -0.6743840074410599.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.25 : 0
+sepalwidth > 2.25 : 1
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 2.25
+0	1	
+0.7939281644384494	0.20607183556155062	
+sepalwidth > 2.25
+0	1	
+0.44149700256363794	0.5585029974363621	
+sepalwidth is missing
+0	1	
+0.4997380693072052	0.5002619306927947	
+
+
+Classifier: 60.
+Classes in the subset "1": {1}
+	 Alfa: 0.15345428017425966   Beta: -0.48660186734886923.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.75 : 1
+petalwidth > 1.75 : 0
+petalwidth is missing : 1
+
+Class distributions
+
+petalwidth <= 1.75
+0	1	
+0.42386950166670484	0.5761304983332952	
+petalwidth > 1.75
+0	1	
+0.7257576214743119	0.27424237852568806	
+petalwidth is missing
+0	1	
+0.4985432953999711	0.5014567046000289	
+
+
+Classifier: 61.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 62.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 63.
+Classes in the subset "1": {1}
+	 Alfa: 0.26375968293755037   Beta: -0.2682816333558082.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.55 : 0
+petalwidth > 1.55 : 1
+petalwidth is missing : 1
+
+Class distributions
+
+petalwidth <= 1.55
+0	1	
+0.6310125880057018	0.36898741199429813	
+petalwidth > 1.55
+0	1	
+0.3710956387867018	0.6289043612132983	
+petalwidth is missing
+0	1	
+0.4985102111116976	0.5014897888883024	
+
+
+Classifier: 64.
+Classes in the subset "1": {1}
+	 Alfa: 0.05278040749264382   Beta: -1.4245674556500278.
+Decision Stump
+
+Classifications
+
+sepallength <= 4.95 : 0
+sepallength > 4.95 : 1
+sepallength is missing : 1
+
+Class distributions
+
+sepallength <= 4.95
+0	1	
+0.945274057387471	0.054725942612529166	
+sepallength > 4.95
+0	1	
+0.4736342742975547	0.5263657257024453	
+sepallength is missing
+0	1	
+0.49923688809748984	0.5007631119025101	
+
+
+Classifier: 65.
+Classes in the subset "1": {2}
+	 Alfa: 0.14758912582759756   Beta: -0.44503723910831233.
+Decision Stump
+
+Classifications
+
+petallength <= 4.85 : 0
+petallength > 4.85 : 1
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 4.85
+0	1	
+0.708905552312758	0.29109444768724196	
+petallength > 4.85
+0	1	
+0.42673661926771833	0.5732633807322816	
+petallength is missing
+0	1	
+0.5030700456516568	0.4969299543483433	
+
+
+Classifier: 66.
+Classes in the subset "1": {1}
+	 Alfa: 0.1664692360627063   Beta: -0.5247531041189789.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.75 : 1
+petalwidth > 1.75 : 0
+petalwidth is missing : 1
+
+Class distributions
+
+petalwidth <= 1.75
+0	1	
+0.41752581839788283	0.5824741816021173	
+petalwidth > 1.75
+0	1	
+0.7406800790438208	0.2593199209561791	
+petalwidth is missing
+0	1	
+0.4991392048190758	0.5008607951809242	
+
+
+Classifier: 67.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 68.
+Classes in the subset "1": {1}
+	 Alfa: 0.9032641155605328   Beta: -0.07914941819202864.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 3.1500000000000004 : 0
+sepalwidth > 3.1500000000000004 : 1
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 3.1500000000000004
+0	1	
+0.5394922759348397	0.4605077240651602	
+sepalwidth > 3.1500000000000004
+0	1	
+0.1410581974761277	0.8589418025238723	
+sepalwidth is missing
+0	1	
+0.4986164115795896	0.5013835884204104	
+
+
+Classifier: 69.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 70.
+Classes in the subset "1": {1}
+	 Alfa: 0.2814422040127473   Beta: -0.32013650064627475.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.75 : 1
+sepalwidth > 2.75 : 0
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 2.75
+0	1	
+0.36288032292372674	0.6371196770762733	
+sepalwidth > 2.75
+0	1	
+0.6548151746762847	0.34518482532371525	
+sepalwidth is missing
+0	1	
+0.5010233912663066	0.49897660873369337	
+
+
+Classifier: 71.
+Classes in the subset "1": {2}
+	 Alfa: 0.08396650488174233   Beta: -1.2724165047991727.
+Decision Stump
+
+Classifications
+
+sepallength <= 6.55 : 1
+sepallength > 6.55 : 0
+sepallength is missing : 1
+
+Class distributions
+
+sepallength <= 6.55
+0	1	
+0.45811513536198406	0.5418848646380159	
+sepallength > 6.55
+0	1	
+0.9272256881191648	0.0727743118808351	
+sepallength is missing
+0	1	
+0.49967207739755576	0.5003279226024443	
+
+
+Classifier: 72.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 73.
+Classes in the subset "1": {1}
+	 Alfa: 0.2883222509297333   Beta: -0.2480341590746006.
+Decision Stump
+
+Classifications
+
+petallength <= 4.95 : 1
+petallength > 4.95 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 4.95
+0	1	
+0.3597050545118383	0.6402949454881617	
+petallength > 4.95
+0	1	
+0.6215349304367711	0.37846506956322895	
+petallength is missing
+0	1	
+0.5036307216234719	0.4963692783765281	
+
+
+Classifier: 74.
+Classes in the subset "1": {1}
+	 Alfa: 0.13797216051964453   Beta: -0.47970566435293693.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.75 : 1
+petalwidth > 1.75 : 0
+petalwidth is missing : 0
+
+Class distributions
+
+petalwidth <= 1.75
+0	1	
+0.43144835775127166	0.5685516422487282	
+petalwidth > 1.75
+0	1	
+0.7230039401454775	0.2769960598545226	
+petalwidth is missing
+0	1	
+0.5019244988627343	0.4980755011372656	
+
+
+Classifier: 75.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 76.
+Classes in the subset "1": {2}
+	 Alfa: 0.0801069546685042   Beta: -0.8434817705526727.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 3.1500000000000004 : 1
+sepalwidth > 3.1500000000000004 : 0
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 3.1500000000000004
+0	1	
+0.4600319787694472	0.5399680212305528	
+sepalwidth > 3.1500000000000004
+0	1	
+0.8438244626966974	0.1561755373033026	
+sepalwidth is missing
+0	1	
+0.499824942995811	0.5001750570041892	
+
+
+Classifier: 77.
+Classes in the subset "1": {1}
+	 Alfa: 0.05061790558922703   Beta: -1.2503805132286445.
+Decision Stump
+
+Classifications
+
+sepallength <= 4.95 : 0
+sepallength > 4.95 : 1
+sepallength is missing : 0
+
+Class distributions
+
+sepallength <= 4.95
+0	1	
+0.9241952478508977	0.07580475214910244	
+sepallength > 4.95
+0	1	
+0.474712640016634	0.5252873599833662	
+sepallength is missing
+0	1	
+0.5016697983788178	0.49833020162118213	
+
+
+Classifier: 78.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 79.
+Classes in the subset "1": {2}
+	 Alfa: 0.2991933574603189   Beta: -0.23598576558798162.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.75 : 0
+sepalwidth > 2.75 : 1
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 2.75
+0	1	
+0.6158502878510138	0.3841497121489862	
+sepalwidth > 2.75
+0	1	
+0.3547128702268813	0.6452871297731188	
+sepalwidth is missing
+0	1	
+0.5014216659096993	0.4985783340903007	
+
+
+Classifier: 80.
+Classes in the subset "1": {1}
+	 Alfa: 0.1416634839093899   Beta: -0.7052397346234344.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.25 : 0
+sepalwidth > 2.25 : 1
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 2.25
+0	1	
+0.8038415792829283	0.1961584207170716	
+sepalwidth > 2.25
+0	1	
+0.4296383138550636	0.5703616861449363	
+sepalwidth is missing
+0	1	
+0.49925521602783474	0.5007447839721652	
+
+
+Classifier: 81.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 82.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 83.
+Classes in the subset "1": {1}
+	 Alfa: 0.2429661708991758   Beta: -0.3159158062412773.
+Decision Stump
+
+Classifications
+
+sepallength <= 6.25 : 1
+sepallength > 6.25 : 0
+sepallength is missing : 1
+
+Class distributions
+
+sepallength <= 6.25
+0	1	
+0.3808522682452554	0.6191477317547446	
+sepallength > 6.25
+0	1	
+0.6529046634178475	0.3470953365821525	
+sepallength is missing
+0	1	
+0.49794602438838403	0.5020539756116159	
+
+
+Classifier: 84.
+Classes in the subset "1": {2}
+	 Alfa: 0.5043861723451659   Beta: -0.14302486294752734.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.75 : 0
+petalwidth > 1.75 : 1
+petalwidth is missing : 0
+
+Class distributions
+
+petalwidth <= 1.75
+0	1	
+0.5710287677902369	0.42897123220976313	
+petalwidth > 1.75
+0	1	
+0.26722016007273036	0.7327798399272697	
+petalwidth is missing
+0	1	
+0.5013242969802991	0.4986757030197009	
+
+
+Classifier: 85.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 86.
+Classes in the subset "1": {2}
+	 Alfa: 0.15547725251817726   Beta: -0.5219748264578412.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.8499999999999996 : 1
+sepalwidth > 2.8499999999999996 : 0
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 2.8499999999999996
+0	1	
+0.4228817707629259	0.5771182292370741	
+sepalwidth > 2.8499999999999996
+0	1	
+0.7396113879115807	0.26038861208841946	
+sepalwidth is missing
+0	1	
+0.5014525608926157	0.4985474391073843	
+
+
+Classifier: 87.
+Classes in the subset "1": {1}
+	 Alfa: 0.271599994472551   Beta: -0.21544107569341275.
+Decision Stump
+
+Classifications
+
+petallength <= 4.95 : 1
+petallength > 4.95 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 4.95
+0	1	
+0.36744349378171764	0.6325565062182823	
+petallength > 4.95
+0	1	
+0.6060843008932243	0.3939156991067757	
+petallength is missing
+0	1	
+0.5002544974122123	0.49974550258778777	
+
+
+Classifier: 88.
+Classes in the subset "1": {2}
+	 Alfa: 0.5393734293445464   Beta: -0.14450685162803467.
+Decision Stump
+
+Classifications
+
+petalwidth <= 1.75 : 0
+petalwidth > 1.75 : 1
+petalwidth is missing : 1
+
+Class distributions
+
+petalwidth <= 1.75
+0	1	
+0.5717546552670149	0.42824534473298514	
+petalwidth > 1.75
+0	1	
+0.2537432207376993	0.7462567792623007	
+petalwidth is missing
+0	1	
+0.4998800866475612	0.5001199133524389	
+
+
+Classifier: 89.
+Classes in the subset "1": {1}
+	 Alfa: 0.11254940554308646   Beta: -0.5541855238380726.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.25 : 0
+sepalwidth > 2.25 : 1
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 2.25
+0	1	
+0.7518253183665214	0.2481746816334786	
+sepalwidth > 2.25
+0	1	
+0.4439617159335114	0.5560382840664886	
+sepalwidth is missing
+0	1	
+0.4992306893520734	0.5007693106479266	
+
+
+Classifier: 90.
+Classes in the subset "1": {1}
+	 Alfa: 0.06806416611966659   Beta: -1.1935928485659315.
+Decision Stump
+
+Classifications
+
+sepallength <= 4.95 : 0
+sepallength > 4.95 : 1
+sepallength is missing : 1
+
+Class distributions
+
+sepallength <= 4.95
+0	1	
+0.9158449911580478	0.08415500884195214	
+sepallength > 4.95
+0	1	
+0.4660203730721423	0.5339796269278577	
+sepallength is missing
+0	1	
+0.49877526653828036	0.5012247334617196	
+
+
+Classifier: 91.
+Classes in the subset "1": {2}
+	 Alfa: 0.29822469780964744   Beta: -0.2642880867401575.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.75 : 0
+sepalwidth > 2.75 : 1
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 2.75
+0	1	
+0.6291509690465624	0.3708490309534376	
+sepalwidth > 2.75
+0	1	
+0.35515643137197633	0.6448435686280237	
+sepalwidth is missing
+0	1	
+0.5031258068150197	0.4968741931849802	
+
+
+Classifier: 92.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 93.
+Classes in the subset "1": {1}
+	 Alfa: 0.4467251952657837   Beta: -0.14066385633768458.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.8499999999999996 : 0
+sepalwidth > 2.8499999999999996 : 1
+sepalwidth is missing : 1
+
+Class distributions
+
+sepalwidth <= 2.8499999999999996
+0	1	
+0.5698717015404047	0.43012829845959527	
+sepalwidth > 2.8499999999999996
+0	1	
+0.2903982905573693	0.7096017094426307	
+sepalwidth is missing
+0	1	
+0.49844003799308184	0.5015599620069182	
+
+
+Classifier: 94.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 95.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 96.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 97.
+Classes in the subset "1": {0}
+	 Alfa: 8.86376679169621   Beta: -9.210340376976182.
+Decision Stump
+
+Classifications
+
+petallength <= 2.45 : 1
+petallength > 2.45 : 0
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 2.45
+0	1	
+0.0	1.0	
+petallength > 2.45
+0	1	
+1.0	0.0	
+petallength is missing
+0	1	
+0.6666666666666666	0.3333333333333333	
+
+
+Classifier: 98.
+Classes in the subset "1": {2}
+	 Alfa: 0.25969249055983495   Beta: -0.2024825095055214.
+Decision Stump
+
+Classifications
+
+sepalwidth <= 2.75 : 0
+sepalwidth > 2.75 : 1
+sepalwidth is missing : 0
+
+Class distributions
+
+sepalwidth <= 2.75
+0	1	
+0.5998799749898798	0.4001200250101202	
+sepalwidth > 2.75
+0	1	
+0.37299605305396133	0.6270039469460387	
+sepalwidth is missing
+0	1	
+0.5003170593373764	0.4996829406626238	
+
+
+Classifier: 99.
+Classes in the subset "1": {2}
+	 Alfa: 0.14162146773383633   Beta: -0.36438958717219616.
+Decision Stump
+
+Classifications
+
+petallength <= 4.85 : 0
+petallength > 4.85 : 1
+petallength is missing : 0
+
+Class distributions
+
+petallength <= 4.85
+0	1	
+0.674537321718544	0.325462678281456	
+petallength > 4.85
+0	1	
+0.42965890587492384	0.5703410941250763	
+petallength is missing
+0	1	
+0.5002401948883548	0.4997598051116452	
+
+
+Number of performed Iterations: 100
+
+
+Time taken to build model: 0.44 seconds
+Time taken to test model on training data: 0 seconds
+
+=== Error on training data ===
+
+Correctly Classified Instances         150              100      %
+Incorrectly Classified Instances         0                0      %
+Kappa statistic                          1     
+Mean absolute error                      0.2246
+Root mean squared error                  0.3247
+Relative absolute error                 50.5429 %
+Root relative squared error             68.8759 %
+Total Number of Instances              150     
+
+
+=== Confusion Matrix ===
+
+  a  b  c   <-- classified as
+ 50  0  0 |  a = Iris-setosa
+  0 50  0 |  b = Iris-versicolor
+  0  0 50 |  c = Iris-virginica
+
+
+
+=== Stratified cross-validation ===
+
+Correctly Classified Instances         139               92.6667 %
+Incorrectly Classified Instances        11                7.3333 %
+Kappa statistic                          0.89  
+Mean absolute error                      0.2283
+Root mean squared error                  0.3255
+Relative absolute error                 51.3754 %
+Root relative squared error             69.0534 %
+Total Number of Instances              150     
+
+
+=== Confusion Matrix ===
+
+  a  b  c   <-- classified as
+ 50  0  0 |  a = Iris-setosa
+  0 44  6 |  b = Iris-versicolor
+  0  5 45 |  c = Iris-virginica
+

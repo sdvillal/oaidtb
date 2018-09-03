@@ -1,0 +1,162 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\boosters\AdaBoostM1W.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\boosters\AdaBoostM1W.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    AdaBoostM1W.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.boosters; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Evaluation; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> * A modification of AdaBoostM1 which works better with weak base classifiers; for more information see:</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT> * [1] - Günther Eibl & Karl Peter Pfeiffer 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;i&GT;</I></FONT><FONT COLOR="#808080"><I>How to make AdaBoost.M1 work for weak base classifiers by changing only one line of the code.</I></FONT><FONT COLOR="#808080"><I>&LT;/i&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> AdaBoostM1W </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\AdaBoostM1.java.html">oaidtb.boosters.AdaBoostM1</A>{ 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 1 / m_NumClasses; avoid operation overload when calculating the guessing error upper bound */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_NumClassesInverse; 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Avoid operation overload when calculating the guessing error upper bound */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_GuesserCalculationConstant; 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>   * Calculate the classifier's vote weight in the final combined hypothesis based on its error. 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> error The training error of the base classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The classifier's vote weight in the final combined hypothesis 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> calculateBeta(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> error){ 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> Math.log(((m_NumClasses - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">) * (</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> - error) + NO_DIVISION_BY_ZERO) / (error + NO_DIVISION_BY_ZERO)); 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>   * The default error value for which the algorithm will stop to iterate following the 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>   * customizable criterion of the number of (consecutive or not) retries the base classifier reaches a error 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>   * worse than this value. 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I>  The ad-hoc stopping criterion proposed in [1] 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> defaultTooBigErrorValue(){ 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_NumClasses != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> / m_NumClasses; 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Initialize the guessing error of the training set upper bound. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> initializeErrorUpperBound(){ 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CalculateErrorUpperBound){ 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>      m_NumClassesInverse = </FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000"> / m_NumClasses; 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>      m_GuesserCalculationConstant = </FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000"> / (Math.pow(</FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000"> - m_NumClassesInverse, </FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000"> - m_NumClassesInverse) * 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>        Math.pow(m_NumClassesInverse, m_NumClassesInverse)); 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"Calculating the guessing error upper bound."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>    m_ErrorUpperBound = </FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>   * Get the guessing error upper bound. See [1] for more info. 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The guessing error upper bound or -1 if no iterations have been done. 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getErrorUpperBound(){ 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NumIterations &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CalculateErrorUpperBound) 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> Double.isNaN(m_ErrorUpperBound) ? </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> : m_ErrorUpperBound; 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>   * Update the theoretical guessing error upper bound.</I></FONT><FONT COLOR="#808080"><I>&LT;PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>   *  - Note that if the error of the base classifier is greater than 1/m_NumClasses the bound is undetermined, 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>   *    and so its calculation will be aborted. 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;/PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> error The current base classifier's error 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> updateErrorUpperBound(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> error){ 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CalculateErrorUpperBound && !Double.isNaN(m_ErrorUpperBound)){ 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (error &GT; (</FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000"> - m_NumClassesInverse)){ 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>        m_ErrorUpperBound = Double.NaN; 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"Can't bound the guessing error upper boud: base classifier's error is greater than 1/2."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>        m_ErrorUpperBound *= (Math.pow(error, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> - m_NumClassesInverse) * Math.pow(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> - error, m_NumClassesInverse) 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>          * m_GuesserCalculationConstant); 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"\tGesser &LT;= "</B></FONT><FONT COLOR="#000000"> + m_ErrorUpperBound); 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The error upper bound string (by example, "Training error upper bound.") */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getErrorUpperBoundName(){ 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Guessing error of the training set upper bound"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String calculateErrorUpperBoundTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Calculate or not the "</B></FONT><FONT COLOR="#000000"> +getErrorUpperBoundName() +</FONT><FONT COLOR="#008000"><B>" (only if no iteration have been done yet).\n"</B></FONT><FONT COLOR="#000000"> + 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>      </FONT><FONT COLOR="#008000"><B>"See Eibl & Pfeiffer paper."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>   * Main method for testing this class. 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> argv the options 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> main(String[] argv){ 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>      System.out.println(Evaluation.evaluateModel(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> AdaBoostM1W(), argv)); 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>      System.err.println(e.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

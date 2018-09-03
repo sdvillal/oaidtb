@@ -1,0 +1,892 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\boosters\AdaBoostM1.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\boosters\AdaBoostM1.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    AdaBoostM1.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.boosters; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Evaluation; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.*; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Enumeration; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Random; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Vector; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">oaidtb.misc.CustomOrderDefiner</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * Class for boosting using AdaBoostM1. For more information see: </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="http://www.research.att.com/~schapire/papers/FreundSc95.ps.Z"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * Yoav Freund and Robert E. Schapire: 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> *  </I></FONT><FONT COLOR="#808080"><I>&LT;i&GT;</I></FONT><FONT COLOR="#808080"><I>A decision-theoretic generalization of on-line learning and an application to boosting</I></FONT><FONT COLOR="#808080"><I>&LT;/i&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * Journal of Computer and System Sciences, 55(1):119-139, 1997. 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;&LT;/p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> AdaBoostM1 </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A> </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\MulticlassExtensibleBooster.java.html">MulticlassExtensibleBooster</A>, <A href="..\..\oaidtb\boosters\ErrorUpperBoundComputer.java.html">ErrorUpperBoundComputer</A>{ 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Must this booster use its own train data copy?. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_UseOwnTrainData = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Base classifiers and the weights of their votes. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\WeightedClassifierVector.java.html">WeightedClassifierVector</A> m_Classifiers; 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The theoretical training error upper bound. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_ErrorUpperBound; 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Calculate or not the training error upper bound. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_CalculateErrorUpperBound = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Number of classes in the original dataset */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_NumClasses; 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The value considered as a "too big error" for the training error of the base classifiers. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_TooBigError = </FONT><FONT COLOR="#0000ff">0.5</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Is the "too big error" customized by the user?  (needed for AdaBoostM1W, but added here). */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_CustomizedBigError = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Number of allowed (non) consecutive "too big errors" (maximum of the training error of the base classifiers). */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_MaxNumOfTooBigErrors = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Number of "too big errors" left before the algorithm stops. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_TooBigErrorCountDown = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Must we reset the "too big errors countdown" after a base classifier error &lt the "big error"? */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_TooBigErrorsMustBeConsecutives = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>   * Boosting method. 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>   * Reset the model and initialize data. 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> data the training data to be used for generating the 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>   * boosted classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if the classifier could not be built successfully 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> buildClassifier(Instances data) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>    </FONT><FONT COLOR="#808080"><I>//Check glogal settings.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Classifier == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"A base classifier has not been specified."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_UseOwnTrainData){ 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>      </FONT><FONT COLOR="#808080"><I>//Check the correct format of training instances.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (data.checkForStringAttributes()) 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>        </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Can't handle string attributes!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (data.classAttribute().isNumeric()) 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>        </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"AdaBoostM1 can't handle a numeric class!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>      </FONT><FONT COLOR="#808080"><I>//We copy them thus ensuring AdaBoostM1 nor other class mess it up.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>      m_TrainData = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instances(data); 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>      m_BoosterReady = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">;  </FONT><FONT COLOR="#808080"><I>//No "return" can be done from here.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>      m_TrainData.deleteWithMissingClass(); 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_TrainData.numInstances() == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>        </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"No train instances without class missing!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>    </FONT><FONT COLOR="#808080"><I>//We entrust to the "caller class" the correctness of the train data instances.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>      m_TrainData = data; 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>    </FONT><FONT COLOR="#808080"><I>//Set up the number of classes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>    m_NumClasses = data.numClasses(); 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>    </FONT><FONT COLOR="#808080"><I>//Set up the number of instances.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>    m_NumInstances = m_TrainData.numInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>    </FONT><FONT COLOR="#808080"><I>//Initialize instance's weight & m_NormFactor.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>    initializeNormFactor(); 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>    initializeWeights(); 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>    </FONT><FONT COLOR="#808080"><I>//Set up the number of performed iterations.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>    m_NumIterations = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>    </FONT><FONT COLOR="#808080"><I>//Initialize the classifiers and their weights array.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>    m_Classifiers = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\WeightedClassifierVector.java.html">WeightedClassifierVector</A>(); 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>    </FONT><FONT COLOR="#808080"><I>//We can now perform new iterations.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>    m_BoosterReady = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>    </FONT><FONT COLOR="#808080"><I>//Initialize the training error upper bound</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>    initializeErrorUpperBound(); 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>    </FONT><FONT COLOR="#808080"><I>//Initialize the stop criterion</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_CustomizedBigError) 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>      m_TooBigError = defaultTooBigErrorValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>    m_TooBigErrorCountDown = m_MaxNumOfTooBigErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>    </FONT><FONT COLOR="#808080"><I>//Perform first "InitialIterations" iterations.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    nextIterations(m_InitialIterations); 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>   * Boosting method. Boosts any classifier that can handle weighted 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>   * instances. 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterations The number of iterations to perform. 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if the classifier could not be built successfully or the stop criterion is applied 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> buildClassifierWithWeights(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterations) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> beta; 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> epsilon; 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>    Classifier baseClassifier; 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>    SerializedObject serializedClassifier = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> SerializedObject(m_Classifier); 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"Boosting without resampling."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>    </FONT><FONT COLOR="#808080"><I>// Do iterations.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (numIterations--; numIterations &GT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; numIterations--){ 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"Training classifier "</B></FONT><FONT COLOR="#000000"> + (m_NumIterations + </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>      </FONT><FONT COLOR="#808080"><I>//Copy the base classifier.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>      baseClassifier = (Classifier) serializedClassifier.getObject(); 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>      </FONT><FONT COLOR="#808080"><I>// Build the classifier.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>      baseClassifier.buildClassifier(m_TrainData); 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>      </FONT><FONT COLOR="#808080"><I>// Calculate the error.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>      epsilon = calculateError(baseClassifier); 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>      </FONT><FONT COLOR="#808080"><I>//Apply the stop criterion</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (mustStopCriterion(epsilon)){ 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"/**** Exit because of stop criterion ****/ ==&GT; error rate = "</B></FONT><FONT COLOR="#000000"> + epsilon); 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NumIterations == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>          </FONT><FONT COLOR="#808080"><I>//Use the first base classifier built</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>          beta = calculateBeta(epsilon); 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>          m_Classifiers.add(baseClassifier, beta); 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>          m_NumIterations++; 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>        </FONT><FONT COLOR="#808080"><I>//Reset, nextIterations()</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>        m_TooBigErrorCountDown = m_MaxNumOfTooBigErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT></FONT><FONT COLOR="#808080"><I>//        return;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>        </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Stop criterion applied: iterate stopped"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>      </FONT><FONT COLOR="#808080"><I>//Determine the weight to assign to this model.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>      beta = calculateBeta(epsilon); 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"\terror rate = "</B></FONT><FONT COLOR="#000000"> + epsilon + </FONT><FONT COLOR="#008000"><B>"  beta = "</B></FONT><FONT COLOR="#000000"> + beta); 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>      </FONT><FONT COLOR="#808080"><I>//Assign new instances weights</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>      reweight(baseClassifier, beta); 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>      </FONT><FONT COLOR="#808080"><I>//Update the theoretical training error upper bound</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>      updateErrorUpperBound(epsilon); 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>      </FONT><FONT COLOR="#808080"><I>//"Commit"</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>      m_Classifiers.add(baseClassifier, beta); 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>      m_NumIterations++; 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT>   * Boosting method. Boosts any classifier using training instances 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT>   * weight for resampling. 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterations The number of iterations to perform. 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if the classifier could not be built successfully or the stop criterion is applied 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> buildClassifierUsingResampling(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterations) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> epsilon, beta;          </FONT><FONT COLOR="#808080"><I>//Base classifier's error and weight.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>    Random randomInstance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random(m_ResampleSeed); </FONT><FONT COLOR="#808080"><I>//Random number generator for resample.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>    Instances sample;              </FONT><FONT COLOR="#808080"><I>//The resampled training dataset.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>    Classifier baseClassifier; 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>    SerializedObject serializedClassifier = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> SerializedObject(m_Classifier); 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"Boosting with resampling."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>    </FONT><FONT COLOR="#808080"><I>// Do iterations</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (numIterations--; numIterations &GT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; numIterations--){ 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug){ 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"Training classifier "</B></FONT><FONT COLOR="#000000"> + (m_NumIterations + </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>      </FONT><FONT COLOR="#808080"><I>// Resample.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>      sample = m_TrainData.resampleWithWeights(randomInstance); 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>      </FONT><FONT COLOR="#808080"><I>//Copy the base classifier.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>      baseClassifier = (Classifier) serializedClassifier.getObject(); 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>      </FONT><FONT COLOR="#808080"><I>// Build the classifier.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>      baseClassifier.buildClassifier(sample); 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT>      </FONT><FONT COLOR="#808080"><I>//Calculate base classifier's error</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>      epsilon = calculateError(baseClassifier); 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>      </FONT><FONT COLOR="#808080"><I>//Apply the stop criterion</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (mustStopCriterion(epsilon)){ 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"/**** Exit because of stop criterion ****/ ==&GT; error rate = "</B></FONT><FONT COLOR="#000000"> + epsilon); 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NumIterations == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>          beta = calculateBeta(epsilon); 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>          m_Classifiers.add(baseClassifier, beta); 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT>          m_NumIterations++; 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT>        </FONT><FONT COLOR="#808080"><I>//Reset, nextIterations()</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>        m_TooBigErrorCountDown = m_MaxNumOfTooBigErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT></FONT><FONT COLOR="#808080"><I>//        return;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>        </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Stop criterion applied: iterate stopped"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>      </FONT><FONT COLOR="#808080"><I>//Determine the weight to assign to this model.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>      beta = calculateBeta(epsilon); 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"\terror rate = "</B></FONT><FONT COLOR="#000000"> + epsilon + </FONT><FONT COLOR="#008000"><B>"  beta = "</B></FONT><FONT COLOR="#000000"> + beta); 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>      </FONT><FONT COLOR="#808080"><I>//Assign new instances weights</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>      reweight(baseClassifier, beta); 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT>      </FONT><FONT COLOR="#808080"><I>//Update the theoretical training error upper bound.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>      updateErrorUpperBound(epsilon); 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>      </FONT><FONT COLOR="#808080"><I>//"Commit"</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT>      m_Classifiers.add(baseClassifier, beta); 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>      m_NumIterations++; 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>   * Calculate a classifiers error as the weight percentage of training instances misclassified. 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> baseClassifier The base classifier 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The error in [0,1] 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If there is a classification error 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> calculateError(Classifier baseClassifier) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> epsilon = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> totalSumOfWeights = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>    Instance instance; 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumInstances; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>      instance = m_TrainData.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> weight = instance.weight(); 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>      totalSumOfWeights += weight; 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (baseClassifier.classifyInstance(instance) != instance.classValue()) 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>        epsilon += weight; 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> epsilon / totalSumOfWeights; 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>   * Calculate the classifier's vote weight in the final combined hypothesis based on its error 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> error The training error of the base classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The classifier's vote weight in the final combined hypothesis 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> calculateBeta(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> error){ 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> Math.log((</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> - error + NO_DIVISION_BY_ZERO) / (error + NO_DIVISION_BY_ZERO)); 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>   * Assign new weight to every instance in the training dataset based 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT>   * in the classifier's vote weight and if it classifies correctly the instance. 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>   * We use a "conservative boosting approach", only increasing the weights of misclassified 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT>   * instances. This update will be exp(beta) if beta is &gt 0 or exp (-beta) otherwise. 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> baseClassifier The base classifier 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> beta Factor in term of which misclassified training instances weight will be updated 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If there is a classification error 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> reweight(Classifier baseClassifier, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> beta) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> newWeightsSum = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (beta &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">)  </FONT><FONT COLOR="#808080"><I>//error &LT; 0.5</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT>      beta = Math.exp(beta); 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">  </FONT><FONT COLOR="#808080"><I>//error &GT; 0.5; we still increase the weights of misclassified instances</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT>      beta = Math.exp(-beta); 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumInstances; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT>      Instance instance = m_TrainData.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> weight = instance.weight(); 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (instance.classValue() != baseClassifier.classifyInstance(instance)) 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT>        instance.setWeight(weight * beta); 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT>      newWeightsSum += weight; 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT>    normalizeWeights(newWeightsSum); 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT>   * Return the class predicted (&lt0 == class 0 and &gt0 == class 1) and the 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT>   * confidence of this prediction (its absolute value). 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The class predicted and its confidence. 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if the instance can´t be classified succesfully. 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> confidenceAndSign(Instance instance) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> confidenceAndSign = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumIterations; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_Classifiers.get(i).classifyInstance(instance) == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT>        confidenceAndSign -= m_Classifiers.getWeight(i); 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>        confidenceAndSign += m_Classifiers.getWeight(i); 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> confidenceAndSign; 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT>   * Return the class predicted (&LT;0 == class 0 and &GT;0 == class 1) and the 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT>   * confidence of this prediction (its absolute value) of the classifier indicated. 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">382  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">383  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifierIndex The classifier's index 
+<FONT COLOR=0 STYLE="font-style:normal">384  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">385  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The class predicted and its confidence. 
+<FONT COLOR=0 STYLE="font-style:normal">386  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">387  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if an error happens. 
+<FONT COLOR=0 STYLE="font-style:normal">388  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">389  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> confidenceAndSign(Instance instance, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classifierIndex) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">390  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">391  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (classifierIndex &GT;= m_NumIterations || classifierIndex &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">392  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Classifier index is invalid"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">393  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">394  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_Classifiers.get(classifierIndex).classifyInstance(instance) == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">395  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> - m_Classifiers.getWeight(classifierIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">396  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">397  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Classifiers.getWeight(classifierIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">398  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">399  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">400  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">401  </FONT>   * Calculates the class membership probabilities for the given test instance. 
+<FONT COLOR=0 STYLE="font-style:normal">402  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">403  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance the instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">404  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">405  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> predicted class probability distribution 
+<FONT COLOR=0 STYLE="font-style:normal">406  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">407  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if instance could not be classified successfully 
+<FONT COLOR=0 STYLE="font-style:normal">408  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">409  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance(Instance instance) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">410  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[m_NumClasses]; 
+<FONT COLOR=0 STYLE="font-style:normal">411  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">412  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumIterations; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">413  </FONT>      distributionForInstance[(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) m_Classifiers.get(i).classifyInstance(instance)] += m_Classifiers.getWeight(i); 
+<FONT COLOR=0 STYLE="font-style:normal">414  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">415  </FONT>    </FONT><FONT COLOR="#808080"><I>//We need to normalize...</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">416  </FONT>    <A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.secureNormalize(distributionForInstance); 
+<FONT COLOR=0 STYLE="font-style:normal">417  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">418  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> distributionForInstance; 
+<FONT COLOR=0 STYLE="font-style:normal">419  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">420  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">421  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">422  </FONT>   * Get the classifier's vote for the instance; the (vectorial) sum of all base classifiers vote vectors must be 
+<FONT COLOR=0 STYLE="font-style:normal">423  </FONT>   * the final combined hypothesis of the booster (obviously, not normalized). 
+<FONT COLOR=0 STYLE="font-style:normal">424  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">425  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance to be classified 
+<FONT COLOR=0 STYLE="font-style:normal">426  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifierIndex The base classifier index 
+<FONT COLOR=0 STYLE="font-style:normal">427  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The vote of the base classifier to the overall classifier 
+<FONT COLOR=0 STYLE="font-style:normal">428  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if an error occurs 
+<FONT COLOR=0 STYLE="font-style:normal">429  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">430  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] getClassifierVote(Instance instance, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classifierIndex) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">431  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">432  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (classifierIndex &GT;= m_NumIterations || classifierIndex &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">433  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Classifier index is invalid"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">434  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">435  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[m_NumClasses]; 
+<FONT COLOR=0 STYLE="font-style:normal">436  </FONT>    distributionForInstance[(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) m_Classifiers.get(classifierIndex).classifyInstance(instance)] 
+<FONT COLOR=0 STYLE="font-style:normal">437  </FONT>      = m_Classifiers.getWeight(classifierIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">438  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">439  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> distributionForInstance; 
+<FONT COLOR=0 STYLE="font-style:normal">440  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">441  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">442  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The value considered as a "too big error" for base classifiers */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">443  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getTooBigError(){ 
+<FONT COLOR=0 STYLE="font-style:normal">444  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_CustomizedBigError ? m_TooBigError : defaultTooBigErrorValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">445  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">446  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">447  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">448  </FONT>   * Set the error value which will be considered as the upper limit for the base classifiers 
+<FONT COLOR=0 STYLE="font-style:normal">449  </FONT>   * training error and will be used to determine the stop criterion of the algorithm. 
+<FONT COLOR=0 STYLE="font-style:normal">450  </FONT>   *   </I></FONT><FONT COLOR="#808080"><I>&LT;li&GT;</I></FONT><FONT COLOR="#808080"><I> If &gt1 ==&GT; there is no stop criterion 
+<FONT COLOR=0 STYLE="font-style:normal">451  </FONT>   *   </I></FONT><FONT COLOR="#808080"><I>&LT;li&GT;</I></FONT><FONT COLOR="#808080"><I> If &lt=0 ==&GT; the default value will be used 
+<FONT COLOR=0 STYLE="font-style:normal">452  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">453  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> tooBigError The value 
+<FONT COLOR=0 STYLE="font-style:normal">454  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">455  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setTooBigError(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> tooBigError){ 
+<FONT COLOR=0 STYLE="font-style:normal">456  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (tooBigError &LT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">457  </FONT>      m_CustomizedBigError = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">458  </FONT>      m_TooBigError = defaultTooBigErrorValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">459  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">460  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">461  </FONT>      m_CustomizedBigError = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">462  </FONT>      m_TooBigError = tooBigError; 
+<FONT COLOR=0 STYLE="font-style:normal">463  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">464  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">465  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">466  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">467  </FONT>   * Get the maximum number of "too big errors" occurrences before the algorithm stops; 
+<FONT COLOR=0 STYLE="font-style:normal">468  </FONT>   * if getTooBigErrorsMustBeConsecutives() is true, they must be consecutive to produce the stop. 
+<FONT COLOR=0 STYLE="font-style:normal">469  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">470  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The maximum number of "too big errors" occurrences. 
+<FONT COLOR=0 STYLE="font-style:normal">471  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">472  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getMaxNumOfTooBigErrors(){ 
+<FONT COLOR=0 STYLE="font-style:normal">473  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_MaxNumOfTooBigErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">474  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">475  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">476  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">477  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">478  </FONT>   * Set the maximum number of "too big errors" occurrences before the algorithm stops; 
+<FONT COLOR=0 STYLE="font-style:normal">479  </FONT>   * if getTooBigErrorsMustBeConsecutives() is true, they must be consecutive to produce the stop. 
+<FONT COLOR=0 STYLE="font-style:normal">480  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">481  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> maxNumOfTooBigErrors The maximum number of "too big errors" occurrences. 
+<FONT COLOR=0 STYLE="font-style:normal">482  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">483  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setMaxNumOfTooBigErrors(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> maxNumOfTooBigErrors){ 
+<FONT COLOR=0 STYLE="font-style:normal">484  </FONT>    m_MaxNumOfTooBigErrors = maxNumOfTooBigErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">485  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">486  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">487  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Must the "too big errors" occurrences be consecutives to produce a stop? */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">488  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> getTooBigErrorsMustBeConsecutives(){ 
+<FONT COLOR=0 STYLE="font-style:normal">489  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_TooBigErrorsMustBeConsecutives; 
+<FONT COLOR=0 STYLE="font-style:normal">490  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">491  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">492  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> tooBigErrorsMustBeConsecutives Must the "too big errors" occurrences be consecutives to produce a stop?  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">493  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setTooBigErrorsMustBeConsecutives(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> tooBigErrorsMustBeConsecutives){ 
+<FONT COLOR=0 STYLE="font-style:normal">494  </FONT>    m_TooBigErrorsMustBeConsecutives = tooBigErrorsMustBeConsecutives; 
+<FONT COLOR=0 STYLE="font-style:normal">495  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">496  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">497  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The default value of the error which will be considered as a "too big error". */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">498  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> defaultTooBigErrorValue(){ 
+<FONT COLOR=0 STYLE="font-style:normal">499  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff">0.5</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">500  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">501  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">502  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">503  </FONT>   * If this method return true, the boosting method must stop. 
+<FONT COLOR=0 STYLE="font-style:normal">504  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">505  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> error The error of the base classifier in the actual boosting iteration 
+<FONT COLOR=0 STYLE="font-style:normal">506  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">507  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> True if we have reached the stop condition, false otherwise. 
+<FONT COLOR=0 STYLE="font-style:normal">508  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">509  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> mustStopCriterion(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> error){ 
+<FONT COLOR=0 STYLE="font-style:normal">510  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (error &GT; m_TooBigError){ 
+<FONT COLOR=0 STYLE="font-style:normal">511  </FONT>      m_TooBigErrorCountDown--; 
+<FONT COLOR=0 STYLE="font-style:normal">512  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_TooBigErrorCountDown == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">513  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">514  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">515  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">516  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">517  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_TooBigErrorsMustBeConsecutives) 
+<FONT COLOR=0 STYLE="font-style:normal">518  </FONT>        m_TooBigErrorCountDown = m_MaxNumOfTooBigErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">519  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">520  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">521  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">522  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">523  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The error upper bound string (by example, "Training error upper bound.") */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">524  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getErrorUpperBoundName(){ 
+<FONT COLOR=0 STYLE="font-style:normal">525  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Training error upper bound"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">526  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">527  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">528  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">529  </FONT>   * Get if the training error upper bound is being calculated. 
+<FONT COLOR=0 STYLE="font-style:normal">530  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">531  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if it's being computed. 
+<FONT COLOR=0 STYLE="font-style:normal">532  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">533  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> getCalculateErrorUpperBound(){ 
+<FONT COLOR=0 STYLE="font-style:normal">534  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_CalculateErrorUpperBound; 
+<FONT COLOR=0 STYLE="font-style:normal">535  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">536  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">537  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">538  </FONT>   * Set (only if no iterations have be done) if the training error upper bound must be 
+<FONT COLOR=0 STYLE="font-style:normal">539  </FONT>   * wether or not calculated. 
+<FONT COLOR=0 STYLE="font-style:normal">540  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">541  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> b If the training error upper bound must or not be calculated. 
+<FONT COLOR=0 STYLE="font-style:normal">542  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">543  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setCalculateErrorUpperBound(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> b){ 
+<FONT COLOR=0 STYLE="font-style:normal">544  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NumIterations == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">545  </FONT>      m_CalculateErrorUpperBound = b; 
+<FONT COLOR=0 STYLE="font-style:normal">546  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">547  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">548  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">549  </FONT>   * Get the training error upper bound. 
+<FONT COLOR=0 STYLE="font-style:normal">550  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">551  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The training error upper bound or -1 if no iterations have been done. 
+<FONT COLOR=0 STYLE="font-style:normal">552  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">553  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getErrorUpperBound(){ 
+<FONT COLOR=0 STYLE="font-style:normal">554  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NumIterations &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">555  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CalculateErrorUpperBound) 
+<FONT COLOR=0 STYLE="font-style:normal">556  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> Double.isNaN(m_ErrorUpperBound) ? </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> : m_ErrorUpperBound; 
+<FONT COLOR=0 STYLE="font-style:normal">557  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">558  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">559  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">560  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">561  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">562  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Initialize the training error upper bound. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">563  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> initializeErrorUpperBound(){ 
+<FONT COLOR=0 STYLE="font-style:normal">564  </FONT>    m_ErrorUpperBound = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">565  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CalculateErrorUpperBound && m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">566  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"Calculating the training error upper bound."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">567  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">568  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">569  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">570  </FONT>   * Update the theoretical training error upper bound.</I></FONT><FONT COLOR="#808080"><I>&LT;PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">571  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">572  </FONT>   *  - Note that if the error of the base classifier is greater than 1/2 the bound is undetermined, 
+<FONT COLOR=0 STYLE="font-style:normal">573  </FONT>   *    and so its calculation will be aborted. 
+<FONT COLOR=0 STYLE="font-style:normal">574  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">575  </FONT>   *  - Note that this is related to the current choice of the classifier's vote weight, so it will 
+<FONT COLOR=0 STYLE="font-style:normal">576  </FONT>   *    be invalid if this class is extended playing with its formulae (like in AdaBoostM1W); 
+<FONT COLOR=0 STYLE="font-style:normal">577  </FONT>   *    so the methods related to the training error must be overriden (with a silent noop if no bound 
+<FONT COLOR=0 STYLE="font-style:normal">578  </FONT>   *    must be calculated and returning 1 the method getErrorBound()). 
+<FONT COLOR=0 STYLE="font-style:normal">579  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;/PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">580  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">581  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> error The current base classifier's error 
+<FONT COLOR=0 STYLE="font-style:normal">582  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">583  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> updateErrorUpperBound(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> error){ 
+<FONT COLOR=0 STYLE="font-style:normal">584  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CalculateErrorUpperBound && !Double.isNaN(m_ErrorUpperBound)){ 
+<FONT COLOR=0 STYLE="font-style:normal">585  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (error &GT; </FONT><FONT COLOR="#0000ff">0.5</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">586  </FONT>        m_ErrorUpperBound = Double.NaN; 
+<FONT COLOR=0 STYLE="font-style:normal">587  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">588  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"Can't bound the training error upper boud: base classifier's error is greater than 1/2."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">589  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">590  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">591  </FONT>        m_ErrorUpperBound *= </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000"> * Math.sqrt(error * (</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> - error)); 
+<FONT COLOR=0 STYLE="font-style:normal">592  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Debug) 
+<FONT COLOR=0 STYLE="font-style:normal">593  </FONT>          System.err.println(</FONT><FONT COLOR="#008000"><B>"\tTEUB--&GT; "</B></FONT><FONT COLOR="#000000"> + m_ErrorUpperBound); 
+<FONT COLOR=0 STYLE="font-style:normal">594  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">595  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">596  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">597  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">598  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">599  </FONT>   * Get the base classifier built on specified iteration. Be careful of not modifying it. 
+<FONT COLOR=0 STYLE="font-style:normal">600  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">601  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numClassifier The number of the base classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">602  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">603  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The base classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">604  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">605  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If numClassifier is incorrect (\&LT;0 or &GT;m_NumIterations). 
+<FONT COLOR=0 STYLE="font-style:normal">606  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">607  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Classifier getClassifier(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numClassifier) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">608  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">609  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (numClassifier &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> || numClassifier &GT;= m_NumIterations) 
+<FONT COLOR=0 STYLE="font-style:normal">610  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Classifier's number incorrect."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">611  </FONT>    </FONT><FONT COLOR="#808080"><I>//It would be better to return a copy; it's slower too.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">612  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Classifiers.get(numClassifier); 
+<FONT COLOR=0 STYLE="font-style:normal">613  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">614  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">615  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">616  </FONT>   * Get the vote's weight of the base classifier built on specified iteration. 
+<FONT COLOR=0 STYLE="font-style:normal">617  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">618  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numClassifier The number of the base classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">619  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">620  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Classifier's weight. 
+<FONT COLOR=0 STYLE="font-style:normal">621  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">622  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If numClassifier is incorrect or if the booster doesn't asign weights. 
+<FONT COLOR=0 STYLE="font-style:normal">623  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">624  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getClassifierWeight(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numClassifier) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">625  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">626  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (numClassifier &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> || numClassifier &GT;= m_NumIterations) 
+<FONT COLOR=0 STYLE="font-style:normal">627  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Classifier's number incorrect."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">628  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Classifiers.getWeight(numClassifier); 
+<FONT COLOR=0 STYLE="font-style:normal">629  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">630  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">631  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">632  </FONT>   * Must the booster use its own train data copy? 
+<FONT COLOR=0 STYLE="font-style:normal">633  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">634  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> b True if the booster must use its own train data copy. 
+<FONT COLOR=0 STYLE="font-style:normal">635  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">636  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setUseOwnTrainData(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> b){ 
+<FONT COLOR=0 STYLE="font-style:normal">637  </FONT>    m_UseOwnTrainData = b; 
+<FONT COLOR=0 STYLE="font-style:normal">638  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">639  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">640  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">641  </FONT>   * Parses a given list of options. Valid options are:</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">642  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">643  </FONT>   * -B 
+<FONT COLOR=0 STYLE="font-style:normal">644  </FONT>   * Calculate the training error upper bound (default false). 
+<FONT COLOR=0 STYLE="font-style:normal">645  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">646  </FONT>   * -E bigErrorValue 
+<FONT COLOR=0 STYLE="font-style:normal">647  </FONT>   * Set the value considered as "too big error" in the (base classifier) training procedure; it will 
+<FONT COLOR=0 STYLE="font-style:normal">648  </FONT>   * be used as an stop criterion. 
+<FONT COLOR=0 STYLE="font-style:normal">649  </FONT>   *  - If less or equal than zero, it will be reset to the default value. 
+<FONT COLOR=0 STYLE="font-style:normal">650  </FONT>   *  - If bigger than 1.0, no stop criterion will be applied. 
+<FONT COLOR=0 STYLE="font-style:normal">651  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">652  </FONT>   * -C maxNumOfBigErrors 
+<FONT COLOR=0 STYLE="font-style:normal">653  </FONT>   * Set the number of times after that, happened a value considered as "too big error" in the training procedure, 
+<FONT COLOR=0 STYLE="font-style:normal">654  </FONT>   * the classifier will stop to iterate. 
+<FONT COLOR=0 STYLE="font-style:normal">655  </FONT>   *  - If less or equal than zero, no stop criterion will be applied. 
+<FONT COLOR=0 STYLE="font-style:normal">656  </FONT>   *  - Default: 1 
+<FONT COLOR=0 STYLE="font-style:normal">657  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">658  </FONT>   * -V 
+<FONT COLOR=0 STYLE="font-style:normal">659  </FONT>   * The "big errors occurrences" mustn't need to be consecutives to provoke the stop. 
+<FONT COLOR=0 STYLE="font-style:normal">660  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">661  </FONT>   * Plus the rest of the superclass options. 
+<FONT COLOR=0 STYLE="font-style:normal">662  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;/PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">663  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">664  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> options the list of options as an array of strings 
+<FONT COLOR=0 STYLE="font-style:normal">665  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">666  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if an option is not supported 
+<FONT COLOR=0 STYLE="font-style:normal">667  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">668  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setOptions(String[] options) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">669  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">670  </FONT>    </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.setOptions(options); 
+<FONT COLOR=0 STYLE="font-style:normal">671  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">672  </FONT>    setCalculateErrorUpperBound(Utils.getFlag(</FONT><FONT COLOR="#008000"><B>'B'</B></FONT><FONT COLOR="#000000">, options)); 
+<FONT COLOR=0 STYLE="font-style:normal">673  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">674  </FONT>    String bigError = Utils.getOption(</FONT><FONT COLOR="#008000"><B>'E'</B></FONT><FONT COLOR="#000000">, options); 
+<FONT COLOR=0 STYLE="font-style:normal">675  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (bigError.length() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">676  </FONT>      setTooBigError(Double.parseDouble(bigError)); 
+<FONT COLOR=0 STYLE="font-style:normal">677  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">678  </FONT>    String bigErrorCountDown = Utils.getOption(</FONT><FONT COLOR="#008000"><B>'C'</B></FONT><FONT COLOR="#000000">, options); 
+<FONT COLOR=0 STYLE="font-style:normal">679  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (bigErrorCountDown.length() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">680  </FONT>      setMaxNumOfTooBigErrors(Integer.parseInt(bigErrorCountDown)); 
+<FONT COLOR=0 STYLE="font-style:normal">681  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">682  </FONT>    setTooBigErrorsMustBeConsecutives(!Utils.getFlag(</FONT><FONT COLOR="#008000"><B>'V'</B></FONT><FONT COLOR="#000000">, options)); 
+<FONT COLOR=0 STYLE="font-style:normal">683  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">684  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">685  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">686  </FONT>   * Gets the current settings of the Classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">687  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">688  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an array of strings suitable for passing to setOptions 
+<FONT COLOR=0 STYLE="font-style:normal">689  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">690  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String[] getOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">691  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">692  </FONT>    String[] otherOptions = </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.getOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">693  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">694  </FONT>    String[] options = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String[otherOptions.length + </FONT><FONT COLOR="#0000ff">6</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">695  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">696  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> current = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">697  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">698  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (getCalculateErrorUpperBound()) 
+<FONT COLOR=0 STYLE="font-style:normal">699  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>"-B"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">700  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">701  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CustomizedBigError){ 
+<FONT COLOR=0 STYLE="font-style:normal">702  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>"-E"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">703  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> + getTooBigError(); 
+<FONT COLOR=0 STYLE="font-style:normal">704  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">705  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">706  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>"-C"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">707  </FONT>    options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000"> + getMaxNumOfTooBigErrors(); 
+<FONT COLOR=0 STYLE="font-style:normal">708  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">709  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!getTooBigErrorsMustBeConsecutives()) 
+<FONT COLOR=0 STYLE="font-style:normal">710  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>"-V"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">711  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">712  </FONT>    System.arraycopy(otherOptions, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">713  </FONT>                     options, current, 
+<FONT COLOR=0 STYLE="font-style:normal">714  </FONT>                     otherOptions.length); 
+<FONT COLOR=0 STYLE="font-style:normal">715  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">716  </FONT>    current += otherOptions.length; 
+<FONT COLOR=0 STYLE="font-style:normal">717  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (current &LT; options.length){ 
+<FONT COLOR=0 STYLE="font-style:normal">718  </FONT>      options[current++] = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">719  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">720  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> options; 
+<FONT COLOR=0 STYLE="font-style:normal">721  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">722  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">723  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">724  </FONT>   * Returns an enumeration describing the available options 
+<FONT COLOR=0 STYLE="font-style:normal">725  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">726  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> an enumeration of all the available options 
+<FONT COLOR=0 STYLE="font-style:normal">727  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">728  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Enumeration listOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">729  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">730  </FONT>    Vector newVector = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Vector(); 
+<FONT COLOR=0 STYLE="font-style:normal">731  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">732  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">733  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tSet the value considered as \"too big error\" in the (base classifier) training procedure;"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">734  </FONT>      + </FONT><FONT COLOR="#008000"><B>" it will be used as an stop criterion.\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">735  </FONT>      + </FONT><FONT COLOR="#008000"><B>"If less or equal than zero, it will be reset to the default value: "</B></FONT><FONT COLOR="#000000"> + defaultTooBigErrorValue() + </FONT><FONT COLOR="#008000"><B>".\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">736  </FONT>      + </FONT><FONT COLOR="#008000"><B>"If bigger than 1.0, no stop criterion will be applied.\n"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">737  </FONT>      </FONT><FONT COLOR="#008000"><B>"E"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-E &LT;num&GT;"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">738  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">739  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">740  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tSet the number of times after that,"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">741  </FONT>      + </FONT><FONT COLOR="#008000"><B>" happened a value considered as a \"too big error\" in the training procedure,"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">742  </FONT>      + </FONT><FONT COLOR="#008000"><B>" the classifier will stop to iterate.\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">743  </FONT>      + </FONT><FONT COLOR="#008000"><B>"If less or equal than zero, no stop criterion will be applied.\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">744  </FONT>      + </FONT><FONT COLOR="#008000"><B>"default: 1"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">745  </FONT>      </FONT><FONT COLOR="#008000"><B>"C"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-C &LT;num&GT;"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">746  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">747  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">748  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tThe \"big errors occurrences\" mustn't need to be consecutives to provoke the stop.\n"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">749  </FONT>      </FONT><FONT COLOR="#008000"><B>"V"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-V"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">750  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">751  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option( 
+<FONT COLOR=0 STYLE="font-style:normal">752  </FONT>      </FONT><FONT COLOR="#008000"><B>"\tCalculate the error upper bound.\n"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">753  </FONT>      </FONT><FONT COLOR="#008000"><B>"B"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"-B"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">754  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">755  </FONT>    newVector.addElement(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Option(</FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#008000"><B>"\nCommon boosters options."</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">756  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">757  </FONT>    Enumeration enum = </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.listOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">758  </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (enum.hasMoreElements()){ 
+<FONT COLOR=0 STYLE="font-style:normal">759  </FONT>      newVector.addElement(enum.nextElement()); 
+<FONT COLOR=0 STYLE="font-style:normal">760  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">761  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">762  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> newVector.elements(); 
+<FONT COLOR=0 STYLE="font-style:normal">763  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">764  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">765  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">766  </FONT>   * Returns description of the boosted classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">767  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">768  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> description of the boosted classifier as a string 
+<FONT COLOR=0 STYLE="font-style:normal">769  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">770  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String toString(){ 
+<FONT COLOR=0 STYLE="font-style:normal">771  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">772  </FONT>    StringBuffer text = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringBuffer(); 
+<FONT COLOR=0 STYLE="font-style:normal">773  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">774  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NumIterations == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">775  </FONT>      text.append(</FONT><FONT COLOR="#008000"><B>"Booster: No model built yet.\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">776  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">777  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NumIterations == </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">778  </FONT>      text.append(</FONT><FONT COLOR="#008000"><B>"Booster: No boosting possible, one classifier used!\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">779  </FONT>      text.append(m_Classifiers.get(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">).toString() + </FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">780  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">781  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">782  </FONT>      text.append(</FONT><FONT COLOR="#008000"><B>"AdaBoostM1: Base classifiers and their weights: \n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">783  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumIterations; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">784  </FONT>        text.append(m_Classifiers.get(i).toString() + </FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">785  </FONT>        text.append(</FONT><FONT COLOR="#008000"><B>"**Weight: "</B></FONT><FONT COLOR="#000000"> + m_Classifiers.getWeight(i) + </FONT><FONT COLOR="#008000"><B>"\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">786  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">787  </FONT>      text.append(</FONT><FONT COLOR="#008000"><B>"Number of performed Iterations: "</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">788  </FONT>                  + m_NumIterations + </FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">789  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">790  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CalculateErrorUpperBound) 
+<FONT COLOR=0 STYLE="font-style:normal">791  </FONT>        text.append(</FONT><FONT COLOR="#008000"><B>"Training error upper bound: "</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">792  </FONT>                    + getErrorUpperBound() + </FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">793  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">794  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">795  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> text.toString(); 
+<FONT COLOR=0 STYLE="font-style:normal">796  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">797  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">798  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------------------------*************************************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">799  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------- Configure the "GUI side" methods ********************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">800  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------------------------*************************************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">801  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">802  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">803  </FONT>   * Returns a string describing this classifier. 
+<FONT COLOR=0 STYLE="font-style:normal">804  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">805  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> a description of the filter suitable for 
+<FONT COLOR=0 STYLE="font-style:normal">806  </FONT>   * displaying in the explorer/experimenter gui 
+<FONT COLOR=0 STYLE="font-style:normal">807  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">808  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String globalInfo(){ 
+<FONT COLOR=0 STYLE="font-style:normal">809  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">810  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"An implementation of AdaBoostM1."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">811  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">812  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">813  </FONT>  </FONT><FONT COLOR="#808080"><I>//--------------------- ToolTips text ********************</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">814  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">815  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String tooBigErrorTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">816  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">817  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Set the value considered as \"too big error\" in the (base classifier) training procedure;"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">818  </FONT>    + </FONT><FONT COLOR="#008000"><B>" it will be used as an stop criterion.\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">819  </FONT>    + </FONT><FONT COLOR="#008000"><B>"- If less or equal than zero, it will be reset to the default value: "</B></FONT><FONT COLOR="#000000"> + defaultTooBigErrorValue() + </FONT><FONT COLOR="#008000"><B>".\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">820  </FONT>    + </FONT><FONT COLOR="#008000"><B>"- If bigger than 1.0, no stop criterion will be applied.\n"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">821  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">822  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">823  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String tooBigErrorsMustBeConsecutivesTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">824  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">825  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"The \"big errors occurrences\" mustn't need to be consecutives to provoke the stop.\n"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">826  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">827  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">828  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String maxNumOfTooBigErrorsTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">829  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">830  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Set the number of times after that,"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">831  </FONT>      + </FONT><FONT COLOR="#008000"><B>" happened a value considered as a \"too big error\" in the training procedure,"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">832  </FONT>      + </FONT><FONT COLOR="#008000"><B>" the classifier will stop to iterate.\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">833  </FONT>      + </FONT><FONT COLOR="#008000"><B>" If less or equal than zero, no stop criterion will be applied.\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">834  </FONT>      + </FONT><FONT COLOR="#008000"><B>"default: 1"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">835  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">836  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">837  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String calculateErrorUpperBoundTipText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">838  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">839  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"Calculate or not the "</B></FONT><FONT COLOR="#000000"> +getErrorUpperBoundName() +</FONT><FONT COLOR="#008000"><B>" (only if no iteration have been done yet).\n"</B></FONT><FONT COLOR="#000000"> + 
+<FONT COLOR=0 STYLE="font-style:normal">840  </FONT>      </FONT><FONT COLOR="#008000"><B>"See Schapire & Freund's paper."</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">841  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">842  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">843  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">844  </FONT>   * Defines a "visual" order to the bean's properties of this booster. 
+<FONT COLOR=0 STYLE="font-style:normal">845  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">846  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The properties order 
+<FONT COLOR=0 STYLE="font-style:normal">847  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">848  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">CustomOrderDefiner</A> getPropertiesOrder(){ 
+<FONT COLOR=0 STYLE="font-style:normal">849  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">850  </FONT>    <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">CustomOrderDefiner</A> cod = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">CustomOrderDefiner</A>(); 
+<FONT COLOR=0 STYLE="font-style:normal">851  </FONT>    cod.add(</FONT><FONT COLOR="#008000"><B>"tooBigError"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">852  </FONT>    cod.add(</FONT><FONT COLOR="#008000"><B>"tooBigErrorsMustBeConsecutives"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">853  </FONT>    cod.add(</FONT><FONT COLOR="#008000"><B>"maxNumOfTooBigErrors"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">854  </FONT>    cod.add(</FONT><FONT COLOR="#008000"><B>"calculateErrorUpperBound"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">855  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">856  </FONT>    <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">CustomOrderDefiner</A> otherOptions = </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.getPropertiesOrder(); 
+<FONT COLOR=0 STYLE="font-style:normal">857  </FONT>    otherOptions.mergeWith(cod); 
+<FONT COLOR=0 STYLE="font-style:normal">858  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">859  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> otherOptions; 
+<FONT COLOR=0 STYLE="font-style:normal">860  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">861  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">862  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">863  </FONT>   * Main method for testing this class. 
+<FONT COLOR=0 STYLE="font-style:normal">864  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">865  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> argv the options 
+<FONT COLOR=0 STYLE="font-style:normal">866  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">867  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> main(String[] argv){ 
+<FONT COLOR=0 STYLE="font-style:normal">868  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">869  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">870  </FONT>      System.out.println(Evaluation.evaluateModel(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> AdaBoostM1(), argv)); 
+<FONT COLOR=0 STYLE="font-style:normal">871  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">872  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">873  </FONT>      System.err.println(e.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">874  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">875  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">876  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

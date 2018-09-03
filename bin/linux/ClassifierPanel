@@ -1,0 +1,10 @@
+#!/bin/bash
+#Inicia la aplicación "Panel de clasificación"
+
+MAIN_CLASS_NAME="oaidtb.gui.ClassifierPanel\$Test"
+export MAIN_CLASS_NAME
+
+OUTPUT_FILE=
+
+./_oaidtb_ $OUTPUT_FILE
+

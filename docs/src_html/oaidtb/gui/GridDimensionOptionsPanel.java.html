@@ -1,0 +1,170 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\GridDimensionOptionsPanel.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\GridDimensionOptionsPanel.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    GridDimensionOptionsPanel.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\guiUtils\LabeledSlider.java.html">oaidtb.misc.guiUtils.LabeledSlider</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeListener; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.ItemEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.ItemListener; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT></FONT><FONT COLOR="#808080"><I>//Precondiciones: originales &GT;0</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * Panel de configuración de la rejilla que se utilizará para crear la imagen de hipótesis 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> GridDimensionOptionsPanel </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> JPanel{ 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_XYDimensionsOriginalRatio = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Para elegir el número de columnas de la rejilla */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\guiUtils\LabeledSlider.java.html">LabeledSlider</A> m_XSlider = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\guiUtils\LabeledSlider.java.html">LabeledSlider</A>(</FONT><FONT COLOR="#008000"><B>"Grid Columns: "</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Para elegir el número de filas de la rejilla */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\guiUtils\LabeledSlider.java.html">LabeledSlider</A> m_YSlider = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\guiUtils\LabeledSlider.java.html">LabeledSlider</A>(</FONT><FONT COLOR="#008000"><B>"Grid Rows: "</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>  </FONT><FONT COLOR="#808080"><I>/** La relación original entre la altura y la anchura del panel de dibujado */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>    </FONT><FONT COLOR="#808080"><I>/** Se debe mantener la relación de aspecto original? */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JCheckBox m_MaintainAspectRatio = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBox(</FONT><FONT COLOR="#008000"><B>"Maintain aspect ratio"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El número de columnas de la rejilla */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getColumns(){ 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_XSlider.getSlider().getValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El número de filas de la rejilla  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getRows(){ 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_YSlider.getSlider().getValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>   * Actualizar la anchura asignada como la original del componente a ser dividido por la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> xSize La anchura del componente 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setOriginalXDimensionSize(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> xSize){ 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>    </FONT><FONT COLOR="#808080"><I>//throw an Exception</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (xSize &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>      m_XSlider.getSlider().setMaximum(xSize); 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>      updateXYOriginalRatio(); 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>   * Actualizar la altura asignada como la original del componente a ser dividido por la rejilla 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> ySize La anchura del componente 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setOriginalYDimensionSize(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> ySize){ 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>    </FONT><FONT COLOR="#808080"><I>//throw an Exception</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (ySize &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>      m_YSlider.getSlider().setMaximum(ySize); 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>      updateXYOriginalRatio(); 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>   * Actualizar la relación entre altura y anchura 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> updateXYOriginalRatio(){ 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>    m_XYDimensionsOriginalRatio = (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) m_XSlider.getSlider().getMaximum() / 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>                                  (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) m_YSlider.getSlider().getMaximum(); 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_MaintainAspectRatio.isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>      m_YSlider.getSlider().setValue((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">)(m_XSlider.getSlider().getValue()/m_XYDimensionsOriginalRatio)); 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>   * Constructor 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> GridDimensionOptionsPanel(){ 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>    </FONT><FONT COLOR="#808080"><I>// Listener para mantener la relación de aspecto cuando se cambia el número de columnas</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> ChangeListener maintainRatioListener = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stateChanged(ChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>        m_YSlider.getSlider().setValue((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(m_XSlider.getSlider().getValue() / m_XYDimensionsOriginalRatio)); 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>    }; 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>    </FONT><FONT COLOR="#808080"><I>//Valores por defecto, para que no pete</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>    m_XSlider.getSlider().setMinimum(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>    m_XSlider.getSlider().addChangeListener(maintainRatioListener); 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>    m_XSlider.getSlider().setValue(</FONT><FONT COLOR="#0000ff">30</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>    m_YSlider.getSlider().setMinimum(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>    m_YSlider.getSlider().setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>    </FONT><FONT COLOR="#808080"><I>//Checkbox para elegir entre mantener o no la relación de aspecto</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>    m_MaintainAspectRatio.addItemListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ItemListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> itemStateChanged(ItemEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_MaintainAspectRatio.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>          m_XSlider.getSlider().addChangeListener(maintainRatioListener); 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>          m_YSlider.getSlider().setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>          m_XSlider.getSlider().removeChangeListener(maintainRatioListener); 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>          m_YSlider.getSlider().setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>    m_MaintainAspectRatio.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Mantener la relación de aspecto X/Y del panel de dibujo"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>    </FONT><FONT COLOR="#808080"><I>//Será un BorderLayout</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>    setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>    </FONT><FONT COLOR="#808080"><I>//Añadimos los componentes al panel</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>    JPanel sizeEditorsPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPanel(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> GridLayout(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>    sizeEditorsPanel.add(m_XSlider.getLabel()); 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>    sizeEditorsPanel.add(m_XSlider.getSlider()); 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    sizeEditorsPanel.add(m_YSlider.getLabel()); 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>    sizeEditorsPanel.add(m_YSlider.getSlider()); 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>    add(m_MaintainAspectRatio, BorderLayout.SOUTH); 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>    add(sizeEditorsPanel, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>    </FONT><FONT COLOR="#808080"><I>//Creamos el borde por defecto</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>    setBorder(BorderFactory.createCompoundBorder( 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>		 BorderFactory.createTitledBorder(</FONT><FONT COLOR="#008000"><B>"Grid setup"</B></FONT><FONT COLOR="#000000">), 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>		 BorderFactory.createEmptyBorder(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>		 )); 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

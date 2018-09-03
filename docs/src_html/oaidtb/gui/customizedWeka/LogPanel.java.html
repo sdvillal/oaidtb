@@ -1,0 +1,337 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\customizedWeka\LogPanel.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\customizedWeka\LogPanel.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    LogPanel.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 1999 Len Trigg 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> *    Modified 2002 by Santiago David Villaba 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> *  Customized Weka changes--&GT; 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT> *    ** The text component to show the log messages is now a JTextPane instead of a JTextArea, allowing 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> *       further text formating capabilities 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT> *    ** The JTextPane isn't able to receive (and swallow) the focus 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT> *    ** The popup menu now is opned when right-clicking over the log test area panel, and 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT> *       two new items ("clear all" and "copy all to the clipboard") were added 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> *    ** Añadida la posiblilidad de colocar un componente no predefinido a la izquierda de 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT> *       la barra de estado 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui.customizedWeka; 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.gui.Logger; 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.gui.TaskLogger; 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.gui.WekaTaskMonitor; 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.text.*; 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeListener; 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.datatransfer.StringSelection; 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.*; 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.text.SimpleDateFormat; 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Date; 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> * This panel allows log and status messages to be posted. Log messages 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> * appear in a scrollable text area, and status messages appear as one-line 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT> * transient messages. 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> Len Trigg (trigg@cs.waikato.ac.nz) 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> Santiago David Villalba (sdvb@wanadoo.es) 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.11 $ 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> LogPanel </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> JPanel </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> Logger, TaskLogger{ 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Displays the current status */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> JLabel m_StatusLab = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JLabel(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> JPanel m_CustomPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPanel(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Displays the log messages */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JTextPane m_LogText = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JTextPane(){ 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>     * Evitar que se trague el foco; no lo evita si pinchamos sobre ella, mejor 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>     * especificar cuál es el siguiente compoenete que recibirá el foco ( o mandarlo 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>     * a cycleRoot); este problema está solucionado a partir del JDK 1.4.0_01 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> false 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isFocusTraversable(){ 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  }; 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The panel for monitoring the number of running tasks (if supplied)*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> WekaTaskMonitor m_TaskMonitor = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>   * Creates the log panel 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> LogPanel(){ 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>    m_LogText.setEditable(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>    m_LogText.setBorder(BorderFactory.createEmptyBorder(</FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>    m_StatusLab.setBorder(BorderFactory.createCompoundBorder( 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>      BorderFactory.createTitledBorder(</FONT><FONT COLOR="#008000"><B>"Status"</B></FONT><FONT COLOR="#000000">), 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>      BorderFactory.createEmptyBorder(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>    JPanel p1 = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPanel(); 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>    p1.setBorder(BorderFactory.createTitledBorder(</FONT><FONT COLOR="#008000"><B>"Log"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>    p1.setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JScrollPane js = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JScrollPane(m_LogText); 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>    p1.add(js, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>    js.getViewport().addChangeListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>      </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> lastHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stateChanged(ChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>        JViewport vp = (JViewport) e.getSource(); 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>        </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> h = vp.getViewSize().height; 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (h != lastHeight){ </FONT><FONT COLOR="#808080"><I>// i.e. an addition not just a user scrolling</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>          lastHeight = h; 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>          </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> x = h - vp.getExtentSize().height; 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>          vp.setViewPosition(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Point(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, x)); 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>    setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>    add(p1, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>    JPanel p2 = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPanel(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>    p2.add(m_CustomPanel, BorderLayout.WEST); 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>    p2.add(m_StatusLab, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>    add(p2,BorderLayout.SOUTH); 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>    addPopups(); 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>   * Creates the log panel 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> LogPanel(WekaTaskMonitor tm){ 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>    </FONT><FONT COLOR="#808080"><I>/*    if (!(tm instanceof java.awt.Component)) { 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>      throw new Exception("TaskLogger must be a graphical component"); 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>      } */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>    m_TaskMonitor = tm; 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>    m_LogText.setEditable(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>    m_LogText.setBorder(BorderFactory.createEmptyBorder(</FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>    m_StatusLab.setBorder(BorderFactory.createCompoundBorder( 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>      BorderFactory.createTitledBorder(</FONT><FONT COLOR="#008000"><B>"Status"</B></FONT><FONT COLOR="#000000">), 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>      BorderFactory.createEmptyBorder(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>    JPanel p1 = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPanel(); 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>    p1.setBorder(BorderFactory.createTitledBorder(</FONT><FONT COLOR="#008000"><B>"Log"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>    p1.setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JScrollPane js = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JScrollPane(m_LogText); 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>    p1.add(js, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>    js.setPreferredSize(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Dimension(</FONT><FONT COLOR="#0000ff">100</FONT><FONT COLOR="#000000">,</FONT><FONT COLOR="#0000ff">60</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>    js.getViewport().addChangeListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>      </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> lastHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stateChanged(ChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>        JViewport vp = (JViewport) e.getSource(); 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>        </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> h = vp.getViewSize().height; 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (h != lastHeight){ </FONT><FONT COLOR="#808080"><I>// i.e. an addition not just a user scrolling</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>          lastHeight = h; 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>          </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> x = h - vp.getExtentSize().height; 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>          vp.setViewPosition(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Point(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, x)); 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>    setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>    add(p1, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>    JPanel p2 = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPanel(); 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>    p2.setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>    p2.add(m_CustomPanel, BorderLayout.WEST); 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>    p2.add(m_StatusLab, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>    p2.add(m_TaskMonitor, BorderLayout.EAST); 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>    add(p2, BorderLayout.SOUTH); 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>    addPopups(); 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>   * Añade un componente a la izquierda de la barra de log 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> customPanel El componente(panel) a añadir) 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addCustomPanel(JPanel customPanel){ 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>    m_CustomPanel.add(customPanel, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>   * Add a popup menu for displaying the amount of free memory 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>   * and running the garbage collector, and another 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>   * to copy the log text to the system clipboard. 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addPopups(){ 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>    m_LogText.addMouseListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> MouseAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mouseClicked(MouseEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (SwingUtilities.isRightMouseButton(e)){ 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>          JPopupMenu popupMenu = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPopupMenu(); 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>          JMenuItem clear = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuItem(</FONT><FONT COLOR="#008000"><B>"Clear the text"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>          clear.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>            </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e2){ 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>              m_LogText.setText(</FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>            } 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>          }); 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>          popupMenu.add(clear); 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>          JMenuItem copyToClipBoard = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuItem(</FONT><FONT COLOR="#008000"><B>"Copy the text to the clipboard"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>          copyToClipBoard.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>            </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e2){ 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>              String text = m_LogText.getSelectedText(); 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>              </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(text == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>                text = m_LogText.getText(); 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>              StringSelection ss = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringSelection(text); 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>              Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>            } 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>          }); 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>          popupMenu.add(copyToClipBoard); 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>          JMenuItem availMem = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuItem(</FONT><FONT COLOR="#008000"><B>"Available memory"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>          availMem.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>            </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent ee){ 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>              System.gc(); 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>              Runtime currR = Runtime.getRuntime(); 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>              </FONT><FONT COLOR="#000080"><B>long</B></FONT><FONT COLOR="#000000"> freeM = currR.freeMemory(); 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT>              logMessage(</FONT><FONT COLOR="#008000"><B>"Available memory : "</B></FONT><FONT COLOR="#000000"> + freeM + </FONT><FONT COLOR="#008000"><B>" bytes"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>            } 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT>          }); 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>          popupMenu.add(availMem); 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT>          JMenuItem runGC = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuItem(</FONT><FONT COLOR="#008000"><B>"Run garbage collector"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>          runGC.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT>            </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent ee){ 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>              statusMessage(</FONT><FONT COLOR="#008000"><B>"Running garbage collector"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>              System.gc(); 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>              statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>            } 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT>          }); 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>          popupMenu.add(runGC); 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>          popupMenu.show(m_LogText, e.getX(), e.getY()); 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>   * Record the starting of a new task 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> taskStarted(){ 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_TaskMonitor != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>      m_TaskMonitor.taskStarted(); 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>   * Record a task ending 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> taskFinished(){ 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_TaskMonitor != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>      m_TaskMonitor.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT>   * Gets a string containing current date and time. 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> a string containing the date and time. 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String getTimestamp(){ 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> SimpleDateFormat(</FONT><FONT COLOR="#008000"><B>"HH:mm:ss:"</B></FONT><FONT COLOR="#000000">)).format(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Date()); 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT>   * Sends the supplied message to the log area. The current timestamp will 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>   * be prepended. 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> message a value of type 'String' 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> logMessage(String message){ 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>    StyledDocument doc = (StyledDocument) m_LogText.getDocument(); 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>      doc.insertString(doc.getLength(), LogPanel.getTimestamp() + </FONT><FONT COLOR="#008000"><B>' '</B></FONT><FONT COLOR="#000000"> + message +</FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT>      m_LogText.setCaretPosition(doc.getLength()); 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000">(BadLocationException e){} 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>   * Sends the supplied message to the status line. 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> message the status message 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> statusMessage(String message){ 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>    m_StatusLab.setText(message); 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The JTextPane component */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> JTextPane getLogText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_LogText; 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT>   * Tests out the log panel from the command line. 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> args ignored 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> main(String[] args){ 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> javax.swing.JFrame jf = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> javax.swing.JFrame(</FONT><FONT COLOR="#008000"><B>"Log Panel"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>      jf.getContentPane().setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> LogPanel lp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> LogPanel(); 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>      jf.getContentPane().add(lp, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>      jf.addWindowListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> java.awt.event.WindowAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> windowClosing(java.awt.event.WindowEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>          jf.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>          System.exit(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>      jf.pack(); 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT>      jf.setVisible(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>      lp.logMessage(</FONT><FONT COLOR="#008000"><B>"Welcome to the generic log panel!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>      lp.statusMessage(</FONT><FONT COLOR="#008000"><B>"Hi there"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>      lp.logMessage(</FONT><FONT COLOR="#008000"><B>"Funky chickens"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>      ex.printStackTrace(); 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>      System.err.println(ex.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>} 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT></FONT></PRE>
+</BODY>
+</HTML>

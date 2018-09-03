@@ -1,0 +1,835 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\misc\BoosterAnalyzer.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\misc\BoosterAnalyzer.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    BoosterAnalyzer.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.misc; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\AdaBoostMH.java.html">oaidtb.boosters.AdaBoostMH</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\Booster.java.html">oaidtb.boosters.Booster</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\IterativeUpdatableClassifier.java.html">oaidtb.boosters.IterativeUpdatableClassifier</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.CostMatrix; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Instance; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Instances; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.OptionHandler; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.FileReader; 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.lang.reflect.Method; 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.ArrayList; 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * A simple class which allows to keep tracking of a booster (& base classifiers) evolution.</I></FONT><FONT COLOR="#808080"><I>&LT;PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * Example of use: 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> *   ... 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> *   Instances instances = new Instances(new FileReader("./data/conus-torus/train.arff")); 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> *   Instances testInstances = new Instances(new FileReader("./data/conus-torus/test.arff")); 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> *   instances.setClassIndex(instances.numAttributes() - 1); 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> *   testInstances.setClassIndex(testInstances.numAttributes() - 1); 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT> *   Booster booster = new oaidtb.boosters.AdaBoostECC(); 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> *   booster.buildClassifier(instances); 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> *   //Create the booster analyzer 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> *   BoosterAnalyzer ba = new BoosterAnalyzer(booster, instances, null); 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT> *   BoosterAnalyzer baTest = new BoosterAnalyzer(booster, testInstances, null); 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> *   //Inform about what we want keep tracking of 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT> *   ba.setSaveBoosterErrors(true); 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT> *   ba.setSaveBoosterCosts(false); 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> *   baTest.setSaveBaseClassifiersCosts(false); 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT> *   baTest.setSaveBaseClassifiersErrors(false); 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT> *   //Initialize the booster analyzer 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT> *   ba.initialize(); 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> *   baTest.initialize(); 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT> *   //Update the statistics 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT> *   ba.updateStatistics(); 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT> *   baTest.updateStatistics(); 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT> *   //Perform a little more iterations 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT> *   booster.nextIterations(10); 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT> *   //Update the statistics 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT> *   ba.updateStatistics(); 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT> *   baTest.updateStatistics(); 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT> *   ... 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/PRE&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> BoosterAnalyzer{ 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\IterativeUpdatableClassifier.java.html">IterativeUpdatableClassifier</A> m_Booster; 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Las instancias sobre las que se recogerán las estadísticas */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Instances m_Data; 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Necesario si el booster cambia el esquema de los datos de entrada para que clasificadores como J48 no fallen */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Instances m_TrainDataFormat; 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>  </FONT><FONT COLOR="#808080"><I>/** La matriz de costos (por defecto, todos los costos valdrán 1) */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> CostMatrix m_CostMatrix = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El método para recuperar la matriz de costos del booster (si existe) */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Method m_CostMatrixGetter = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El array que contiene los errores del booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ArrayList m_BoosterErrors = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ArrayList(); 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El array que contiene los costes del booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ArrayList m_BoosterCosts = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ArrayList(); 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El array que contiene los errores del clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ArrayList m_BC_Errors = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ArrayList(); 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El array que contiene los costes del clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ArrayList m_BC_Costs = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ArrayList(); 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El mayor error alcanzado por el clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_BiggestBC_Error = </FONT><FONT COLOR="#0000ff">0.0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El mayor error alcanzado por el booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_BiggestBoosterError = </FONT><FONT COLOR="#0000ff">0.0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El menor error alcanzado por el clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_SmallestBC_Error = </FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El mayor error alcanzado por el booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_SmallestBoosterError = </FONT><FONT COLOR="#0000ff">1.0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El mayor coste alcanzado por el clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_BiggestBC_Cost = Double.MIN_VALUE; 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El mayor coste alcanzado por el booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_BiggestBoosterCost = Double.MIN_VALUE; 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El menor coste alcanzado por el clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_SmallestBC_Cost = Double.MAX_VALUE; 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El menor coste alcanzado por el booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_SmallestBoosterCost = Double.MAX_VALUE; 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El mayor costo de entre el mayor costo alcanzado por el booster y el mayor costo alcanzado por el clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> m_BiggestCost; 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Primera iteración en que se alcanzó el mayor error del clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_BiggestBC_ErrorAt = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Primera iteración en que se alcanzó el mayor error del booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_BiggestBoosterErrorAt = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Primera iteración en que se alcanzó el menor error del clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_SmallestBC_ErrorAt = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Primera iteración en que se alcanzó el menor error del booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_SmallestBoosterErrorAt = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Primera iteración en que se alcanzó el mayor coste del clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_BiggestBC_CostAt = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Primera iteración en que se alcanzó el mayor coste del booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_BiggestBoosterCostAt = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Primera iteración en que se alcanzó el menor coste del clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_SmallestBC_CostAt = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Primera iteración en que se alcanzó el menor coste del booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_SmallestBoosterCostAt = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Las predicciones del booster para cada una de las clases de cada instancia */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[][] m_BC_VotesForInstances; 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Computar o no los errores del booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_SaveBoosterErrors = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Computar o no los costes del booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_SaveBoosterCosts = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Computar o no los errores del clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_SaveBaseClassifiersErrors = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Computar o no los costes del clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_SaveBaseClassifiersCosts = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Saber si ya se ha comenzado la recolección de estadísticas */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_ProcessStarted = </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El número de iteraciones analizadas hasta el momento */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> m_IterationsAnalyzedSoFar = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>   * Constructor 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> booster El booster sobre el que se van a recoger estadísticas 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> data El conjunto de datos 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> costMatrix La matriz de costos (si es null, se aplicará la política definida en {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> #initialize}) 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception si los parámetros no son válidos o hay un error de introspección 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> BoosterAnalyzer(<A href="..\..\oaidtb\boosters\IterativeUpdatableClassifier.java.html">IterativeUpdatableClassifier</A> booster, Instances data, CostMatrix costMatrix) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (data == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> || data.numInstances() == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"No se ha especificado el conjunto de datos sobre el que trabajar."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (booster == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"No se ha especificado el booster sobre el que trabajar."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>    m_Data = data; 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>    m_Booster = booster; 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>    m_CostMatrix = costMatrix; 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (isCostSensitiveBooster((Classifier) booster)) 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>      m_CostMatrixGetter = <A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.getCostMatrixGetter((Classifier) booster); 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>   * Este método debe ser llamado cuando el booster ya haya sido debidamente configurado 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>   * (se hace automáticamente la primera vez que se llama a {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> #updateStatistics} si no 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>   * ha sido invocado antes). Sus cometidos son: 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> Inicializar la matriz de costos; si es null, se pide al booster que provea una y si éste no 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>   * es capaz se usa la matriz por defecto en la que los costes valen siempre 1 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> Comprobar que el clasificador realmente sea capaz de clasificar las instancias 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>   * </I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> Hacer otras inicializaciones 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception Si el clasificador no es capaz de clasificar las instancias 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception Si se falla al invocar el método del booster que provee la matriz de costes 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> initialize() </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!<A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.classifierCanClassify((Classifier) m_Booster, m_Data.instance(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">))) 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Los datos con los que analizar no son compatibles "</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>                          + </FONT><FONT COLOR="#008000"><B>"con las instancias de entrenamiento del booster."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBaseClassifiersCosts || m_SaveBaseClassifiersErrors) 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((m_CostMatrix == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> || m_CostMatrix.size() != m_Data.numClasses()) && m_CostMatrixGetter != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT>        m_CostMatrix = (CostMatrix) m_CostMatrixGetter.invoke(m_Booster, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Object[]{}); 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CostMatrix == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT></FONT><FONT COLOR="#808080"><I>// No podemos hacer esto porque getElement(int,int) es final</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT></FONT><FONT COLOR="#808080"><I>//      m_CostMatrix = new CostMatrix(0){</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT></FONT><FONT COLOR="#808080"><I>//        public double getElement(int row, int column){</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT></FONT><FONT COLOR="#808080"><I>//          return 0.0;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT></FONT><FONT COLOR="#808080"><I>//        }</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT></FONT><FONT COLOR="#808080"><I>//      };</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>      m_CostMatrix = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> CostMatrix(m_Data.numClasses()); 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>    m_BC_VotesForInstances = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[m_Data.numInstances()][m_Data.numClasses()]; 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_Booster </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\AdaBoostMH.java.html">AdaBoostMH</A>) 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>      m_TrainDataFormat = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instances(((<A href="..\..\oaidtb\boosters\AdaBoostMH.java.html">AdaBoostMH</A>)m_Booster).getTrainData(), </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>      m_TrainDataFormat = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instances(((<A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A>)m_Booster).getTrainData(), </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT>    m_ProcessStarted = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>   * Actualiza las estadísticas, si existen nuevas iteraciones que no han sido utilizadas 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>   * para tal fin. 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception Si se produce algún error 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> updateStatistics() </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(!m_ProcessStarted) 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>      initialize(); 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>    </FONT><FONT COLOR="#808080"><I>//Es un booster simple o es un meta-booster?</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Booster </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\AdaBoostMH.java.html">AdaBoostMH</A>) 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>      </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (m_IterationsAnalyzedSoFar &LT; m_Booster.getNumIterationsPerformed()){ 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>        retrieveStatisticsFromMH(m_IterationsAnalyzedSoFar); 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT>        m_IterationsAnalyzedSoFar++; 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT>      </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (m_IterationsAnalyzedSoFar &LT; m_Booster.getNumIterationsPerformed()){ 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>        retrieveStatistics(m_IterationsAnalyzedSoFar); 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>        m_IterationsAnalyzedSoFar++; 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>    m_BiggestCost = (m_BiggestBoosterCost &GT; m_BiggestBC_Cost ? m_BiggestBoosterCost : m_BiggestBC_Cost); 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT>   * Recoge las estadísticas de un booster "convencional" 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> itIndex la iteración de la que recoger las estadísticas 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception si algo falla... 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> retrieveStatistics(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> itIndex) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> boosterFails = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> boosterCost = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> bcFails = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> bcCost = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT>    </FONT><FONT COLOR="#808080"><I>//Nos hacemos con el clasificador base correspondiente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>    Classifier baseClassifier = ((<A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A>) m_Booster).getClassifier(itIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_Data.numInstances(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>      Instance instance = m_Data.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> trueClassValue = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.classValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classifiedAs; 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>      </FONT><FONT COLOR="#808080"><I>//Calculamos los errores del booster</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBoosterErrors || m_SaveBoosterCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>        <A href="..\..\oaidtb\misc\Utils.java.html">Utils</A>.doubleArraysSum(m_BC_VotesForInstances[i], 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT>                              m_Booster.getClassifierVote(instance, itIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>        classifiedAs = <A href="..\..\oaidtb\misc\Utils.java.html">Utils</A>.maxIndex(m_BC_VotesForInstances[i]); 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (classifiedAs != trueClassValue){ 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>          boosterFails++; 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT>          boosterCost += m_CostMatrix.getElement(trueClassValue, classifiedAs); 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>      </FONT><FONT COLOR="#808080"><I>//Calculamos los errores del clasificador base</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>      </FONT><FONT COLOR="#808080"><I>//Un poco ineficiente, dividirlo en dos buclse para realizar esta comprobación sólo una vez</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBaseClassifiersErrors || m_SaveBaseClassifiersCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT>        </FONT><FONT COLOR="#808080"><I>//Los clasificadores de weka no deberían depender para clasificar de que la instancia</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>        </FONT><FONT COLOR="#808080"><I>//pertenezca a algún dataset, pero dependen (por ejemplo, J48 pregunta por el número</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>        </FONT><FONT COLOR="#808080"><I>//de clases de la instancia a clasificar...)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>        instance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>        instance.setDataset(m_TrainDataFormat); 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT>        classifiedAs = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) baseClassifier.classifyInstance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (classifiedAs != trueClassValue){ 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>          bcFails++; 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>          bcCost += m_CostMatrix.getElement(trueClassValue, classifiedAs); 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>    saveStatistics(itIndex, boosterFails, boosterCost, bcFails, bcCost); 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>   * Recoge las estadísticas de un meta-booster 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> itIndex la iteración de la que recoger las estadísticas 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception si algo falla... 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> retrieveStatisticsFromMH(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> itIndex) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> boosterFails = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> boosterCost = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> bcFails = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> bcCost = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>    <A href="..\..\oaidtb\boosters\AdaBoostMH.java.html">AdaBoostMH</A> mh = (<A href="..\..\oaidtb\boosters\AdaBoostMH.java.html">AdaBoostMH</A>) m_Booster; 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT>    </FONT><FONT COLOR="#808080"><I>//Nos hacemos con los clasificadores base</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT>    Classifier[] baseClassifiers = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Classifier[mh.getNumClasses()]; 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> j = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; j &LT; mh.getNumClasses(); j++) 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT>      baseClassifiers[j] = mh.getBooster(j).getClassifier(itIndex); 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_Data.numInstances(); i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT>      Instance instance = m_Data.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> trueClassValue = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.classValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classifiedAs; 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBoosterErrors || m_SaveBoosterCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT>        <A href="..\..\oaidtb\misc\Utils.java.html">Utils</A>.doubleArraysSum(m_BC_VotesForInstances[i], 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT>                              m_Booster.getClassifierVote(instance, itIndex)); 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT>        classifiedAs = <A href="..\..\oaidtb\misc\Utils.java.html">Utils</A>.maxIndex(m_BC_VotesForInstances[i]); 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (classifiedAs != trueClassValue){ 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT>          boosterFails++; 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT>          boosterCost += m_CostMatrix.getElement(trueClassValue, classifiedAs); 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>      </FONT><FONT COLOR="#808080"><I>//Calculamos los errores del clasificador base</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT>      </FONT><FONT COLOR="#808080"><I>//Consideramos el número de fallos total del clasificador base</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT>      </FONT><FONT COLOR="#808080"><I>//como la suma de los errores de cada CB en la iteración</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT>      </FONT><FONT COLOR="#808080"><I>//clasificando la clase correspondiente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBaseClassifiersErrors || m_SaveBaseClassifiersCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT>        </FONT><FONT COLOR="#808080"><I>//PEAZO DE FALLO, 2 HORAS DE DEPURADO POR GAÑÁN</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT>        </FONT><FONT COLOR="#808080"><I>//instance.setDataset(trainDataFormat);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT>        </FONT><FONT COLOR="#808080"><I>//Los clasificadores de weka no deberían depender para clasificar de que la instancia</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT>        </FONT><FONT COLOR="#808080"><I>//pertenezca a algún dataset, pero dependen (por ejemplo, J48 pregunta por el número</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT>        </FONT><FONT COLOR="#808080"><I>//de clases de la instancia a clasificar...)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT>        instance = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT>        instance.setDataset(m_TrainDataFormat); 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT>        classifiedAs = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) baseClassifiers[trueClassValue].classifyInstance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (classifiedAs != </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>          bcFails++; 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT>          bcCost += m_CostMatrix.getElement(trueClassValue, classifiedAs); 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT>    saveStatistics(itIndex, boosterFails, boosterCost, bcFails, bcCost); 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT>   * Salva las estadísticas en los correspondientes arrays 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> itIndex El número de iteración 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> boosterFails El número de errores del booster 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> boosterCost El coste de los errores del booster 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> bcFails El número de fallos del clasifixador base 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> bcCost El coste de los errores del clasificador base 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> saveStatistics(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> itIndex, 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT>                              </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> boosterFails, 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT>                              </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> boosterCost, 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT>                              </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> bcFails, 
+<FONT COLOR=0 STYLE="font-style:normal">382  </FONT>                              </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> bcCost){ 
+<FONT COLOR=0 STYLE="font-style:normal">383  </FONT>    </FONT><FONT COLOR="#808080"><I>//Booster error</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">384  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBoosterErrors){ 
+<FONT COLOR=0 STYLE="font-style:normal">385  </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> error = (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) boosterFails / (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) m_Data.numInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">386  </FONT>      m_BoosterErrors.add(itIndex, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>(error)); 
+<FONT COLOR=0 STYLE="font-style:normal">387  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_BiggestBoosterError &LT; error){ 
+<FONT COLOR=0 STYLE="font-style:normal">388  </FONT>        m_BiggestBoosterError = error; 
+<FONT COLOR=0 STYLE="font-style:normal">389  </FONT>        m_BiggestBoosterErrorAt = itIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">390  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">391  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SmallestBoosterError &GT; error){ 
+<FONT COLOR=0 STYLE="font-style:normal">392  </FONT>        m_SmallestBoosterError = error; 
+<FONT COLOR=0 STYLE="font-style:normal">393  </FONT>        m_SmallestBoosterErrorAt = itIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">394  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">395  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">396  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">397  </FONT>    </FONT><FONT COLOR="#808080"><I>//Booster cost</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">398  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBoosterCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">399  </FONT>      m_BoosterCosts.add(itIndex, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>(boosterCost)); 
+<FONT COLOR=0 STYLE="font-style:normal">400  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_BiggestBoosterCost &LT; boosterCost){ 
+<FONT COLOR=0 STYLE="font-style:normal">401  </FONT>        m_BiggestBoosterCost = boosterCost; 
+<FONT COLOR=0 STYLE="font-style:normal">402  </FONT>        m_BiggestBoosterCostAt = itIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">403  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">404  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SmallestBoosterCost &GT; boosterCost){ 
+<FONT COLOR=0 STYLE="font-style:normal">405  </FONT>        m_SmallestBoosterCost = boosterCost; 
+<FONT COLOR=0 STYLE="font-style:normal">406  </FONT>        m_SmallestBoosterCostAt = itIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">407  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">408  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">409  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">410  </FONT>    </FONT><FONT COLOR="#808080"><I>//Base classifier error</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">411  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBaseClassifiersErrors){ 
+<FONT COLOR=0 STYLE="font-style:normal">412  </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> error = (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) bcFails / (</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">) m_Data.numInstances(); 
+<FONT COLOR=0 STYLE="font-style:normal">413  </FONT>      m_BC_Errors.add(itIndex, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>(error)); 
+<FONT COLOR=0 STYLE="font-style:normal">414  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_BiggestBC_Error &LT; error){ 
+<FONT COLOR=0 STYLE="font-style:normal">415  </FONT>        m_BiggestBC_Error = error; 
+<FONT COLOR=0 STYLE="font-style:normal">416  </FONT>        m_BiggestBC_ErrorAt = itIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">417  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">418  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SmallestBC_Error &GT; error){ 
+<FONT COLOR=0 STYLE="font-style:normal">419  </FONT>        m_SmallestBC_Error = error; 
+<FONT COLOR=0 STYLE="font-style:normal">420  </FONT>        m_SmallestBC_ErrorAt = itIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">421  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">422  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">423  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">424  </FONT>    </FONT><FONT COLOR="#808080"><I>//Base classifier cost</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">425  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBaseClassifiersCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">426  </FONT>      m_BC_Costs.add(itIndex, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>(bcCost)); 
+<FONT COLOR=0 STYLE="font-style:normal">427  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_BiggestBC_Cost &LT; bcCost){ 
+<FONT COLOR=0 STYLE="font-style:normal">428  </FONT>        m_BiggestBC_Cost = bcCost; 
+<FONT COLOR=0 STYLE="font-style:normal">429  </FONT>        m_BiggestBC_CostAt = itIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">430  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">431  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SmallestBC_Cost &GT; bcCost){ 
+<FONT COLOR=0 STYLE="font-style:normal">432  </FONT>        m_SmallestBC_Cost = bcCost; 
+<FONT COLOR=0 STYLE="font-style:normal">433  </FONT>        m_SmallestBC_CostAt = itIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">434  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">435  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">436  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">437  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">438  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">439  </FONT>   * Método ad-hoc para conocer rápidamente (sin tener que hacer introspección) si 
+<FONT COLOR=0 STYLE="font-style:normal">440  </FONT>   * un booster puede proporcionar una matriz de costes; de momento, se emplea 
+<FONT COLOR=0 STYLE="font-style:normal">441  </FONT>   * la norma de que esto es así si y sólo si pertenece al paquete 
+<FONT COLOR=0 STYLE="font-style:normal">442  </FONT>   * {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> oaidtb.boosters.costSensitive} 
+<FONT COLOR=0 STYLE="font-style:normal">443  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">444  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> booster El booster en cuestión 
+<FONT COLOR=0 STYLE="font-style:normal">445  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si el booster pertenece a {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> oaidtb.boosters.costSensitive} 
+<FONT COLOR=0 STYLE="font-style:normal">446  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">447  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isCostSensitiveBooster(Classifier booster){ 
+<FONT COLOR=0 STYLE="font-style:normal">448  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (booster </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\Booster.java.html">Booster</A>){ 
+<FONT COLOR=0 STYLE="font-style:normal">449  </FONT>      String name = booster.getClass().getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">450  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (name.startsWith(</FONT><FONT COLOR="#008000"><B>"oaidtb.boosters.costSensitive."</B></FONT><FONT COLOR="#000000">)){ 
+<FONT COLOR=0 STYLE="font-style:normal">451  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">452  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">453  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">454  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">455  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">456  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">457  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">458  </FONT>   * Salvar los costes del clasificador base? 
+<FONT COLOR=0 STYLE="font-style:normal">459  </FONT>   * (sólo si aún no se ha inicializado el analizador) 
+<FONT COLOR=0 STYLE="font-style:normal">460  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">461  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> saveBaseClassifiersCosts sí o no 
+<FONT COLOR=0 STYLE="font-style:normal">462  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">463  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSaveBaseClassifiersCosts(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> saveBaseClassifiersCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">464  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ProcessStarted) 
+<FONT COLOR=0 STYLE="font-style:normal">465  </FONT>      m_SaveBaseClassifiersCosts = saveBaseClassifiersCosts; 
+<FONT COLOR=0 STYLE="font-style:normal">466  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">467  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">468  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">469  </FONT>   * Salvar los errores del clasificador base? 
+<FONT COLOR=0 STYLE="font-style:normal">470  </FONT>   * (sólo si aún no se ha inicializado el analizador) 
+<FONT COLOR=0 STYLE="font-style:normal">471  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">472  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> saveBaseClassifiersErrors sí o no 
+<FONT COLOR=0 STYLE="font-style:normal">473  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">474  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSaveBaseClassifiersErrors(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> saveBaseClassifiersErrors){ 
+<FONT COLOR=0 STYLE="font-style:normal">475  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ProcessStarted) 
+<FONT COLOR=0 STYLE="font-style:normal">476  </FONT>      m_SaveBaseClassifiersErrors = saveBaseClassifiersErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">477  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">478  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">479  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">480  </FONT>   * Salvar los errores del booster? 
+<FONT COLOR=0 STYLE="font-style:normal">481  </FONT>   * (sólo si aún no se ha inicializado el analizador) 
+<FONT COLOR=0 STYLE="font-style:normal">482  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">483  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> saveBoosterCosts sí o no 
+<FONT COLOR=0 STYLE="font-style:normal">484  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">485  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSaveBoosterCosts(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> saveBoosterCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">486  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ProcessStarted) 
+<FONT COLOR=0 STYLE="font-style:normal">487  </FONT>      m_SaveBoosterCosts = saveBoosterCosts; 
+<FONT COLOR=0 STYLE="font-style:normal">488  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">489  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">490  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">491  </FONT>   * Salvar los costes del booster? 
+<FONT COLOR=0 STYLE="font-style:normal">492  </FONT>   * (sólo si aún no se ha inicializado el analizador) 
+<FONT COLOR=0 STYLE="font-style:normal">493  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">494  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> saveBoosterErrors sí o no 
+<FONT COLOR=0 STYLE="font-style:normal">495  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">496  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSaveBoosterErrors(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> saveBoosterErrors){ 
+<FONT COLOR=0 STYLE="font-style:normal">497  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ProcessStarted) 
+<FONT COLOR=0 STYLE="font-style:normal">498  </FONT>      m_SaveBoosterErrors = saveBoosterErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">499  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">500  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">501  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">502  </FONT>   * Indicar explícitamente la matriz de costes; si es incorrecta, no 
+<FONT COLOR=0 STYLE="font-style:normal">503  </FONT>   * se hace nada (quizás habría que lanzar una excepción, pero eso 
+<FONT COLOR=0 STYLE="font-style:normal">504  </FONT>   * lo dejo para otro día) 
+<FONT COLOR=0 STYLE="font-style:normal">505  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">506  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> costMatrix La matriz de costes 
+<FONT COLOR=0 STYLE="font-style:normal">507  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">508  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setCostMatrix(CostMatrix costMatrix){ 
+<FONT COLOR=0 STYLE="font-style:normal">509  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ProcessStarted && </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> != costMatrix) 
+<FONT COLOR=0 STYLE="font-style:normal">510  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (costMatrix.size() == m_Data.numClasses()) 
+<FONT COLOR=0 STYLE="font-style:normal">511  </FONT>        m_CostMatrix = costMatrix; 
+<FONT COLOR=0 STYLE="font-style:normal">512  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#808080"><I>//throw an exception of invalid format</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">513  </FONT>        ; 
+<FONT COLOR=0 STYLE="font-style:normal">514  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">515  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">516  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La primera iteración en la que se ha alcanzado el mayor coste del clasificador base hasta ahora */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">517  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getBiggestBC_CostAt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">518  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BiggestBC_CostAt; 
+<FONT COLOR=0 STYLE="font-style:normal">519  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">520  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">521  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La primera iteración en la que se ha alcanzado el mayor error del clasificador base hasta ahora */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">522  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getBiggestBC_ErrorAt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">523  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BiggestBC_ErrorAt; 
+<FONT COLOR=0 STYLE="font-style:normal">524  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">525  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">526  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La primera iteración en la que se ha alcanzado el mayor coste del booster hasta ahora */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">527  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getBiggestBoosterCostAt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">528  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BiggestBoosterCostAt; 
+<FONT COLOR=0 STYLE="font-style:normal">529  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">530  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">531  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La primera iteración en la que se ha alcanzado el mayor error del booster hasta ahora */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">532  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getBiggestBoosterErrorAt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">533  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BiggestBoosterErrorAt; 
+<FONT COLOR=0 STYLE="font-style:normal">534  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">535  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">536  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La primera iteración en la que se ha alcanzado el menor coste del clasificador base hasta ahora */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">537  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getSmallestBC_CostAt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">538  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_SmallestBC_CostAt; 
+<FONT COLOR=0 STYLE="font-style:normal">539  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">540  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">541  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La primera iteración en la que se ha alcanzado el menor error del clasificador base hasta ahora */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">542  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getSmallestBC_ErrorAt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">543  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_SmallestBC_ErrorAt; 
+<FONT COLOR=0 STYLE="font-style:normal">544  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">545  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">546  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La primera iteración en la que se ha alcanzado el menor coste del booster hasta ahora */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">547  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getSmallestBoosterCostAt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">548  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_SmallestBoosterCostAt; 
+<FONT COLOR=0 STYLE="font-style:normal">549  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">550  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">551  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La primera iteración en la que se ha alcanzado el menor error del booster hasta ahora */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">552  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> getSmallestBoosterErrorAt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">553  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_SmallestBoosterErrorAt; 
+<FONT COLOR=0 STYLE="font-style:normal">554  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">555  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">556  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">557  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> iterationIndex El número de iteración 
+<FONT COLOR=0 STYLE="font-style:normal">558  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El error del booster en la iteracion 
+<FONT COLOR=0 STYLE="font-style:normal">559  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">560  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getBoosterError(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> iterationIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">561  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> ((<A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>) m_BoosterErrors.get(iterationIndex)).value; 
+<FONT COLOR=0 STYLE="font-style:normal">562  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">563  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">564  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">565  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> iterationIndex El número de iteración 
+<FONT COLOR=0 STYLE="font-style:normal">566  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El error del clasificador base en la iteración 
+<FONT COLOR=0 STYLE="font-style:normal">567  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">568  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getBaseClassifierError(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> iterationIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">569  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> ((<A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>) m_BC_Errors.get(iterationIndex)).value; 
+<FONT COLOR=0 STYLE="font-style:normal">570  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">571  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">572  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">573  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> iterationIndex El número de iteración 
+<FONT COLOR=0 STYLE="font-style:normal">574  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El coste de los errores del booster en dicha iteración 
+<FONT COLOR=0 STYLE="font-style:normal">575  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">576  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getBoosterCost(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> iterationIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">577  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> ((<A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>) m_BoosterCosts.get(iterationIndex)).value; 
+<FONT COLOR=0 STYLE="font-style:normal">578  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">579  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">580  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">581  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> iterationIndex El número de iteración 
+<FONT COLOR=0 STYLE="font-style:normal">582  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El coste de los errores del clasificador base en dicha iteración 
+<FONT COLOR=0 STYLE="font-style:normal">583  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">584  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getBaseClassifierCost(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> iterationIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">585  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> ((<A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>) m_BC_Costs.get(iterationIndex)).value; 
+<FONT COLOR=0 STYLE="font-style:normal">586  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">587  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">588  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">589  </FONT>   * Definimos el coste relativo como el cociente del coste de los errores en una determinada 
+<FONT COLOR=0 STYLE="font-style:normal">590  </FONT>   * iteración entre el mayor coste alcanzado hasta entonces [0,1] 
+<FONT COLOR=0 STYLE="font-style:normal">591  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">592  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> iterationIndex El número de iteración 
+<FONT COLOR=0 STYLE="font-style:normal">593  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El coste relativo del booster [0,1] 
+<FONT COLOR=0 STYLE="font-style:normal">594  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">595  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getBoosterRelativeCost(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> iterationIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">596  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> ((<A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>) m_BoosterCosts.get(iterationIndex)).value / m_BiggestCost; 
+<FONT COLOR=0 STYLE="font-style:normal">597  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">598  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">599  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">600  </FONT>   * Definimos el coste relativo como el cociente del coste de los errores en una determinada 
+<FONT COLOR=0 STYLE="font-style:normal">601  </FONT>   * iteración entre el mayor coste alcanzado hasta entonces [0,1] 
+<FONT COLOR=0 STYLE="font-style:normal">602  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">603  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> iterationIndex El número de iteración 
+<FONT COLOR=0 STYLE="font-style:normal">604  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El coste relativo del clasificador base [0,1] 
+<FONT COLOR=0 STYLE="font-style:normal">605  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">606  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getBaseClassifierRelativeCost(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> iterationIndex){ 
+<FONT COLOR=0 STYLE="font-style:normal">607  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> ((<A href="..\..\oaidtb\misc\SimpleDouble.java.html">SimpleDouble</A>) m_BC_Costs.get(iterationIndex)).value / m_BiggestCost; 
+<FONT COLOR=0 STYLE="font-style:normal">608  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">609  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">610  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El mayor coste alcanzado por el booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">611  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getBiggestBoosterCost(){ 
+<FONT COLOR=0 STYLE="font-style:normal">612  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BiggestBoosterCost; 
+<FONT COLOR=0 STYLE="font-style:normal">613  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">614  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">615  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El mayor coste alcanzado por el clasificador base */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">616  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> getBiggestBC_Cost(){ 
+<FONT COLOR=0 STYLE="font-style:normal">617  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BiggestBC_Cost; 
+<FONT COLOR=0 STYLE="font-style:normal">618  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">619  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">620  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> ArrayList} que contiene los costes de los clasificadores base  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">621  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> ArrayList getBC_Costs(){ 
+<FONT COLOR=0 STYLE="font-style:normal">622  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BC_Costs; 
+<FONT COLOR=0 STYLE="font-style:normal">623  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">624  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">625  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> ArrayList} que contiene los errores de los clasificadores base  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">626  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> ArrayList getBC_Errors(){ 
+<FONT COLOR=0 STYLE="font-style:normal">627  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BC_Errors; 
+<FONT COLOR=0 STYLE="font-style:normal">628  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">629  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">630  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> ArrayList} que contiene los costes del booster en cada iteración  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">631  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> ArrayList getBoosterCosts(){ 
+<FONT COLOR=0 STYLE="font-style:normal">632  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BoosterCosts; 
+<FONT COLOR=0 STYLE="font-style:normal">633  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">634  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">635  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> ArrayList} que contiene los errores del booster en cada iteración  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">636  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> ArrayList getBoosterErrors(){ 
+<FONT COLOR=0 STYLE="font-style:normal">637  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_BoosterErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">638  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">639  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">640  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El número de iteraciones analizadas hasta el momento*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">641  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterationsAnalyzed(){ 
+<FONT COLOR=0 STYLE="font-style:normal">642  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_IterationsAnalyzedSoFar; 
+<FONT COLOR=0 STYLE="font-style:normal">643  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">644  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">645  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Los datos sobre los que se está haciendo el análisis */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">646  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Instances getData(){ 
+<FONT COLOR=0 STYLE="font-style:normal">647  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Data; 
+<FONT COLOR=0 STYLE="font-style:normal">648  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">649  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">650  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> <A href="..\..\oaidtb\boosters\IterativeUpdatableClassifier.java.html">IterativeUpdatableClassifier</A>} que se está analizando */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">651  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\IterativeUpdatableClassifier.java.html">IterativeUpdatableClassifier</A> getBooster(){ 
+<FONT COLOR=0 STYLE="font-style:normal">652  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Booster; 
+<FONT COLOR=0 STYLE="font-style:normal">653  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">654  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">655  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> una descripción en modo texto, CSV (Comma Separated Values) de las estadísticas  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">656  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String toCSV(){ 
+<FONT COLOR=0 STYLE="font-style:normal">657  </FONT>    StringBuffer sb = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringBuffer(); 
+<FONT COLOR=0 STYLE="font-style:normal">658  </FONT>    ArrayList[] collectedStats = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ArrayList[</FONT><FONT COLOR="#0000ff">4</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">659  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numCollected = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">660  </FONT>    sb.append(</FONT><FONT COLOR="#008000"><B>";;;FORMAT: itIndex"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">661  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_SaveBoosterErrors){ 
+<FONT COLOR=0 STYLE="font-style:normal">662  </FONT>      collectedStats[numCollected] = m_BoosterErrors; 
+<FONT COLOR=0 STYLE="font-style:normal">663  </FONT>      numCollected++; 
+<FONT COLOR=0 STYLE="font-style:normal">664  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>",booster error"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">665  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">666  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_SaveBoosterCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">667  </FONT>      collectedStats[numCollected] = m_BoosterCosts; 
+<FONT COLOR=0 STYLE="font-style:normal">668  </FONT>      numCollected++; 
+<FONT COLOR=0 STYLE="font-style:normal">669  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>",booster cost"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">670  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">671  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_SaveBaseClassifiersErrors){ 
+<FONT COLOR=0 STYLE="font-style:normal">672  </FONT>      collectedStats[numCollected] = m_BC_Errors; 
+<FONT COLOR=0 STYLE="font-style:normal">673  </FONT>      numCollected++; 
+<FONT COLOR=0 STYLE="font-style:normal">674  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>",base classifier error"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">675  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">676  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_SaveBaseClassifiersCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">677  </FONT>      collectedStats[numCollected] = m_BC_Costs; 
+<FONT COLOR=0 STYLE="font-style:normal">678  </FONT>      numCollected++; 
+<FONT COLOR=0 STYLE="font-style:normal">679  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>",base classifier cost"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">680  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">681  </FONT>    sb.append(</FONT><FONT COLOR="#008000"><B>"\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">682  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">683  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000">(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i=</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_IterationsAnalyzedSoFar - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">684  </FONT>      sb.append(i +</FONT><FONT COLOR="#008000"><B>","</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">685  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000">(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> j=</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; j &LT; numCollected - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; j++) 
+<FONT COLOR=0 STYLE="font-style:normal">686  </FONT>        sb.append(collectedStats[j].get(i) +</FONT><FONT COLOR="#008000"><B>","</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">687  </FONT>      sb.append(collectedStats[numCollected - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">].get(i) +</FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">688  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">689  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">690  </FONT>    sb.append(m_IterationsAnalyzedSoFar - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> +</FONT><FONT COLOR="#008000"><B>","</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">691  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000">(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> j=</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; j &LT; numCollected - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; j++) 
+<FONT COLOR=0 STYLE="font-style:normal">692  </FONT>      sb.append(collectedStats[j].get(m_IterationsAnalyzedSoFar - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">) +</FONT><FONT COLOR="#008000"><B>","</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">693  </FONT>    sb.append(collectedStats[numCollected - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">].get(m_IterationsAnalyzedSoFar - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">694  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">695  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> sb.toString(); 
+<FONT COLOR=0 STYLE="font-style:normal">696  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">697  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">698  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Una representación en modo texto de las estadísticas */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">699  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String toString(){ 
+<FONT COLOR=0 STYLE="font-style:normal">700  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">701  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000">(m_IterationsAnalyzedSoFar == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">702  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String(</FONT><FONT COLOR="#008000"><B>"No iterations are analyzed"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">703  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">704  </FONT>    StringBuffer sb = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringBuffer(); 
+<FONT COLOR=0 STYLE="font-style:normal">705  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">706  </FONT>    sb.append(</FONT><FONT COLOR="#008000"><B>"Analysis of "</B></FONT><FONT COLOR="#000000"> + m_Booster.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">707  </FONT>    sb.append(</FONT><FONT COLOR="#008000"><B>"\nwith the options:\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">708  </FONT>    String[] options = ((OptionHandler) m_Booster).getOptions(); 
+<FONT COLOR=0 STYLE="font-style:normal">709  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; options.length; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">710  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (options[i].equals(</FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">)) 
+<FONT COLOR=0 STYLE="font-style:normal">711  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">712  </FONT>      sb.append(options[i] + </FONT><FONT COLOR="#008000"><B>" "</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">713  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">714  </FONT>    sb.append(</FONT><FONT COLOR="#008000"><B>"\n\n Relation info:\n"</B></FONT><FONT COLOR="#000000"> + m_Data.toSummaryString() + </FONT><FONT COLOR="#008000"><B>"\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">715  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">716  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBoosterErrors && m_SaveBoosterCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">717  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"=== Booster information: errors & costs ===\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">718  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"Biggest error: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBoosterError + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBoosterErrorAt); 
+<FONT COLOR=0 STYLE="font-style:normal">719  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nSmallest error: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBoosterError + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBoosterErrorAt); 
+<FONT COLOR=0 STYLE="font-style:normal">720  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nBiggest cost: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBoosterCost + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBoosterCostAt); 
+<FONT COLOR=0 STYLE="font-style:normal">721  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nSmallest cost: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBoosterCost + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBoosterCostAt); 
+<FONT COLOR=0 STYLE="font-style:normal">722  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_BoosterErrors.size(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">723  </FONT>        sb.append(</FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> + i + </FONT><FONT COLOR="#008000"><B>" ==&GT; "</B></FONT><FONT COLOR="#000000"> + getBoosterError(i) + </FONT><FONT COLOR="#008000"><B>", "</B></FONT><FONT COLOR="#000000"> + getBoosterCost(i)); 
+<FONT COLOR=0 STYLE="font-style:normal">724  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">725  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBoosterErrors){ 
+<FONT COLOR=0 STYLE="font-style:normal">726  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"=== Booster information: errors ===\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">727  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"Biggest error: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBoosterError + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBoosterErrorAt); 
+<FONT COLOR=0 STYLE="font-style:normal">728  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nSmallest error: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBoosterError + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBoosterErrorAt); 
+<FONT COLOR=0 STYLE="font-style:normal">729  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_BoosterErrors.size(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">730  </FONT>        sb.append(</FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> + i + </FONT><FONT COLOR="#008000"><B>" ==&GT; "</B></FONT><FONT COLOR="#000000"> + getBoosterError(i)); 
+<FONT COLOR=0 STYLE="font-style:normal">731  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">732  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBoosterCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">733  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"=== Booster information: costs ===\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">734  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"Biggest cost: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBoosterCost + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBoosterCostAt); 
+<FONT COLOR=0 STYLE="font-style:normal">735  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nSmallest cost: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBoosterCost + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBoosterCostAt); 
+<FONT COLOR=0 STYLE="font-style:normal">736  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_BoosterCosts.size(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">737  </FONT>        sb.append(</FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> + i + </FONT><FONT COLOR="#008000"><B>" ==&GT; "</B></FONT><FONT COLOR="#000000"> + getBoosterCost(i)); 
+<FONT COLOR=0 STYLE="font-style:normal">738  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">739  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">740  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBaseClassifiersErrors && m_SaveBaseClassifiersCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">741  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\n\n=== Base classifiers information: errors & costs ===\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">742  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"Biggest error: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBC_Error + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBC_ErrorAt); 
+<FONT COLOR=0 STYLE="font-style:normal">743  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nSmallest error: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBC_Error + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBC_ErrorAt); 
+<FONT COLOR=0 STYLE="font-style:normal">744  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nBiggest cost: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBC_Cost + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBC_CostAt); 
+<FONT COLOR=0 STYLE="font-style:normal">745  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nSmallest cost: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBC_Cost + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBC_CostAt); 
+<FONT COLOR=0 STYLE="font-style:normal">746  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_BC_Errors.size(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">747  </FONT>        sb.append(</FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> + i + </FONT><FONT COLOR="#008000"><B>" ==&GT; "</B></FONT><FONT COLOR="#000000"> + getBaseClassifierError(i) + </FONT><FONT COLOR="#008000"><B>", "</B></FONT><FONT COLOR="#000000"> + getBaseClassifierCost(i)); 
+<FONT COLOR=0 STYLE="font-style:normal">748  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">749  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBaseClassifiersErrors){ 
+<FONT COLOR=0 STYLE="font-style:normal">750  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\n\n=== Base classifiers information: errors ===\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">751  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"Biggest error: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBC_Error + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBC_ErrorAt); 
+<FONT COLOR=0 STYLE="font-style:normal">752  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nSmallest error: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBC_Error + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBC_ErrorAt); 
+<FONT COLOR=0 STYLE="font-style:normal">753  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_BC_Errors.size(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">754  </FONT>        sb.append(</FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> + i + </FONT><FONT COLOR="#008000"><B>" ==&GT; "</B></FONT><FONT COLOR="#000000"> + getBaseClassifierError(i)); 
+<FONT COLOR=0 STYLE="font-style:normal">755  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">756  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SaveBaseClassifiersCosts){ 
+<FONT COLOR=0 STYLE="font-style:normal">757  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\n\n=== Base classifiers information: costs ===\n\n"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">758  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"Biggest cost: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBC_Cost + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_BiggestBC_CostAt); 
+<FONT COLOR=0 STYLE="font-style:normal">759  </FONT>      sb.append(</FONT><FONT COLOR="#008000"><B>"\nSmallest cost: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBC_Cost + </FONT><FONT COLOR="#008000"><B>" at iteration: "</B></FONT><FONT COLOR="#000000"> + m_SmallestBC_CostAt); 
+<FONT COLOR=0 STYLE="font-style:normal">760  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_BC_Costs.size(); i++) 
+<FONT COLOR=0 STYLE="font-style:normal">761  </FONT>        sb.append(</FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> + i + </FONT><FONT COLOR="#008000"><B>" ==&GT; "</B></FONT><FONT COLOR="#000000"> + getBaseClassifierCost(i)); 
+<FONT COLOR=0 STYLE="font-style:normal">762  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">763  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">764  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> sb.toString(); 
+<FONT COLOR=0 STYLE="font-style:normal">765  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">766  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">767  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">768  </FONT>   * Clase de test (pública y estática, así se puede omitir del producto final, pues no es interesante) 
+<FONT COLOR=0 STYLE="font-style:normal">769  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">770  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> Test{ 
+<FONT COLOR=0 STYLE="font-style:normal">771  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">772  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">773  </FONT>     * Testeamos la clase 
+<FONT COLOR=0 STYLE="font-style:normal">774  </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">775  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> args ignored. 
+<FONT COLOR=0 STYLE="font-style:normal">776  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">777  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> main(String[] args){ 
+<FONT COLOR=0 STYLE="font-style:normal">778  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">779  </FONT>      </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">780  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">781  </FONT>        Instances instances = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instances(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FileReader(</FONT><FONT COLOR="#008000"><B>"./data/conus-torus/train.arff"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">782  </FONT>        Instances testInstances = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Instances(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FileReader(</FONT><FONT COLOR="#008000"><B>"./data/conus-torus/test.arff"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">783  </FONT>        instances.setClassIndex(instances.numAttributes() - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">784  </FONT>        testInstances.setClassIndex(testInstances.numAttributes() - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">785  </FONT></FONT><FONT COLOR="#808080"><I>//      Booster booster = new oaidtb.boosters.costSensitive.CSB0();</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">786  </FONT></FONT><FONT COLOR="#808080"><I>//      Booster booster = new oaidtb.boosters.AdaBoostECC();</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">787  </FONT>        <A href="..\..\oaidtb\boosters\AdaBoostMH.java.html">AdaBoostMH</A> booster = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\boosters\AdaBoostMH.java.html">AdaBoostMH</A>(); 
+<FONT COLOR=0 STYLE="font-style:normal">788  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">789  </FONT>        booster.setDebug(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">790  </FONT></FONT><FONT COLOR="#808080"><I>//      ((AbstractCSB) booster).</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">791  </FONT></FONT><FONT COLOR="#808080"><I>//        setCostMatrixSource(new SelectedTag(AbstractCSB.DEFAULT_MATRIX, AbstractCSB.TAGS_MATRIX_SOURCE));</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">792  </FONT>        booster.buildClassifier(instances); 
+<FONT COLOR=0 STYLE="font-style:normal">793  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">794  </FONT>        BoosterAnalyzer ba = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BoosterAnalyzer(booster, instances, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">795  </FONT>        BoosterAnalyzer baTest = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BoosterAnalyzer(booster, testInstances, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">796  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">797  </FONT>        ba.setSaveBaseClassifiersCosts(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">798  </FONT>        ba.setSaveBoosterCosts(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">799  </FONT></FONT><FONT COLOR="#808080"><I>//      ba.setSaveBaseClassifiersErrors(false);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">800  </FONT>        baTest.initialize(); 
+<FONT COLOR=0 STYLE="font-style:normal">801  </FONT>        ba.initialize(); 
+<FONT COLOR=0 STYLE="font-style:normal">802  </FONT>        ba.updateStatistics(); 
+<FONT COLOR=0 STYLE="font-style:normal">803  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">804  </FONT>        booster.nextIterations(</FONT><FONT COLOR="#0000ff">10</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">805  </FONT>        ba.updateStatistics(); 
+<FONT COLOR=0 STYLE="font-style:normal">806  </FONT>        baTest.updateStatistics(); 
+<FONT COLOR=0 STYLE="font-style:normal">807  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">808  </FONT>        System.err.println(ba.toString()); 
+<FONT COLOR=0 STYLE="font-style:normal">809  </FONT>        System.err.println(baTest.toString()); 
+<FONT COLOR=0 STYLE="font-style:normal">810  </FONT>        System.err.println(ba.toCSV()); 
+<FONT COLOR=0 STYLE="font-style:normal">811  </FONT>        System.err.println(baTest.toCSV()); 
+<FONT COLOR=0 STYLE="font-style:normal">812  </FONT>       } 
+<FONT COLOR=0 STYLE="font-style:normal">813  </FONT>      </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">814  </FONT>        ex.printStackTrace(); 
+<FONT COLOR=0 STYLE="font-style:normal">815  </FONT>        System.err.println(ex.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">816  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">817  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">818  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">819  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

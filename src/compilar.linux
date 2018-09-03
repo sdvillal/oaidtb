@@ -1,0 +1,30 @@
+#!/bin/sh
+#Script para hacer una recompilación total de todo el
+#proyecto; ya no se actualizará más, en vez de ello
+#se debe usar Ant con el archivo build.xml
+#Presuponemos que el compilador está en el PATH
+SOURCE_PATH=../src
+OUTPUT_PATH=../libs
+#Localización de las bibliotecas
+LIBS_PATH=../libs
+WEKA_PATH=$LIBS_PATH/weka_patched.jar
+COLT_PATH=$LIBS_PATH/colt_only_used_classes.jar
+JFREECHART_PATH=$LIBS_PATH/jfreechart-0.9.2.jar
+JCOMMON_PATH=$LIBS_PATH/jcommon-0.6.4.jar
+#Configuración del CLASSPATH
+OUR_CP=$SOURCE_PATH:$WEKA_PATH:$COLT_PATH:$JFREECHART_PATH:$JCOMMON_PATH
+#Compilamos el paquete boosters
+javac -classpath $OUR_CP -d $OUTPUT_PATH $SOURCE_PATH/oaidtb/boosters/*.java $SOURCE_PATH/oaidtb/boosters/costSensitive/*.java
+#Compilamos el paquete filters
+javac -classpath $OUR_CP -d $OUTPUT_PATH $SOURCE_PATH/oaidtb/filters/*.java 
+#Compilamos el paquete misc
+javac -classpath $OUR_CP -d $OUTPUT_PATH $SOURCE_PATH/oaidtb/misc/*.java
+javac -classpath $OUR_CP -d $OUTPUT_PATH $SOURCE_PATH/oaidtb/misc/pointDistributions/*.java 
+javac -classpath $OUR_CP -d $OUTPUT_PATH $SOURCE_PATH/oaidtb/misc/guiUtils/*.java 
+javac -classpath $OUR_CP -d $OUTPUT_PATH $SOURCE_PATH/oaidtb/misc/javaTutorial/*.java 
+javac -classpath $OUR_CP -d $OUTPUT_PATH $SOURCE_PATH/oaidtb/misc/mediator/*.java 
+#Compilamos el paquete gui
+javac -classpath $OUR_CP -d $OUTPUT_PATH $SOURCE_PATH/oaidtb/gui/customizedWeka/*.java
+javac -classpath $OUR_CP -d $OUTPUT_PATH $SOURCE_PATH/oaidtb/gui/*.java
+#Copiamos los archivos de recursos
+cp -rpf $SOURCE_PATH/_resources_/oaidtb $OUTPUT_PATH

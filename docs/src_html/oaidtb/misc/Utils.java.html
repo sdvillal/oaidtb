@@ -1,0 +1,346 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\misc\Utils.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\misc\Utils.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    Utils.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.misc; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.CostMatrix; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.*; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.image.BufferedImage; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.Introspector; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.MethodDescriptor; 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyDescriptor; 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.FileOutputStream; 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.PrintWriter; 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.lang.reflect.Method; 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.lang.reflect.Modifier; 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Comparator; 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * Miscellaneous (simple) utilities. 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> Utils{ 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>   * Comprueba que la versión actual de la máquina virtual java 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>   * en que se está ejecutando la aplicación es mayor o igual a 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>   * otra versión 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> minJVMVersion Una cadena conteniendo la versión de java, por ejemplo, "1.3.1" 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true si la cadena que representa a la MVJ actual es mayor o igual que la pasada como parámetro 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>   *         (cambiarlo por algo más seguro) 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isJVMVersionGreaterOrEqualThan(String minJVMVersion){ 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> minJVMVersion.compareToIgnoreCase(System.getProperty(</FONT><FONT COLOR="#008000"><B>"java.version"</B></FONT><FONT COLOR="#000000">)) &LT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>   * Merge two InputMap maps 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> dest The map where all pairs key/value will be stored 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> other The map which contents will be added to de dest map 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mergeInputMaps(InputMap dest, InputMap other){ 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>    KeyStroke[] strokes = other.allKeys(); 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (strokes != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; strokes.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>        dest.put(strokes[i], other.get(strokes[i])); 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>   * Merge two ActionMap maps 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> dest The map where all pairs key/value will be stored 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> other The map which contents will be added to de dest map 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mergeActionMaps(ActionMap dest, ActionMap other){ 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>    Object[] keys = other.allKeys(); 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (keys != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; keys.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>        dest.put(keys[i], other.get(keys[i])); 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>   * Capture an area of the screen 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> rectangle Rect to capture in screen coordinates 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> A buffered image containing the capture or null if an error happens 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> BufferedImage captureScreenShot(Rectangle rectangle){ 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>      Robot robot = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Robot(); 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> robot.createScreenCapture(rectangle); 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (AWTException ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>      System.err.println(ex.toString()); 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> component A component 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> A buffered image with component painted in 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> Image captureComponentToImage(JComponent component){ 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>    Rectangle rect = component.getBounds(); 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>    Image image = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BufferedImage(rect.width, rect.height, BufferedImage.TYPE_INT_ARGB); 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>    component.paint(image.getGraphics()); 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> image; 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>   * Check if a classifier is able to classify a type of instances. 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifier The classifier 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instance The instance 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true or false 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> classifierCanClassify(Classifier classifier, Instance instance){ 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>      classifier.classifyInstance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>   * 1 if true, 0 if false 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> b true or false 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> 1 if true, 0 if false 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> boolToInt(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> b){ 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> b ? </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> : </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>   * Fast sum (no checks) of the components of two double arrays, storing 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>   * the result in the first array (arrayDest) 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> arrayDest 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> arrayToSum 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> doubleArraysSum(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] arrayDest, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] arrayToSum){ 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; arrayDest.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>      arrayDest[i] += arrayToSum[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>   * Search for the bigger value in an array of doubles 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> array The array 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The index of the bigger value 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> maxIndex(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] array){ 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> maxIndex = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; i &LT; array.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (array[maxIndex] &LT; array[i]) 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>        maxIndex = i; 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> maxIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>   * Search for the smaller value in an array of doubles 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> array The array 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The index of the smaller value 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> minIndex(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] array){ 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> minIndex = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; i &LT; array.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (array[minIndex] &GT; array[i]) 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>        minIndex = i; 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> minIndex; 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>   * Stores the text in a (new or overwritten) file. 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> what The string to be written 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> fileName The name of the file where it will be written 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception if an error happens 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> printTextToFile(String what, String fileName) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>    PrintWriter file = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PrintWriter(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FileOutputStream(fileName)); 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>    file.println(what); 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>    file.close(); 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT>   * Sorts an array of PropertyDescriptor objects according to their names. 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> properties 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> sortPropertiesByName(PropertyDescriptor[] properties){ 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT>    java.util.Arrays.sort(properties, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Comparator(){ 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> compare(Object o1, Object o2){ 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>        PropertyDescriptor pd1 = (PropertyDescriptor) o1; 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>        PropertyDescriptor pd2 = (PropertyDescriptor) o2; 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> pd1.getName().compareTo(pd2.getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>   * Sorts an array of PropertyDescriptor objects according to a custom order; 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>   * all the properties not in the order will be put at the end. 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> properties The properties to be sorted 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> index The structure indicating the order of the properties 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The properties sorted 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> PropertyDescriptor[] sortProperties(PropertyDescriptor[] properties, <A href="..\..\oaidtb\misc\CustomOrderDefiner.java.html">CustomOrderDefiner</A> index){ 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT>    PropertyDescriptor[] tmpProps = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PropertyDescriptor[properties.length]; 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT>    </FONT><FONT COLOR="#808080"><I>//We don't know if all or none  of the indexed properties are contained in the "properties" array.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>    PropertyDescriptor[] withoutIndexProps = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PropertyDescriptor[properties.length]; 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> withoutIndexPropsCount = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; properties.length; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> propertyIndex = index.getIndex(properties[i].getDisplayName()); 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (propertyIndex != -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> && tmpProps[propertyIndex] == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>        tmpProps[propertyIndex] = properties[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>        withoutIndexProps[withoutIndexPropsCount] = properties[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT>        withoutIndexPropsCount++; 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; tmpProps.length && withoutIndexPropsCount &GT;= </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (tmpProps[i] == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>        tmpProps[i] = withoutIndexProps[--withoutIndexPropsCount]; 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> tmpProps; 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT>   * Returns a method to access to the cost matrix used by a cost sensitive classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>   * it must have the following signature: "public CostMatrix getCostMatrix()". 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifier The classifier to be analyzed. 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The getter method or null if it doesn't exist. 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error occurs during introspection. 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> Method getCostMatrixGetter(Classifier classifier) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT>    MethodDescriptor[] methods = Introspector.getBeanInfo(classifier.getClass()).getMethodDescriptors(); 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; methods.length; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>      Method method = methods[i].getMethod(); 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (method.getName().equals(</FONT><FONT COLOR="#008000"><B>"getCostMatrix"</B></FONT><FONT COLOR="#000000">) && 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT>        method.getReturnType().equals(CostMatrix.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">) && 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>        Modifier.isPublic(method.getModifiers())) 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> method; 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>   * Normalize the values of an array of doubles, which can hold negative values, 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT>   * so that the sum will be one. 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> array The array to be normalized. 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> secureNormalize(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] array){ 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> sumTmp = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> minValue = array[minIndex(array)]; 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (minValue &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; array.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>        sumTmp += (array[i] -= minValue); 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; array.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>        sumTmp += array[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>    weka.core.Utils.normalize(array, sumTmp); 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>   * Applies Math.round and returns an integer 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> x El ouble a redondear 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El resultado de Math.round(x) como un entero 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> round(</FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> x){ 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(x); 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT></FONT><FONT COLOR="#808080"><I>// TODO: create a centralized policy to handle the exceptional values produced by the Math. functions, so</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT></FONT><FONT COLOR="#808080"><I>// this values can't damage the algorithms (by examplo, when reweighting).</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT></FONT><FONT COLOR="#808080"><I>//</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT></FONT><FONT COLOR="#808080"><I>//  public final static double exp(double a){</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT></FONT><FONT COLOR="#808080"><I>//</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT></FONT><FONT COLOR="#808080"><I>//    if (a == Double.NaN)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT></FONT><FONT COLOR="#808080"><I>//      return 0;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT></FONT><FONT COLOR="#808080"><I>//</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT></FONT><FONT COLOR="#808080"><I>//    if (a == Double.POSITIVE_INFINITY)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT></FONT><FONT COLOR="#808080"><I>//      return Double.MAX_VALUE;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT></FONT><FONT COLOR="#808080"><I>//</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT></FONT><FONT COLOR="#808080"><I>//    return Math.exp(a);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT></FONT><FONT COLOR="#808080"><I>//  }</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT></FONT><FONT COLOR="#808080"><I>//</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT></FONT><FONT COLOR="#808080"><I>//  public static double log(double a){</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT></FONT><FONT COLOR="#808080"><I>//</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT></FONT><FONT COLOR="#808080"><I>//    return Math.log(a);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT></FONT><FONT COLOR="#808080"><I>//  }</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

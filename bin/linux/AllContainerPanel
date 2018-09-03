@@ -1,0 +1,10 @@
+#!/bin/bash
+#Inicia la aplicación "Bidimensional Generalization"
+
+MAIN_CLASS_NAME="oaidtb.gui.AllContainerPanel\$AppMainFrame"
+export MAIN_CLASS_NAME
+
+OUTPUT_FILE=
+
+./_oaidtb_ $OUTPUT_FILE
+

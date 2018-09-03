@@ -1,0 +1,115 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\customizedWeka\PropertyText.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\customizedWeka\PropertyText.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    PropertyText.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 1999 Len Trigg 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui.customizedWeka; 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.FocusAdapter; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.FocusEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.KeyAdapter; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.KeyEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyEditor; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * Support for a PropertyEditor that uses text. 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * Isn't going to work well if the property gets changed 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * somewhere other than this field simultaneously 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> Len Trigg (trigg@cs.waikato.ac.nz) 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.5 $ 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT></FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> PropertyText </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> JTextField{ 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The property editor */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> PropertyEditor m_Editor; 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>   * Sets up the editing component with the supplied editor. 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> pe the PropertyEditor 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>  PropertyText(PropertyEditor pe){ 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>    </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">(pe.getAsText()); 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>    m_Editor = pe; 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>    </FONT><FONT COLOR="#808080"><I>/*    m_Editor.addPropertyChangeListener(new PropertyChangeListener() { 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>      public void propertyChange(PropertyChangeEvent evt) { 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>	updateUs(); 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>      }); */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>    addKeyListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> KeyAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> keyReleased(KeyEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>        </FONT><FONT COLOR="#808080"><I>//	if (e.getKeyCode() == KeyEvent.VK_ENTER) {</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>        updateEditor(); 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>        </FONT><FONT COLOR="#808080"><I>//	}</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>    addFocusListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FocusAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> focusLost(FocusEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>        updateEditor(); 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>   * Attempts to update the textfield value from the editor. 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> updateUs(){ 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>      setText(m_Editor.getAsText()); 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (IllegalArgumentException ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>      </FONT><FONT COLOR="#808080"><I>// Quietly ignore.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>   * Attempts to update the editor value from the textfield. 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> updateEditor(){ 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>      m_Editor.setAsText(getText()); 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (IllegalArgumentException ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>      </FONT><FONT COLOR="#808080"><I>// Quietly ignore.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>} 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT></FONT></PRE>
+</BODY>
+</HTML>

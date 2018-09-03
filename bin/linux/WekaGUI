@@ -1,0 +1,10 @@
+#!/bin/bash
+#Inicia el "selector de aplicación gráfica" de Weka
+
+MAIN_CLASS_NAME="weka.gui.GUIChooser"
+export MAIN_CLASS_NAME
+
+OUTPUT_FILE=
+
+./_oaidtb_ $OUTPUT_FILE
+

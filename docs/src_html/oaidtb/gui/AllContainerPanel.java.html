@@ -1,0 +1,1178 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\AllContainerPanel.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\AllContainerPanel.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    AllContainerPanel.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> com.jrefinery.ui.RefineryUtilities; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> com.jrefinery.ui.about.AboutFrame; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\customizedWeka\LogPanel.java.html">oaidtb.gui.customizedWeka.LogPanel</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\guiUtils\SystemOutputStreamRedirector.java.html">oaidtb.misc.guiUtils.SystemOutputStreamRedirector</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Arbitrable.java.html">oaidtb.misc.mediator.Arbitrable</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Mediator.java.html">oaidtb.misc.mediator.Mediator</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Classifier; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Utils; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.gui.WekaTaskMonitor; 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.border.EtchedBorder; 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.InternalFrameAdapter; 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.InternalFrameEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.InternalFrameListener; 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.plaf.FontUIResource; 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.text.SimpleAttributeSet; 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.text.StyleConstants; 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.*; 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.geom.Rectangle2D; 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.image.BufferedImage; 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyChangeEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyChangeListener; 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyVetoException; 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.File; 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.ArrayList; 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> * Clase que hace de contenedor principal para todos los componentes que forman la aplicación. 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT> * Encapsula y centraliza mediante el interface Mediator las relaciones y la lógica de interacción 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT> * entre dichos componentes. 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.2 $ 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> AllContainerPanel </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\mediator\Mediator.java.html">Mediator</A>{ 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#808080"><I>/** La base de datos de puntos compartida entre los diversos componentes */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances</A> m_Points = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\Point2DInstances.java.html">Point2DInstances</A>(</FONT><FONT COLOR="#008000"><B>"BIGUIApp"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El panel de configuración del clasificador */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A> m_ClassifierPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>(m_Points); 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El panel de represantación de instancias e hipótesis */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\DrawingPanel.java.html">DrawingPanel</A> m_DrawingPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\DrawingPanel.java.html">DrawingPanel</A>(m_Points); 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El panel que controla la inserción y borrado de las instancias */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\InstancesEditingPanel.java.html">InstancesEditingPanel</A> m_InstancesEditingPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\InstancesEditingPanel.java.html">InstancesEditingPanel</A>(m_DrawingPanel); 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El panel que controla las opciones de visualización y la creación de las imágenes de hipótesis */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\VisualOptionsPanel.java.html">VisualOptionsPanel</A> m_VisualOptionsPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\VisualOptionsPanel.java.html">VisualOptionsPanel</A>(m_DrawingPanel); 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El panel de log */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\customizedWeka\LogPanel.java.html">LogPanel</A> m_Log = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\customizedWeka\LogPanel.java.html">LogPanel</A>(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> WekaTaskMonitor()); 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#808080"><I>//Opciones globales</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Hacer o no log de las acciones ejecutadas en el panel del clasificador */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem m_LogClassifierPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem(</FONT><FONT COLOR="#008000"><B>"Log classifier panel messages"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Hacer o no log de las acciones ejecutadas en el panel de edición de instancias */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem m_LogInstancesEditingPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem(</FONT><FONT COLOR="#008000"><B>"Log instances editing panel messages"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Hacer o no log de las acciones ejecutadas en el panel de dibujado */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem m_LogDrawingPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem(</FONT><FONT COLOR="#008000"><B>"Log drawing panel messages"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Hacer o no log de las acciones ejecutadas en el panel de opciones visuales */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem m_LogVisualOptionsPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem(</FONT><FONT COLOR="#008000"><B>"Log visual options panel messages"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Capturar o no los mensajes mandados a System.err para mostrarlos en el panel de log */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem m_LogSystemErr = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem(</FONT><FONT COLOR="#008000"><B>"Log system err messages"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>  </FONT><FONT COLOR="#808080"><I>/** A la vez que se mandan los mensajes de System.err al panel de log, mandarlos también o no al System.err "estándar" */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem m_SystemErrFork = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem(</FONT><FONT COLOR="#008000"><B>"Create a fork with default err"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Crear de manera automática la imagen de hipótesis tras la construcción de un clasificador */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem m_AutoUpdateOnClassifierBuilt = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem(</FONT><FONT COLOR="#008000"><B>"Auto update when a classifier is built"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Crear de manera automática la imagen de hipótesis tras la iteración de un booster */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem m_AutoUpdateOnBoosterIt = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBoxMenuItem(</FONT><FONT COLOR="#008000"><B>"Auto update when a booster finish to iterate"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>  </FONT><FONT COLOR="#808080"><I>/** La barra de herramientas */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JToolBar m_ToolBar = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JToolBar(); 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El thread que se encarga de redirigir los mensajes enviados a System.err al panel de log */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\guiUtils\SystemOutputStreamRedirector.java.html">SystemOutputStreamRedirector</A> m_ErrRedirector; 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>   *  Etiqueta en que se muestra las coordenadas en el dominio del problema del punto del panel de dibujado 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>   * sobre el que se encuentra el puntero del ratón; coordenada X 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JTextArea m_MouseLocationLabelX = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JTextArea(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">8</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>   *  Etiqueta en que se muestra las coordenadas en el dominio del problema del punto del panel de dibujado 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>   * sobre el que se encuentra el puntero del ratón; coordenada Y 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JTextArea m_MouseLocationLabelY = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JTextArea(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">8</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Frame interno en que se muestra el panel de configuración del clasificador */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JInternalFrame m_ClassifierFrame = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JInternalFrame(</FONT><FONT COLOR="#008000"><B>"Classifier"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Frame interno en que se muestra el panel de opciones visuales */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JInternalFrame m_VisualOptionsFrame = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JInternalFrame(</FONT><FONT COLOR="#008000"><B>"Visual options"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Frame interno en que se muestra el panel de edición de instancias */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JInternalFrame m_InstanceEditingFrame = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JInternalFrame(</FONT><FONT COLOR="#008000"><B>"Instance options"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>  </FONT><FONT COLOR="#808080"><I>/** El frame "acerca de", con información relativa al proyecto, las licencias e información del sistema */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> AboutFrame m_AboutFrame; 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>  </FONT><FONT COLOR="#808080"><I>//Componentes de la toolbar</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Botón de acceso rápido para hacer zoom out */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JButton m_ZoomOutButton = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ImageIcon(getClass().getResource(</FONT><FONT COLOR="#008000"><B>"_images_/expandall.gif"</B></FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Botón de acceso rápido para entrar en modo zoom */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JCheckBox m_ZoomMode = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JCheckBox(</FONT><FONT COLOR="#008000"><B>"Zoom mode"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Icono del Profesor X, seña de identidad de la aplicación */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>  </FONT><FONT COLOR="#808080"><I>//TODO: Una clase Resources para todas estas cosas + clase Locale para configurar el lenguaje etc.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> ImageIcon PROFX_ICON = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ImageIcon(AllContainerPanel.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">.getResource(</FONT><FONT COLOR="#008000"><B>"_images_/profx.gif"</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Constructor */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> AllContainerPanel(){ 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>    </FONT><FONT COLOR="#808080"><I>//Añadimos a todos los paneles el mediador</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>    m_ClassifierPanel.addMediator(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>    m_InstancesEditingPanel.addMediator(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>    m_DrawingPanel.addMediator(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>    m_VisualOptionsPanel.addMediator(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    </FONT><FONT COLOR="#808080"><I>//Creamos los bordes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>    m_VisualOptionsPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder(</FONT><FONT COLOR="#008000"><B>"Visual options"</B></FONT><FONT COLOR="#000000">), 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>                                                                      BorderFactory.createEmptyBorder(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>    m_InstancesEditingPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder(</FONT><FONT COLOR="#008000"><B>"Instance editing options"</B></FONT><FONT COLOR="#000000">), 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>                                                                         BorderFactory.createEmptyBorder(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>    m_ClassifierPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder(</FONT><FONT COLOR="#008000"><B>"Classifier options"</B></FONT><FONT COLOR="#000000">), 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>                                                                   BorderFactory.createEmptyBorder(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>    m_DrawingPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, Color.cyan, Color.green)); 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>    </FONT><FONT COLOR="#808080"><I>//Configuramos el aspecto de los mensajes redirigidos desde System.err</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>    SimpleAttributeSet sas = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> SimpleAttributeSet(); 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>    StyleConstants.setForeground(sas, Color.blue); 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>    StyleConstants.setItalic(sas, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>    StyleConstants.setBold(sas, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>    </FONT><FONT COLOR="#808080"><I>//Configurar el thread que se encargará de la redirección */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>    m_ErrRedirector = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\misc\guiUtils\SystemOutputStreamRedirector.java.html">SystemOutputStreamRedirector</A>(m_Log.getLogText(), sas, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">, m_SystemErrFork.isSelected()); 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>    </FONT><FONT COLOR="#808080"><I>// Iniciar/parar la redirección de mensajes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>    m_LogSystemErr.addItemListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ItemListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>      </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Thread t; 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> itemStateChanged(ItemEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogSystemErr.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>          t = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Thread(m_ErrRedirector); 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>          t.setPriority(m_ErrRedirector.getPriority()); 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>          t.setDaemon(m_ErrRedirector.isDaemon()); 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>          t.start(); 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>          m_SystemErrFork.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>          t.interrupt(); 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>          m_SystemErrFork.setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>    </FONT><FONT COLOR="#808080"><I>//Configuración inicial de la redirección</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogSystemErr.isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>      m_LogSystemErr.setSelected(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>    </FONT><FONT COLOR="#808080"><I>//Configurar el fork entre System.err y el panel de log</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>    m_SystemErrFork.addItemListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ItemListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> itemStateChanged(ItemEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>        m_ErrRedirector.setFork(m_SystemErrFork.isSelected()); 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>    </FONT><FONT COLOR="#808080"><I>//Configuración inicial de la redirección</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>    m_ErrRedirector.setFork(m_SystemErrFork.isSelected()); 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>    </FONT><FONT COLOR="#808080"><I>//Configuración de las etiquetas que muestran las coordenadas reales</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>    </FONT><FONT COLOR="#808080"><I>//que representa el punto del panel de bibujado sobre el que se encuentra</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>    </FONT><FONT COLOR="#808080"><I>//el puntero del ratón</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>    m_MouseLocationLabelX.setEditable(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>    m_MouseLocationLabelX.setForeground(Color.blue); 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>    m_MouseLocationLabelX.setBackground(Color.orange); 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>    m_MouseLocationLabelY.setEditable(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>    m_MouseLocationLabelY.setBackground(Color.orange); 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>    m_MouseLocationLabelY.setForeground(Color.blue); 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>    m_DrawingPanel.addMouseMotionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> MouseMotionAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mouseMoved(MouseEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_DrawingPanel.isZoomedIn()){ 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>          m_MouseLocationLabelX.setText(</FONT><FONT COLOR="#008000"><B>"x= "</B></FONT><FONT COLOR="#000000"> + e.getX()); 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>          m_MouseLocationLabelY.setText(</FONT><FONT COLOR="#008000"><B>"y= "</B></FONT><FONT COLOR="#000000"> + e.getY()); 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>          </FONT><FONT COLOR="#808080"><I>//Obtenemos las coordenadas "reales" del pubto en el dominio del problema</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>          m_MouseLocationLabelX.setText(</FONT><FONT COLOR="#008000"><B>"x= "</B></FONT><FONT COLOR="#000000"> + Utils.doubleToString(m_DrawingPanel.getXFromPanel(e.getX()), </FONT><FONT COLOR="#0000ff">4</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">4</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>          m_MouseLocationLabelY.setText(</FONT><FONT COLOR="#008000"><B>"y= "</B></FONT><FONT COLOR="#000000"> + Utils.doubleToString(m_DrawingPanel.getYFromPanel(e.getY()), </FONT><FONT COLOR="#0000ff">4</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">4</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> mouseDragged(MouseEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT>        mouseMoved(e); 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>    </FONT><FONT COLOR="#808080"><I>//Añadimos las etiquetas de coordenadas a la parte izquerda de la barra de estado en el panel de log</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>    m_MouseLocationLabelX.setText(</FONT><FONT COLOR="#008000"><B>"x="</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>    m_MouseLocationLabelY.setText(</FONT><FONT COLOR="#008000"><B>"y="</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>    JPanel locPanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPanel(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> GridLayout(</FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT>    locPanel.add(m_MouseLocationLabelX); 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>    locPanel.add(m_MouseLocationLabelY); 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>    locPanel.validate(); 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>    locPanel.setBorder(BorderFactory.createLineBorder(Color.green)); 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>    m_Log.addCustomPanel(locPanel); 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT>   * Crea un JMenu con todos los items que sirven para configurar las opciones globales 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Un JMenu con todos los items que sirven para configurar las opciones globales 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> JMenu createGeneralOptionsMenu(){ 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>    </FONT><FONT COLOR="#808080"><I>//El menú</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>    JMenu tmp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenu(</FONT><FONT COLOR="#008000"><B>"Global Options"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT>    </FONT><FONT COLOR="#808080"><I>//Añadimos las opciones de log</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>    tmp.add(m_LogInstancesEditingPanel); 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>    tmp.add(m_LogClassifierPanel); 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>    tmp.add(m_LogVisualOptionsPanel); 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>    tmp.add(m_LogDrawingPanel); 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>    m_LogInstancesEditingPanel.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Hacer log de los mensajes del panel de edición de instancias"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>    m_LogClassifierPanel.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Hacer log de los mensajes del panel de configuración del clasificador"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>    m_LogVisualOptionsPanel.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Hacer log de los mensajes del panel de opciones visuales"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>    m_LogDrawingPanel.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Hacer log de los mensajes del panel de dibujado"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT>    </FONT><FONT COLOR="#808080"><I>//Añadimos un separador</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>    tmp.addSeparator(); 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>    </FONT><FONT COLOR="#808080"><I>//Añadimos las opciones de redirección de System.err</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>    tmp.add(m_LogSystemErr); 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>    m_LogSystemErr.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.ALT_MASK)); 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>    tmp.add(m_SystemErrFork); 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT>    m_LogSystemErr.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Mandar los mensajes de System.err al panel de log"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>    m_SystemErrFork.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Mandar también los mensajes al stream al que apunta System.err por defecto"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT>    </FONT><FONT COLOR="#808080"><I>//Situación inicial de la chackbox, coherente con la configuración</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>    m_SystemErrFork.setEnabled(m_LogSystemErr.isSelected()); 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT>    </FONT><FONT COLOR="#808080"><I>//Añadimos un separador</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>    tmp.addSeparator(); 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>    </FONT><FONT COLOR="#808080"><I>//Añadimos las opciones de creación autmática de las imágenes de hipótesis</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT>    tmp.add(m_AutoUpdateOnClassifierBuilt); 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>    m_AutoUpdateOnClassifierBuilt.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.ALT_MASK)); 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>    tmp.add(m_AutoUpdateOnBoosterIt); 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT>    m_AutoUpdateOnBoosterIt.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_MASK)); 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT>    tmp.setMnemonic(</FONT><FONT COLOR="#008000"><B>'o'</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>    m_AutoUpdateOnClassifierBuilt.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Crear automáticamente la imagen de hipótesis tras construir un clasificador"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT>    m_AutoUpdateOnBoosterIt.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Crear automáticamente la imagen de hipótesis tras iterar un booster"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> tmp; 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>   * Crea la barra de herramientas que contendrá componentes de acceso rápido a las acciones 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>   * más comunes para no tener que estar habriendo y cerrando los paneles 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT>   * de configuración 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT>   *TODO: Completarla con otras acciones importantes (crear imagen, resetear el booster, partir las instancias, undo etc. 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> createToolBar(){ 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>    </FONT><FONT COLOR="#808080"><I>//Configuración de la barra de herramientas</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>    m_ToolBar.setFloatable(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); </FONT><FONT COLOR="#808080"><I>//Tiene muy mal sopote por parte de sun</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>    m_ToolBar.setBorderPainted(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>    m_ToolBar.setBackground(Color.black); 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>    </FONT><FONT COLOR="#808080"><I>//Tal y como está ahora no queda mal, pero en el momento en que se añadan más opciones</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>    </FONT><FONT COLOR="#808080"><I>//se deberá usar GridBagLayout</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT>    m_ToolBar.setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> GridLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>    </FONT><FONT COLOR="#808080"><I>//Acceso rápido a la acción de entrar o salir del modo zoom</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>    </FONT><FONT COLOR="#808080"><I>//TODO: No acceder directamente al componente del panel, sino hacerlo (centralizando la habilitación / deshabilitación)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT>    </FONT><FONT COLOR="#808080"><I>//      con una Action</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>    m_ZoomMode.addItemListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ItemListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> itemStateChanged(ItemEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>        m_InstancesEditingPanel.m_ZoomModeCB.setSelected(m_ZoomMode.isSelected()); 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>    m_InstancesEditingPanel.m_ZoomModeCB.addItemListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ItemListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> itemStateChanged(ItemEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_InstancesEditingPanel.m_ZoomModeCB.isSelected() != m_ZoomMode.isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>          m_ZoomMode.setSelected(m_InstancesEditingPanel.m_ZoomModeCB.isSelected()); 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>    m_ZoomMode.setMnemonic(</FONT><FONT COLOR="#008000"><B>'z'</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>    m_ZoomMode.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Entrar / Salir del modo zoom"</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#008000"><B>" (Alt-Z)"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT>    m_ToolBar.add(m_ZoomMode); 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>    </FONT><FONT COLOR="#808080"><I>//Acceso rápido a la acción de hacer zoom out</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>    </FONT><FONT COLOR="#808080"><I>//TODO: No acceder directamente al componente del panel, sino hacerlo (centralizando la habilitación / deshabilitación)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT>    </FONT><FONT COLOR="#808080"><I>//      con una Action</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>    m_ZoomOutButton.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>        m_InstancesEditingPanel.m_ZoomOutButton.doClick(); 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>    m_ZoomOutButton.setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>    m_ZoomOutButton.setMnemonic(</FONT><FONT COLOR="#008000"><B>'x'</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>    m_ZoomOutButton.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Volver a ver todo el dominio del problema"</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#008000"><B>" (Alt-X)"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT>    m_ToolBar.add(m_ZoomOutButton); 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>    </FONT><FONT COLOR="#808080"><I>//Acceso rápido a la acción de configurar el color asignado al botón izquierdo del ratón</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT>    </FONT><FONT COLOR="#808080"><I>//TODO: No acceder directamente al componente del panel, sino hacerlo (centralizando la habilitación / deshabilitación)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT>    </FONT><FONT COLOR="#808080"><I>//      con una Action</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JButton color1Button = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(); 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT>    color1Button.setText(m_InstancesEditingPanel.m_Color1Button.getText()); 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT>    color1Button.setBackground(m_InstancesEditingPanel.m_Color1Button.getBackground()); 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>    color1Button.setMnemonic(KeyEvent.VK_1); 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT>    color1Button.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT>        m_InstancesEditingPanel.m_Color1Button.doClick(); 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT>    </FONT><FONT COLOR="#808080"><I>//Sincronizar las etiquetas que indican el número de instancias de ese color</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT>    m_InstancesEditingPanel.m_Color1Button.addPropertyChangeListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PropertyChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> propertyChange(PropertyChangeEvent evt){ 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT>        color1Button.setText(m_InstancesEditingPanel.m_Color1Button.getText()); 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT>        color1Button.setBackground(m_InstancesEditingPanel.m_Color1Button.getBackground()); 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT>    color1Button.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Seleccionar el color asociado a los clicks del botón izquierdo del ratón"</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#008000"><B>" (Alt-1)"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT>    m_ToolBar.add(color1Button); 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>    </FONT><FONT COLOR="#808080"><I>//Acceso rápido a la acción de configurar el color asignado al botón derecho del ratón</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT>    </FONT><FONT COLOR="#808080"><I>//TODO: No acceder directamente al componente del panel, sino hacerlo (centralizando la habilitación / deshabilitación)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT>    </FONT><FONT COLOR="#808080"><I>//      con una Action</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JButton color2Button = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(); 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT>    color2Button.setText(m_InstancesEditingPanel.m_Color1Button.getText()); 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT>    color2Button.setBackground(m_InstancesEditingPanel.m_Color1Button.getBackground()); 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT>    color2Button.setMnemonic(KeyEvent.VK_2); 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT>    color2Button.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT>        m_InstancesEditingPanel.m_Color2Button.doClick(); 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT>    </FONT><FONT COLOR="#808080"><I>//Sincronizar las etiquetas que indican el número de instancias de ese color</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT>    m_InstancesEditingPanel.m_Color2Button.addPropertyChangeListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PropertyChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> propertyChange(PropertyChangeEvent evt){ 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>        color2Button.setText(m_InstancesEditingPanel.m_Color2Button.getText()); 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT>        color2Button.setBackground(m_InstancesEditingPanel.m_Color2Button.getBackground()); 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT>    color2Button.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Seleccionar el color asociado a los clicks del botón derecho del ratón"</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#008000"><B>" (Alt-2)"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT>    m_ToolBar.add(color2Button); 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT>    </FONT><FONT COLOR="#808080"><I>//Botón para seleccionar un clasificador</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT>    JButton selectClassifierButton = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(PROFX_ICON); 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT>    selectClassifierButton.setMnemonic(KeyEvent.VK_SPACE); 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT>    selectClassifierButton.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>        Point p = m_ToolBar.getLocationOnScreen(); 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT>        m_ClassifierPanel.getClassifierSelector().showPropertyDialog(p.x, p.y); 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT>    selectClassifierButton.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Seleccionar el clasificador"</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#008000"><B>" (Alt-Espacio)"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT>    m_ToolBar.add(selectClassifierButton); 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT>    </FONT><FONT COLOR="#808080"><I>//Textfield para editar el número de iteraciones a realizar</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT>    JTextField boosterIterations = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JTextField(</FONT><FONT COLOR="#0000ff">6</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">382  </FONT>    boosterIterations.setHorizontalAlignment(JTextField.RIGHT); 
+<FONT COLOR=0 STYLE="font-style:normal">383  </FONT>    </FONT><FONT COLOR="#808080"><I>//Sincronizamos con el del panel</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">384  </FONT>    boosterIterations.setDocument(m_ClassifierPanel.getBoosterIterationsDocument()); 
+<FONT COLOR=0 STYLE="font-style:normal">385  </FONT>    m_ClassifierPanel.getBoosterIterateAction().addStateDependantComponent(boosterIterations); 
+<FONT COLOR=0 STYLE="font-style:normal">386  </FONT>    boosterIterations.setEnabled(m_ClassifierPanel.getBoosterIterateAction().isEnabled()); 
+<FONT COLOR=0 STYLE="font-style:normal">387  </FONT>    boosterIterations.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Número de iteraciones a realizar"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">388  </FONT>    m_ToolBar.add(boosterIterations); 
+<FONT COLOR=0 STYLE="font-style:normal">389  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">390  </FONT>    </FONT><FONT COLOR="#808080"><I>//Botón de construir un clasificador / iterar un booster</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">391  </FONT>    JButton classifyButton = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ImageIcon(AllContainerPanel.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">.getResource(</FONT><FONT COLOR="#008000"><B>"_images_/resume.gif"</B></FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">392  </FONT>    classifyButton.setMnemonic(KeyEvent.VK_ENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">393  </FONT>    classifyButton.addActionListener(m_ClassifierPanel.getBuildOrIterateAction()); 
+<FONT COLOR=0 STYLE="font-style:normal">394  </FONT>    classifyButton.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Clasificar / Iterar"</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#008000"><B>" (Alt-Intro)"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">395  </FONT>    m_ToolBar.add(classifyButton); 
+<FONT COLOR=0 STYLE="font-style:normal">396  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">397  </FONT>    </FONT><FONT COLOR="#808080"><I>////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">398  </FONT>    </FONT><FONT COLOR="#808080"><I>/// Mostrar o no los paneles de la aplicación</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">399  </FONT>    </FONT><FONT COLOR="#808080"><I>////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">400  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">401  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">402  </FONT>     * Listener que minimiza / restaura alternativamente un {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> JInternalFrame} 
+<FONT COLOR=0 STYLE="font-style:normal">403  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">404  </FONT>    </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> ShowAndHideFrame </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> ActionListener{ 
+<FONT COLOR=0 STYLE="font-style:normal">405  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">406  </FONT>      </FONT><FONT COLOR="#808080"><I>/** El frame a minimizar / restaurar cuando la acción es invocada */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">407  </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JInternalFrame frame; 
+<FONT COLOR=0 STYLE="font-style:normal">408  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">409  </FONT>      </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">410  </FONT>       * Constructor 
+<FONT COLOR=0 STYLE="font-style:normal">411  </FONT>       * 
+<FONT COLOR=0 STYLE="font-style:normal">412  </FONT>       * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> frame El frame a minimizar / restaurar cuando la acción es invocada 
+<FONT COLOR=0 STYLE="font-style:normal">413  </FONT>       */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">414  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> ShowAndHideFrame(JInternalFrame frame){ 
+<FONT COLOR=0 STYLE="font-style:normal">415  </FONT>        </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">.frame = frame; 
+<FONT COLOR=0 STYLE="font-style:normal">416  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">417  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">418  </FONT>      </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">419  </FONT>       * Minimiza o restaura el frame 
+<FONT COLOR=0 STYLE="font-style:normal">420  </FONT>       * 
+<FONT COLOR=0 STYLE="font-style:normal">421  </FONT>       * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> e El evento que ha provocado esta llamada a la acción 
+<FONT COLOR=0 STYLE="font-style:normal">422  </FONT>       */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">423  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">424  </FONT>        </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">425  </FONT>          frame.setIcon(!frame.isIcon()); 
+<FONT COLOR=0 STYLE="font-style:normal">426  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">427  </FONT>        </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (PropertyVetoException ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">428  </FONT>          ex.printStackTrace(); 
+<FONT COLOR=0 STYLE="font-style:normal">429  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">430  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">431  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">432  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">433  </FONT>    </FONT><FONT COLOR="#808080"><I>//Botón de mostrar / ocultar el frame de edición de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">434  </FONT>    JButton showAndHideIEFrame = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#008000"><B>"I.E."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">435  </FONT>    showAndHideIEFrame.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ShowAndHideFrame(m_InstanceEditingFrame)); 
+<FONT COLOR=0 STYLE="font-style:normal">436  </FONT>    showAndHideIEFrame.setMnemonic(KeyEvent.VK_LEFT); 
+<FONT COLOR=0 STYLE="font-style:normal">437  </FONT>    showAndHideIEFrame.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Mostrar / Ocultar la ventana de edición de instancias"</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#008000"><B>" (Alt-Izquierda)"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">438  </FONT>    m_ToolBar.add(showAndHideIEFrame); 
+<FONT COLOR=0 STYLE="font-style:normal">439  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">440  </FONT>    </FONT><FONT COLOR="#808080"><I>//Botón de mostrar / ocultar el frame de configuración del clasificador</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">441  </FONT>    JButton showAndHideClassifierFrame = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#008000"><B>"C.P."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">442  </FONT>    showAndHideClassifierFrame.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ShowAndHideFrame(m_ClassifierFrame)); 
+<FONT COLOR=0 STYLE="font-style:normal">443  </FONT>    showAndHideClassifierFrame.setMnemonic(KeyEvent.VK_DOWN); 
+<FONT COLOR=0 STYLE="font-style:normal">444  </FONT>    showAndHideClassifierFrame.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Mostrar / Ocultar la ventana de utilidades del clasificador"</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#008000"><B>" (Alt-Abajo)"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">445  </FONT>    m_ToolBar.add(showAndHideClassifierFrame); 
+<FONT COLOR=0 STYLE="font-style:normal">446  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">447  </FONT>    </FONT><FONT COLOR="#808080"><I>//Botón de mostrar / ocultar el frame de opciones visuales</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">448  </FONT>    JButton showAndHideVOFrame = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#008000"><B>"V.O."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">449  </FONT>    showAndHideVOFrame.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ShowAndHideFrame(m_VisualOptionsFrame)); 
+<FONT COLOR=0 STYLE="font-style:normal">450  </FONT>    showAndHideVOFrame.setMnemonic(KeyEvent.VK_RIGHT); 
+<FONT COLOR=0 STYLE="font-style:normal">451  </FONT>    showAndHideVOFrame.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Mostrar / Ocultar la ventana de opciones visuales"</B></FONT><FONT COLOR="#000000"> + </FONT><FONT COLOR="#008000"><B>" (Alt-Derecha)"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">452  </FONT>    m_ToolBar.add(showAndHideVOFrame); 
+<FONT COLOR=0 STYLE="font-style:normal">453  </FONT>  }</FONT><FONT COLOR="#808080"><I>//FIN de createToolBar()</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">454  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">455  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">456  </FONT>   * Crea el panel en el que incluiremos todos los componentes que conforman la aplicación 
+<FONT COLOR=0 STYLE="font-style:normal">457  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">458  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El panel que aglutina toda la aplicación, listo para ser añadido a un contenedor de nivel superior 
+<FONT COLOR=0 STYLE="font-style:normal">459  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">460  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> JDesktopPane createDesktopPane(){ 
+<FONT COLOR=0 STYLE="font-style:normal">461  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">462  </FONT>    </FONT><FONT COLOR="#808080"><I>//Creamos la barra de herramientas</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">463  </FONT>    createToolBar(); 
+<FONT COLOR=0 STYLE="font-style:normal">464  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">465  </FONT>    </FONT><FONT COLOR="#808080"><I>//El panel con capas al que vamos a añadir todos los componentes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">466  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JDesktopPane desktopPane = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JDesktopPane(); 
+<FONT COLOR=0 STYLE="font-style:normal">467  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">468  </FONT>    </FONT><FONT COLOR="#808080"><I>///////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">469  </FONT>    </FONT><FONT COLOR="#808080"><I>/// Creamos los diversos frames y los colocamos en la capa de paleta del desktopPane</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">470  </FONT>    </FONT><FONT COLOR="#808080"><I>///////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">471  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">472  </FONT>    </FONT><FONT COLOR="#808080"><I>//El frame de edición de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">473  </FONT>    m_InstanceEditingFrame.getContentPane().add(m_InstancesEditingPanel, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">474  </FONT>    m_InstanceEditingFrame.setLocation(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">30</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">475  </FONT>    m_InstancesEditingPanel.validate(); 
+<FONT COLOR=0 STYLE="font-style:normal">476  </FONT>    m_InstanceEditingFrame.setSize((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) m_InstancesEditingPanel.getPreferredSize().getWidth(), 
+<FONT COLOR=0 STYLE="font-style:normal">477  </FONT>                                   (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) m_InstancesEditingPanel.getPreferredSize().getHeight() + </FONT><FONT COLOR="#0000ff">20</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">478  </FONT>    m_InstanceEditingFrame.setVisible(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">479  </FONT>    desktopPane.add(m_InstanceEditingFrame, JDesktopPane.PALETTE_LAYER); 
+<FONT COLOR=0 STYLE="font-style:normal">480  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">481  </FONT>    </FONT><FONT COLOR="#808080"><I>//El frame de configuración del clasificador</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">482  </FONT>    m_ClassifierFrame.getContentPane().add(m_ClassifierPanel, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">483  </FONT>    m_ClassifierPanel.validate(); 
+<FONT COLOR=0 STYLE="font-style:normal">484  </FONT>    Dimension dim = m_ClassifierPanel.getPreferredSize(); 
+<FONT COLOR=0 STYLE="font-style:normal">485  </FONT>    m_ClassifierFrame.setSize((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) dim.getWidth() + </FONT><FONT COLOR="#0000ff">20</FONT><FONT COLOR="#000000">, (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) dim.getHeight() + </FONT><FONT COLOR="#0000ff">20</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">486  </FONT>    m_ClassifierFrame.setLocation(</FONT><FONT COLOR="#0000ff">200</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">30</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">487  </FONT>    m_ClassifierFrame.setVisible(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">488  </FONT>    desktopPane.add(m_ClassifierFrame, JDesktopPane.PALETTE_LAYER); 
+<FONT COLOR=0 STYLE="font-style:normal">489  </FONT></FONT><FONT COLOR="#808080"><I>//    BasicInternalFrameUI ui = (BasicInternalFrameUI) classifierFrame.getUI();</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">490  </FONT></FONT><FONT COLOR="#808080"><I>//    ui.getNorthPane().setPreferredSize(new Dimension(0,0));</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">491  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">492  </FONT>    </FONT><FONT COLOR="#808080"><I>//El frame de edición de instancias</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">493  </FONT>    m_VisualOptionsFrame.getContentPane().add(m_VisualOptionsPanel, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">494  </FONT>    m_VisualOptionsPanel.validate(); 
+<FONT COLOR=0 STYLE="font-style:normal">495  </FONT>    m_VisualOptionsFrame.setSize((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) m_VisualOptionsPanel.getPreferredSize().getWidth() + </FONT><FONT COLOR="#0000ff">20</FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">496  </FONT>                                 (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) m_VisualOptionsPanel.getPreferredSize().getHeight() + </FONT><FONT COLOR="#0000ff">20</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">497  </FONT>    m_VisualOptionsFrame.setLocation(</FONT><FONT COLOR="#0000ff">380</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">30</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">498  </FONT>    m_VisualOptionsFrame.setVisible(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">499  </FONT>    desktopPane.add(m_VisualOptionsFrame, JDesktopPane.PALETTE_LAYER); 
+<FONT COLOR=0 STYLE="font-style:normal">500  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">501  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">502  </FONT>     * Listener que oculta un JInternalFrame cada vez que éste es minimizado 
+<FONT COLOR=0 STYLE="font-style:normal">503  </FONT>     * TODO: Crear un listener que produzca un comportamiento similar a las paletas 
+<FONT COLOR=0 STYLE="font-style:normal">504  </FONT>     *       de herramientas del PaintShopPro (mostrar cuando se pasa el ratón por 
+<FONT COLOR=0 STYLE="font-style:normal">505  </FONT>     *       encima del icono etc.) 
+<FONT COLOR=0 STYLE="font-style:normal">506  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">507  </FONT>    InternalFrameListener whenIconizeHideListener = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> InternalFrameAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">508  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> internalFrameIconified(InternalFrameEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">509  </FONT>        e.getInternalFrame().getDesktopIcon().setVisible(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">510  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">511  </FONT>    }; 
+<FONT COLOR=0 STYLE="font-style:normal">512  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">513  </FONT>    </FONT><FONT COLOR="#808080"><I>//Añadimos el listener a los frames</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">514  </FONT>    m_InstanceEditingFrame.addInternalFrameListener(whenIconizeHideListener); 
+<FONT COLOR=0 STYLE="font-style:normal">515  </FONT>    m_ClassifierFrame.addInternalFrameListener(whenIconizeHideListener); 
+<FONT COLOR=0 STYLE="font-style:normal">516  </FONT>    m_VisualOptionsFrame.addInternalFrameListener(whenIconizeHideListener); 
+<FONT COLOR=0 STYLE="font-style:normal">517  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">518  </FONT>    </FONT><FONT COLOR="#808080"><I>//Configuramos el "panel base" que se muestra por debajo de los frames, y lo añadimos a la capa por defecto</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">519  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JPanel basePanel = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPanel(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">520  </FONT>    </FONT><FONT COLOR="#808080"><I>//La barra de herramientas al note</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">521  </FONT>    basePanel.add(m_ToolBar, BorderLayout.NORTH); 
+<FONT COLOR=0 STYLE="font-style:normal">522  </FONT>    </FONT><FONT COLOR="#808080"><I>//El m_BasePanel de dibujado en el centro</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">523  </FONT>    basePanel.add(m_DrawingPanel, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">524  </FONT>    </FONT><FONT COLOR="#808080"><I>//El m_BasePanel de log al sur</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">525  </FONT>    basePanel.add(m_Log, BorderLayout.SOUTH); 
+<FONT COLOR=0 STYLE="font-style:normal">526  </FONT>    </FONT><FONT COLOR="#808080"><I>//Lo añadimos a la capa por defecto del desktopPane</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">527  </FONT>    desktopPane.add(basePanel, JDesktopPane.DEFAULT_LAYER); 
+<FONT COLOR=0 STYLE="font-style:normal">528  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">529  </FONT>    </FONT><FONT COLOR="#808080"><I>//Como los JDektopPane carecen de gestor de distribución, hacemos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">530  </FONT>    </FONT><FONT COLOR="#808080"><I>//que el panel base siempre ocupe todo el tamaño disponible</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">531  </FONT>    </FONT><FONT COLOR="#808080"><I>//en la capa DefaultLayer del desktopPane</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">532  </FONT>    desktopPane.addComponentListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ComponentAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">533  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> componentResized(ComponentEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">534  </FONT>        basePanel.setBounds(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, desktopPane.getWidth(), desktopPane.getHeight()); 
+<FONT COLOR=0 STYLE="font-style:normal">535  </FONT>        desktopPane.validate(); 
+<FONT COLOR=0 STYLE="font-style:normal">536  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">537  </FONT>    }); 
+<FONT COLOR=0 STYLE="font-style:normal">538  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">539  </FONT>    </FONT><FONT COLOR="#808080"><I>////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">540  </FONT>    </FONT><FONT COLOR="#808080"><I>/// Configuramos el mapa del teclado con las teclas--&GT;acciones definidas por cada panel para que sean</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">541  </FONT>    </FONT><FONT COLOR="#808080"><I>///  accesibles desde toda la aplicación</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">542  </FONT>    </FONT><FONT COLOR="#808080"><I>///  ¡OJO con los duplicados!</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">543  </FONT>    </FONT><FONT COLOR="#808080"><I>///////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">544  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">545  </FONT>    </FONT><FONT COLOR="#808080"><I>//Mapa de nombreAcción--&GT;acción</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">546  </FONT>    <A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.mergeActionMaps(desktopPane.getActionMap(), m_InstancesEditingPanel.getActionMap()); 
+<FONT COLOR=0 STYLE="font-style:normal">547  </FONT>    <A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.mergeActionMaps(desktopPane.getActionMap(), m_VisualOptionsPanel.getActionMap()); 
+<FONT COLOR=0 STYLE="font-style:normal">548  </FONT>    <A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.mergeActionMaps(desktopPane.getActionMap(), m_ClassifierPanel.getActionMap()); 
+<FONT COLOR=0 STYLE="font-style:normal">549  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">550  </FONT>    </FONT><FONT COLOR="#808080"><I>//Mapa de tecla--&GT;nombreAcción</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">551  </FONT>    <A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.mergeInputMaps(desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW), 
+<FONT COLOR=0 STYLE="font-style:normal">552  </FONT>                                     m_InstancesEditingPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)); 
+<FONT COLOR=0 STYLE="font-style:normal">553  </FONT>    <A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.mergeInputMaps(desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW), 
+<FONT COLOR=0 STYLE="font-style:normal">554  </FONT>                                     m_VisualOptionsPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)); 
+<FONT COLOR=0 STYLE="font-style:normal">555  </FONT>    <A href="..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.mergeInputMaps(desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW), 
+<FONT COLOR=0 STYLE="font-style:normal">556  </FONT>                                     m_ClassifierPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)); 
+<FONT COLOR=0 STYLE="font-style:normal">557  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">558  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> desktopPane; 
+<FONT COLOR=0 STYLE="font-style:normal">559  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">560  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">561  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">562  </FONT>   * Implementación del interfaz mediator, este método controla la acción 
+<FONT COLOR=0 STYLE="font-style:normal">563  </FONT>   * a realizar para cada uno de los mensajes definidos. 
+<FONT COLOR=0 STYLE="font-style:normal">564  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">565  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> colleague La identidad del panel que ha generado el mensaje 
+<FONT COLOR=0 STYLE="font-style:normal">566  </FONT>   *        (de dibujado, de opciones visuales, de configuración del clasificador o de edición de instancias) 
+<FONT COLOR=0 STYLE="font-style:normal">567  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> changeIndicator Constante que indica el tipo de cambio 
+<FONT COLOR=0 STYLE="font-style:normal">568  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> object Objeto que puede ser utilizado para realizar las acciones pertinentes 
+<FONT COLOR=0 STYLE="font-style:normal">569  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">570  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> colleagueChanged(<A href="..\..\oaidtb\misc\mediator\Arbitrable.java.html">Arbitrable</A> colleague, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> changeIndicator, Object object){ 
+<FONT COLOR=0 STYLE="font-style:normal">571  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">572  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (colleague == m_ClassifierPanel) 
+<FONT COLOR=0 STYLE="font-style:normal">573  </FONT>      classifierPanelChanged(changeIndicator, object); 
+<FONT COLOR=0 STYLE="font-style:normal">574  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">575  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (colleague == m_DrawingPanel) 
+<FONT COLOR=0 STYLE="font-style:normal">576  </FONT>      drawingPanelChanged(changeIndicator, object); 
+<FONT COLOR=0 STYLE="font-style:normal">577  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">578  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (colleague == m_InstancesEditingPanel) 
+<FONT COLOR=0 STYLE="font-style:normal">579  </FONT>      instancesEditingPanelChanged(changeIndicator, object); 
+<FONT COLOR=0 STYLE="font-style:normal">580  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">581  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (colleague == m_VisualOptionsPanel) 
+<FONT COLOR=0 STYLE="font-style:normal">582  </FONT>      visualOptionsPanelChanged(changeIndicator, object); 
+<FONT COLOR=0 STYLE="font-style:normal">583  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">584  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">585  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">586  </FONT>   * Control de los mensajes recibidos desde un {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> <A href="..\..\oaidtb\gui\VisualOptionsPanel.java.html">VisualOptionsPanel</A>} 
+<FONT COLOR=0 STYLE="font-style:normal">587  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">588  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> changeIndicator El indicador de cambio 
+<FONT COLOR=0 STYLE="font-style:normal">589  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> object El objeto definido para dicho indicador de cambio 
+<FONT COLOR=0 STYLE="font-style:normal">590  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">591  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> visualOptionsPanelChanged(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> changeIndicator, Object object){ 
+<FONT COLOR=0 STYLE="font-style:normal">592  </FONT>    </FONT><FONT COLOR="#000080"><B>switch</B></FONT><FONT COLOR="#000000"> (changeIndicator){ 
+<FONT COLOR=0 STYLE="font-style:normal">593  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\VisualOptionsPanel.java.html">VisualOptionsPanel</A>.HYPOTHESIS_IMAGE_START: 
+<FONT COLOR=0 STYLE="font-style:normal">594  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogVisualOptionsPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">595  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Creando la imagen de hipótesis de un "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">596  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"Clasificando"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">597  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">598  </FONT>        m_Log.taskStarted(); 
+<FONT COLOR=0 STYLE="font-style:normal">599  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">600  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\VisualOptionsPanel.java.html">VisualOptionsPanel</A>.HYPOTHESIS_IMAGE_FINISH: 
+<FONT COLOR=0 STYLE="font-style:normal">601  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogVisualOptionsPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">602  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Creada la imagen de hipótesis de un "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">603  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">604  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">605  </FONT>        m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">606  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">607  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\VisualOptionsPanel.java.html">VisualOptionsPanel</A>.HYPOTHESIS_IMAGE_CANCELED: 
+<FONT COLOR=0 STYLE="font-style:normal">608  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogVisualOptionsPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">609  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Cancelada la creación de la imagen de hipótesis de un "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">610  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">611  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">612  </FONT>        m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">613  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">614  </FONT>      </FONT><FONT COLOR="#000080"><B>default</B></FONT><FONT COLOR="#000000"> : 
+<FONT COLOR=0 STYLE="font-style:normal">615  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">616  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">617  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">618  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">619  </FONT>   * Control de los mensajes recibidos desde un {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> <A href="..\..\oaidtb\gui\InstancesEditingPanel.java.html">InstancesEditingPanel</A>} 
+<FONT COLOR=0 STYLE="font-style:normal">620  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">621  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> changeIndicator El indicador de cambio 
+<FONT COLOR=0 STYLE="font-style:normal">622  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> object El objeto definido para dicho indicador de cambio 
+<FONT COLOR=0 STYLE="font-style:normal">623  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">624  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> instancesEditingPanelChanged(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> changeIndicator, Object object){ 
+<FONT COLOR=0 STYLE="font-style:normal">625  </FONT>    </FONT><FONT COLOR="#000080"><B>switch</B></FONT><FONT COLOR="#000000"> (changeIndicator){ 
+<FONT COLOR=0 STYLE="font-style:normal">626  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\InstancesEditingPanel.java.html">InstancesEditingPanel</A>.INSTANCES_DELETED: 
+<FONT COLOR=0 STYLE="font-style:normal">627  </FONT>        </FONT><FONT COLOR="#808080"><I>//Redibujamos todo</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">628  </FONT>        m_DrawingPanel.setUpdateInstances(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">629  </FONT>        m_DrawingPanel.setUpdateGrid(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">630  </FONT>        m_DrawingPanel.repaint(); 
+<FONT COLOR=0 STYLE="font-style:normal">631  </FONT>        </FONT><FONT COLOR="#808080"><I>//Reseteamos el clasificador</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">632  </FONT>        m_ClassifierPanel.getResetAction().actionPerformed(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">633  </FONT>        </FONT><FONT COLOR="#808080"><I>//Sincronizamos el clasificador del panel de opciones visuales con este</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">634  </FONT>        m_VisualOptionsPanel.setClassifier(m_ClassifierPanel.getClassifier(), m_ClassifierPanel.getTrainData(), m_ClassifierPanel.getColors(), </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">635  </FONT>        </FONT><FONT COLOR="#808080"><I>//Ya no es válida la información de zoom out</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">636  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_DrawingPanel.isZoomedIn()) 
+<FONT COLOR=0 STYLE="font-style:normal">637  </FONT>          resetNaturalScale(); 
+<FONT COLOR=0 STYLE="font-style:normal">638  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogInstancesEditingPanel.isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">639  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Todas las instancias han sido purgadas"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">640  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">641  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\InstancesEditingPanel.java.html">InstancesEditingPanel</A>.INSTANCES_LOAD_START: 
+<FONT COLOR=0 STYLE="font-style:normal">642  </FONT>        </FONT><FONT COLOR="#808080"><I>//Deshabilitar las acciones pertinentes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">643  </FONT>        m_ZoomMode.setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">644  </FONT>        m_ZoomOutButton.setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">645  </FONT>        m_ClassifierPanel.setEnableClassifyActions(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">646  </FONT>        </FONT><FONT COLOR="#808080"><I>//Siempre notificamos la acción</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">647  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (object </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> File) 
+<FONT COLOR=0 STYLE="font-style:normal">648  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Cargando las instancias de: "</B></FONT><FONT COLOR="#000000"> + ((File) object).getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">649  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">650  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Cargando las instancias de: "</B></FONT><FONT COLOR="#000000"> + (String) object); 
+<FONT COLOR=0 STYLE="font-style:normal">651  </FONT>        m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"Cargando"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">652  </FONT>        m_Log.taskStarted(); 
+<FONT COLOR=0 STYLE="font-style:normal">653  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">654  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\InstancesEditingPanel.java.html">InstancesEditingPanel</A>.INSTANCES_LOAD_FINISH: 
+<FONT COLOR=0 STYLE="font-style:normal">655  </FONT>        </FONT><FONT COLOR="#808080"><I>//Habilitamos las acciones pertinentes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">656  </FONT>        m_ZoomMode.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">657  </FONT>        m_ZoomOutButton.setEnabled(m_DrawingPanel.isZoomedIn()); 
+<FONT COLOR=0 STYLE="font-style:normal">658  </FONT>        m_ClassifierPanel.setEnableClassifyActions(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">659  </FONT>        </FONT><FONT COLOR="#808080"><I>//Reseteamos el clasificador</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">660  </FONT>        m_ClassifierPanel.getResetAction().actionPerformed(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">661  </FONT>        </FONT><FONT COLOR="#808080"><I>//Sincronizamos el clasificador del panel de opciones visuales con este</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">662  </FONT>        m_VisualOptionsPanel.setClassifier(m_ClassifierPanel.getClassifier(), 
+<FONT COLOR=0 STYLE="font-style:normal">663  </FONT>                                           m_ClassifierPanel.getTrainData(), 
+<FONT COLOR=0 STYLE="font-style:normal">664  </FONT>                                           m_ClassifierPanel.getColors(), 
+<FONT COLOR=0 STYLE="font-style:normal">665  </FONT>                                           </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">666  </FONT>        </FONT><FONT COLOR="#808080"><I>//Redibujamos todo</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">667  </FONT>        m_DrawingPanel.setUpdateInstances(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">668  </FONT>        m_DrawingPanel.setUpdateGrid(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">669  </FONT>        m_DrawingPanel.repaint(); 
+<FONT COLOR=0 STYLE="font-style:normal">670  </FONT>        </FONT><FONT COLOR="#808080"><I>//Ya no es válida la información de zoom out</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">671  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_DrawingPanel.isZoomedIn()) 
+<FONT COLOR=0 STYLE="font-style:normal">672  </FONT>          resetNaturalScale(); 
+<FONT COLOR=0 STYLE="font-style:normal">673  </FONT>        </FONT><FONT COLOR="#808080"><I>//Siempre notificamos la acción</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">674  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (object </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> File) 
+<FONT COLOR=0 STYLE="font-style:normal">675  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Finalizada la carga de: "</B></FONT><FONT COLOR="#000000"> + ((File) object).getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">676  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">677  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Finalizada la carga de: "</B></FONT><FONT COLOR="#000000"> + ((String) object)); 
+<FONT COLOR=0 STYLE="font-style:normal">678  </FONT>        m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">679  </FONT>        m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">680  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">681  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\InstancesEditingPanel.java.html">InstancesEditingPanel</A>.INSTANCES_LOAD_FAIL: 
+<FONT COLOR=0 STYLE="font-style:normal">682  </FONT>        </FONT><FONT COLOR="#808080"><I>//Habilitamos las acciones pertinentes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">683  </FONT>        m_ZoomMode.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">684  </FONT>        m_ZoomOutButton.setEnabled(m_DrawingPanel.isZoomedIn()); 
+<FONT COLOR=0 STYLE="font-style:normal">685  </FONT>        m_ClassifierPanel.setEnableClassifyActions(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">686  </FONT>        </FONT><FONT COLOR="#808080"><I>//Siempre notificamos la acción</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">687  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (object </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> File) 
+<FONT COLOR=0 STYLE="font-style:normal">688  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Fallo en la carga de: "</B></FONT><FONT COLOR="#000000"> + ((File) object).getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">689  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">690  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Fallo en la carga de: "</B></FONT><FONT COLOR="#000000"> + ((String) object)); 
+<FONT COLOR=0 STYLE="font-style:normal">691  </FONT>        m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">692  </FONT>        m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">693  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">694  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\InstancesEditingPanel.java.html">InstancesEditingPanel</A>.INSTANCES_SAVE_START: 
+<FONT COLOR=0 STYLE="font-style:normal">695  </FONT>        </FONT><FONT COLOR="#808080"><I>//Deshabilitamos las acciones pertinentes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">696  </FONT>        m_ZoomMode.setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">697  </FONT>        m_ZoomOutButton.setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">698  </FONT>        </FONT><FONT COLOR="#808080"><I>//Siempre notificamos la acción</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">699  </FONT>        m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Salvando las instancias en: "</B></FONT><FONT COLOR="#000000"> + ((File) object).getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">700  </FONT>        m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"Salvando"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">701  </FONT>        m_Log.taskStarted(); 
+<FONT COLOR=0 STYLE="font-style:normal">702  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">703  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\InstancesEditingPanel.java.html">InstancesEditingPanel</A>.INSTANCES_SAVE_FINISH: 
+<FONT COLOR=0 STYLE="font-style:normal">704  </FONT>        </FONT><FONT COLOR="#808080"><I>//Habilitamos las acciones pertinentes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">705  </FONT>        m_ZoomMode.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">706  </FONT>        m_ZoomOutButton.setEnabled(m_DrawingPanel.isZoomedIn()); 
+<FONT COLOR=0 STYLE="font-style:normal">707  </FONT>        </FONT><FONT COLOR="#808080"><I>//Siempre notificamos la acción</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">708  </FONT>        m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Instancias salvadas en: "</B></FONT><FONT COLOR="#000000"> + ((File) object).getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">709  </FONT>        m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">710  </FONT>        m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">711  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">712  </FONT>      </FONT><FONT COLOR="#000080"><B>default</B></FONT><FONT COLOR="#000000"> : 
+<FONT COLOR=0 STYLE="font-style:normal">713  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">714  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">715  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">716  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">717  </FONT>   * Control de los mensajes recibidos desde un {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>} 
+<FONT COLOR=0 STYLE="font-style:normal">718  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">719  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> changeIndicator El indicador de cambio 
+<FONT COLOR=0 STYLE="font-style:normal">720  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> object El objeto definido para dicho indicador de cambio 
+<FONT COLOR=0 STYLE="font-style:normal">721  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">722  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> classifierPanelChanged(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> changeIndicator, Object object){ 
+<FONT COLOR=0 STYLE="font-style:normal">723  </FONT>    </FONT><FONT COLOR="#000080"><B>switch</B></FONT><FONT COLOR="#000000"> (changeIndicator){ 
+<FONT COLOR=0 STYLE="font-style:normal">724  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>.CLASSIFIER_CHANGED: 
+<FONT COLOR=0 STYLE="font-style:normal">725  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogClassifierPanel.isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">726  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Seleccionado un classificador "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">727  </FONT>        </FONT><FONT COLOR="#808080"><I>//El clasificador no está construido, no lo pasamos aún</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">728  </FONT>        </FONT><FONT COLOR="#808080"><I>//m_VisualOptionsPanel.setClassifier((Classifier) object, null, null, false);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">729  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">730  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>.CLASSIFIER_BUILD_START: 
+<FONT COLOR=0 STYLE="font-style:normal">731  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogClassifierPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">732  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Inializada la construcción de un "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">733  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"Construyendo un clasificador"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">734  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">735  </FONT>        m_Log.taskStarted(); 
+<FONT COLOR=0 STYLE="font-style:normal">736  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">737  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>.CLASSIFIER_BUILD_FINISH: 
+<FONT COLOR=0 STYLE="font-style:normal">738  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogClassifierPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">739  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Finalizada la construcción de un "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">740  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">741  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">742  </FONT>        m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">743  </FONT>        </FONT><FONT COLOR="#808080"><I>//Sincronizamos el clasificador del panel de opciones visuales con este</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">744  </FONT>        m_VisualOptionsPanel.setClassifier((Classifier) object, 
+<FONT COLOR=0 STYLE="font-style:normal">745  </FONT>                                           m_ClassifierPanel.getTrainData(), 
+<FONT COLOR=0 STYLE="font-style:normal">746  </FONT>                                           m_ClassifierPanel.getColors(), 
+<FONT COLOR=0 STYLE="font-style:normal">747  </FONT>                                           </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">748  </FONT>        </FONT><FONT COLOR="#808080"><I>//Ya no es válida la información de zoom out</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">749  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_DrawingPanel.isZoomedIn()) 
+<FONT COLOR=0 STYLE="font-style:normal">750  </FONT>          resetNaturalScale(); 
+<FONT COLOR=0 STYLE="font-style:normal">751  </FONT>        </FONT><FONT COLOR="#808080"><I>//Reconstruir automáticamente, si procede, la imagen de hipótesis</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">752  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_AutoUpdateOnClassifierBuilt.isSelected() && m_VisualOptionsPanel.getRefreshAction().isEnabled()) 
+<FONT COLOR=0 STYLE="font-style:normal">753  </FONT>          m_VisualOptionsPanel.getRefreshAction().actionPerformed(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">754  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">755  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>.CLASSIFIER_BUILD_CANCELED: 
+<FONT COLOR=0 STYLE="font-style:normal">756  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogClassifierPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">757  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Cancelada la construcción de un "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">758  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">759  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">760  </FONT>        m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">761  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">762  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>.BOOSTER_FIRST_ITERATION: 
+<FONT COLOR=0 STYLE="font-style:normal">763  </FONT>        </FONT><FONT COLOR="#808080"><I>//Resetear el panel de opciones visuales</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">764  </FONT>        m_VisualOptionsPanel.reset(); 
+<FONT COLOR=0 STYLE="font-style:normal">765  </FONT>        </FONT><FONT COLOR="#808080"><I>//Sincronizamos el clasificador del panel de opciones visuales con este</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">766  </FONT>        m_VisualOptionsPanel.setClassifier((Classifier) object, 
+<FONT COLOR=0 STYLE="font-style:normal">767  </FONT>                                           m_ClassifierPanel.getTrainData(), 
+<FONT COLOR=0 STYLE="font-style:normal">768  </FONT>                                           m_ClassifierPanel.getColors(), 
+<FONT COLOR=0 STYLE="font-style:normal">769  </FONT>                                           </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">770  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">771  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>.BOOSTER_ITERATE_START: 
+<FONT COLOR=0 STYLE="font-style:normal">772  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogClassifierPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">773  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Iniciadas las siguientes iteraciones de un "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">774  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"Un booster está iterando"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">775  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">776  </FONT>        m_Log.taskStarted(); 
+<FONT COLOR=0 STYLE="font-style:normal">777  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">778  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>.BOOSTER_ITERATE_FINISHED: 
+<FONT COLOR=0 STYLE="font-style:normal">779  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogClassifierPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">780  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Terminadas las siguientes iteraciones de un "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">781  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">782  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">783  </FONT>        m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">784  </FONT>        </FONT><FONT COLOR="#808080"><I>//Hemos realizado más iteraciones</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">785  </FONT>        m_VisualOptionsPanel.newIterationsMade(); 
+<FONT COLOR=0 STYLE="font-style:normal">786  </FONT>        </FONT><FONT COLOR="#808080"><I>//Ya no es válida la información de zoom out</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">787  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_DrawingPanel.isZoomedIn()) 
+<FONT COLOR=0 STYLE="font-style:normal">788  </FONT>          resetNaturalScale(); 
+<FONT COLOR=0 STYLE="font-style:normal">789  </FONT>        </FONT><FONT COLOR="#808080"><I>//Reconstruir automáticamente, si procede, la imagen de hipótesis</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">790  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_AutoUpdateOnBoosterIt.isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">791  </FONT>          m_VisualOptionsPanel.getRefreshAction().actionPerformed(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">792  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">793  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\ClassifierPanel.java.html">ClassifierPanel</A>.BOOSTER_ITERATE_CANCELED: 
+<FONT COLOR=0 STYLE="font-style:normal">794  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogClassifierPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">795  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Canceladas las siguientes iteraciones de un "</B></FONT><FONT COLOR="#000000"> + object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">796  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">797  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">798  </FONT>        m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">799  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">800  </FONT>      </FONT><FONT COLOR="#000080"><B>default</B></FONT><FONT COLOR="#000000"> : 
+<FONT COLOR=0 STYLE="font-style:normal">801  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">802  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">803  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">804  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">805  </FONT>   * Control de los mensajes recibidos desde un {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> <A href="..\..\oaidtb\gui\DrawingPanel.java.html">DrawingPanel</A>} 
+<FONT COLOR=0 STYLE="font-style:normal">806  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">807  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> changeIndicator El indicador de cambio 
+<FONT COLOR=0 STYLE="font-style:normal">808  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> object El objeto definido para dicho indicador de cambio 
+<FONT COLOR=0 STYLE="font-style:normal">809  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">810  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> drawingPanelChanged(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> changeIndicator, Object object){ 
+<FONT COLOR=0 STYLE="font-style:normal">811  </FONT>    </FONT><FONT COLOR="#000080"><B>switch</B></FONT><FONT COLOR="#000000"> (changeIndicator){ 
+<FONT COLOR=0 STYLE="font-style:normal">812  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\DrawingPanel.java.html">DrawingPanel</A>.INSTANCES_REPAINT_BEGIN: 
+<FONT COLOR=0 STYLE="font-style:normal">813  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogDrawingPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">814  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Repintando las instancias"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">815  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"Repintando las instancias"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">816  </FONT>          m_Log.taskStarted(); 
+<FONT COLOR=0 STYLE="font-style:normal">817  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">818  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">819  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\DrawingPanel.java.html">DrawingPanel</A>.INSTANCES_REPAINT_FINISH: 
+<FONT COLOR=0 STYLE="font-style:normal">820  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_LogDrawingPanel.isSelected()){ 
+<FONT COLOR=0 STYLE="font-style:normal">821  </FONT>          m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Finalizado el repintado de las instancias"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">822  </FONT>          m_Log.statusMessage(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">823  </FONT>          m_Log.taskFinished(); 
+<FONT COLOR=0 STYLE="font-style:normal">824  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">825  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">826  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\DrawingPanel.java.html">DrawingPanel</A>.REGION_SELECTED: 
+<FONT COLOR=0 STYLE="font-style:normal">827  </FONT>        </FONT><FONT COLOR="#808080"><I>//Hacemos zoom de manera automática</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">828  </FONT>        Rectangle2D.Double r = (Rectangle2D.Double) object; 
+<FONT COLOR=0 STYLE="font-style:normal">829  </FONT>        doZoomIn(r); 
+<FONT COLOR=0 STYLE="font-style:normal">830  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">831  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\DrawingPanel.java.html">DrawingPanel</A>.ZOOM_IN: 
+<FONT COLOR=0 STYLE="font-style:normal">832  </FONT>        </FONT><FONT COLOR="#808080"><I>//Habilitamos las acciones pertinentes (usar un Action en vez de esto)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">833  </FONT>        m_ZoomOutButton.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">834  </FONT>        m_InstancesEditingPanel.m_ZoomOutButton.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">835  </FONT>        </FONT><FONT COLOR="#808080"><I>//Siempre informamos sobre la operación</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">836  </FONT>        r = (Rectangle2D.Double) object; 
+<FONT COLOR=0 STYLE="font-style:normal">837  </FONT>        m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Zoom hecho sobre: x="</B></FONT><FONT COLOR="#000000"> + r.x + </FONT><FONT COLOR="#008000"><B>" y="</B></FONT><FONT COLOR="#000000"> + r.y + </FONT><FONT COLOR="#008000"><B>" width="</B></FONT><FONT COLOR="#000000"> + r.width + </FONT><FONT COLOR="#008000"><B>" height="</B></FONT><FONT COLOR="#000000"> + r.height); 
+<FONT COLOR=0 STYLE="font-style:normal">838  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">839  </FONT>      </FONT><FONT COLOR="#000080"><B>case</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\DrawingPanel.java.html">DrawingPanel</A>.ZOOM_OUT: 
+<FONT COLOR=0 STYLE="font-style:normal">840  </FONT>        </FONT><FONT COLOR="#808080"><I>//Deshabilitamos las acciones pertinentes</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">841  </FONT>        m_ZoomOutButton.setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">842  </FONT>        m_InstancesEditingPanel.m_ZoomOutButton.setEnabled(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">843  </FONT>        </FONT><FONT COLOR="#808080"><I>//Volvemos a ver todo a escala natural</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">844  </FONT>        doZoomOut(); 
+<FONT COLOR=0 STYLE="font-style:normal">845  </FONT>        m_Log.logMessage(</FONT><FONT COLOR="#008000"><B>"Zoom out, vuelta al principio."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">846  </FONT>        </FONT><FONT COLOR="#000080"><B>break</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">847  </FONT>      </FONT><FONT COLOR="#000080"><B>default</B></FONT><FONT COLOR="#000000"> : 
+<FONT COLOR=0 STYLE="font-style:normal">848  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">849  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">850  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">851  </FONT>  </FONT><FONT COLOR="#808080"><I>//////////////////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">852  </FONT>  </FONT><FONT COLOR="#808080"><I>//// Métodos propios de las operaciones de zoom</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">853  </FONT>  </FONT><FONT COLOR="#808080"><I>/////////////////////</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">854  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">855  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">856  </FONT>   * Clase que sirve para llevar el historial de zoom; como consume 
+<FONT COLOR=0 STYLE="font-style:normal">857  </FONT>   * mucha memoria debido a que, en el peor de los casos, 
+<FONT COLOR=0 STYLE="font-style:normal">858  </FONT>   * tiene que almacenar cada vez 2 imágenes, he decidido limitar el historial de zoom a la 
+<FONT COLOR=0 STYLE="font-style:normal">859  </FONT>   * posibilidad de volver sólo a volver a ver todo a escala natural. Otra opción 
+<FONT COLOR=0 STYLE="font-style:normal">860  </FONT>   * más rápida y menos costosa en términos de memoria es hacer zoom símplemente 
+<FONT COLOR=0 STYLE="font-style:normal">861  </FONT>   * sobre lo que se ve en ese momento. 
+<FONT COLOR=0 STYLE="font-style:normal">862  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">863  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> ZoomHistory{ 
+<FONT COLOR=0 STYLE="font-style:normal">864  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">865  </FONT>    BufferedImage m_HypothesisSumImage; 
+<FONT COLOR=0 STYLE="font-style:normal">866  </FONT>    BufferedImage m_HypothesisImage; 
+<FONT COLOR=0 STYLE="font-style:normal">867  </FONT>    Rectangle m_GridDimensions; 
+<FONT COLOR=0 STYLE="font-style:normal">868  </FONT>    Rectangle2D.Double m_Region; 
+<FONT COLOR=0 STYLE="font-style:normal">869  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">870  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">871  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Para almacenar el historial de zoom (por ahora, sólo la información de la vista a escala natural 
+<FONT COLOR=0 STYLE="font-style:normal">872  </FONT>   *  ZoomHistory 
+<FONT COLOR=0 STYLE="font-style:normal">873  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">874  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ArrayList m_ZoomHistory = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ArrayList(); 
+<FONT COLOR=0 STYLE="font-style:normal">875  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">876  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">877  </FONT>   * Hace zoom sobre la región especificada. Coordina todos los paneles para que la información sea 
+<FONT COLOR=0 STYLE="font-style:normal">878  </FONT>   * coherente y hace una copia de seguridad en caso de que sea el primer zoom que hacemos desde 
+<FONT COLOR=0 STYLE="font-style:normal">879  </FONT>   * la escala natural. 
+<FONT COLOR=0 STYLE="font-style:normal">880  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">881  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> r La región sobre la que hacer zoom, expresada en coordenadas reales del dominio del problema 
+<FONT COLOR=0 STYLE="font-style:normal">882  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">883  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> doZoomIn(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double r){ 
+<FONT COLOR=0 STYLE="font-style:normal">884  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">885  </FONT>    </FONT><FONT COLOR="#808080"><I>// Para guardar las coordenadas naturales (panatalla)  que corresponden a las coordenadas</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">886  </FONT>    </FONT><FONT COLOR="#808080"><I>// reales en el dominio del problema pasadas por parámetro</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">887  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double r2; 
+<FONT COLOR=0 STYLE="font-style:normal">888  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">889  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_DrawingPanel.isZoomedIn()){ 
+<FONT COLOR=0 STYLE="font-style:normal">890  </FONT>      </FONT><FONT COLOR="#808080"><I>//Guardamos la información para poder volver a restaurar</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">891  </FONT>      ZoomHistory naturalScale = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ZoomHistory(); 
+<FONT COLOR=0 STYLE="font-style:normal">892  </FONT>      naturalScale.m_HypothesisSumImage = m_VisualOptionsPanel.getHypothesisSumImage(); 
+<FONT COLOR=0 STYLE="font-style:normal">893  </FONT>      naturalScale.m_HypothesisImage = m_VisualOptionsPanel.getHypothesisImage(); 
+<FONT COLOR=0 STYLE="font-style:normal">894  </FONT>      naturalScale.m_GridDimensions = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Rectangle(m_DrawingPanel.getGridColumnWidth(), 
+<FONT COLOR=0 STYLE="font-style:normal">895  </FONT>                                                    m_DrawingPanel.getGridRowHeight(), 
+<FONT COLOR=0 STYLE="font-style:normal">896  </FONT>                                                    m_DrawingPanel.getGridWidth(), 
+<FONT COLOR=0 STYLE="font-style:normal">897  </FONT>                                                    m_DrawingPanel.getGridHeight()); 
+<FONT COLOR=0 STYLE="font-style:normal">898  </FONT>      naturalScale.m_Region = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, m_DrawingPanel.getWidth(), m_DrawingPanel.getHeight()); 
+<FONT COLOR=0 STYLE="font-style:normal">899  </FONT>      m_ZoomHistory.add(naturalScale); 
+<FONT COLOR=0 STYLE="font-style:normal">900  </FONT>      </FONT><FONT COLOR="#808080"><I>//Las coordenadas reales coinciden con las naturales</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">901  </FONT>      r2 = r; 
+<FONT COLOR=0 STYLE="font-style:normal">902  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">903  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">904  </FONT>    </FONT><FONT COLOR="#808080"><I>//Calculamos las coordenadas naturales (de pantalla) que se corresponden con estas coordenadas</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">905  </FONT>    </FONT><FONT COLOR="#808080"><I>//reales en el dominio del problema pasadas por parámetro</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">906  </FONT>      r2 = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double(m_DrawingPanel.getXInPanel(r.x), 
+<FONT COLOR=0 STYLE="font-style:normal">907  </FONT>                                  m_DrawingPanel.getYInPanel(r.y), 
+<FONT COLOR=0 STYLE="font-style:normal">908  </FONT>                                  r.width * m_DrawingPanel.getXScaleFactor(), 
+<FONT COLOR=0 STYLE="font-style:normal">909  </FONT>                                  r.height * m_DrawingPanel.getYScaleFactor()); 
+<FONT COLOR=0 STYLE="font-style:normal">910  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">911  </FONT>    </FONT><FONT COLOR="#808080"><I>//Le decimos al panel ahora tiene que representar la nueva región</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">912  </FONT>    m_DrawingPanel.zoomIn(r.x, r.y, r.width, r.height); 
+<FONT COLOR=0 STYLE="font-style:normal">913  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">914  </FONT>    </FONT><FONT COLOR="#808080"><I>//Recuperamos la imagen de hipótesis que contiene el panel de dibujado</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">915  </FONT>    BufferedImage hi = m_VisualOptionsPanel.getHypothesisImage(); 
+<FONT COLOR=0 STYLE="font-style:normal">916  </FONT>    </FONT><FONT COLOR="#808080"><I>//Si existe dicha imagen</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">917  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (hi != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">918  </FONT>      </FONT><FONT COLOR="#808080"><I>// Hay que evitar que cuando se maximiza pete (porque el tamaño de la imagen en el</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">919  </FONT>      </FONT><FONT COLOR="#808080"><I>// panel de opciones visuales es menor que el de la imagen del panel de dibujo</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">920  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> finalImageWidth = Math.max(m_DrawingPanel.getWidth(), 
+<FONT COLOR=0 STYLE="font-style:normal">921  </FONT>                                     hi.getWidth()); 
+<FONT COLOR=0 STYLE="font-style:normal">922  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> finalImageHeight = Math.max(m_DrawingPanel.getHeight(), 
+<FONT COLOR=0 STYLE="font-style:normal">923  </FONT>                                      hi.getHeight()); 
+<FONT COLOR=0 STYLE="font-style:normal">924  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">925  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">926  </FONT>      </FONT><FONT COLOR="#808080"><I>//Hacemos corresponder la imagen de hipótesis con lo que vemos en la pantalla</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">927  </FONT>      </FONT><FONT COLOR="#808080"><I>//Demasie de cutre, pensar en algo mejor (+ rápido)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">928  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (hi.getWidth() &LT; finalImageWidth || hi.getHeight() &LT; finalImageHeight){ 
+<FONT COLOR=0 STYLE="font-style:normal">929  </FONT>        m_VisualOptionsPanel.setHypothesisImage(resizeImage(m_VisualOptionsPanel.getHypothesisImage(), 
+<FONT COLOR=0 STYLE="font-style:normal">930  </FONT>                                                            finalImageWidth, 
+<FONT COLOR=0 STYLE="font-style:normal">931  </FONT>                                                            finalImageHeight)); 
+<FONT COLOR=0 STYLE="font-style:normal">932  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">933  </FONT>        m_VisualOptionsPanel.setHypothesisSumImage(resizeImage(m_VisualOptionsPanel.getHypothesisSumImage(), 
+<FONT COLOR=0 STYLE="font-style:normal">934  </FONT>                                                               finalImageWidth, 
+<FONT COLOR=0 STYLE="font-style:normal">935  </FONT>                                                               finalImageHeight)); 
+<FONT COLOR=0 STYLE="font-style:normal">936  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">937  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">938  </FONT>      </FONT><FONT COLOR="#808080"><I>//Hacemos zoom de la imagen de hipótesis del panel de opciones visuales</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">939  </FONT>      m_VisualOptionsPanel.setHypothesisImage(zoomInImage(m_VisualOptionsPanel.getHypothesisImage(), 
+<FONT COLOR=0 STYLE="font-style:normal">940  </FONT>                                                          r2, finalImageWidth, finalImageHeight)); 
+<FONT COLOR=0 STYLE="font-style:normal">941  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">942  </FONT>      </FONT><FONT COLOR="#808080"><I>//Hacemos zoom de la imagen de hipótesis usando grados de confianza del panel de opciones visuales</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">943  </FONT>      m_VisualOptionsPanel.setHypothesisSumImage(zoomInImage(m_VisualOptionsPanel.getHypothesisSumImage(), 
+<FONT COLOR=0 STYLE="font-style:normal">944  </FONT>                                                             r2, finalImageWidth, finalImageHeight)); 
+<FONT COLOR=0 STYLE="font-style:normal">945  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">946  </FONT>      </FONT><FONT COLOR="#808080"><I>//También hacemos zoom, si procede, sobre la imagen de la rejilla</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">947  </FONT>      BufferedImage gi = m_DrawingPanel.getGridImage(); 
+<FONT COLOR=0 STYLE="font-style:normal">948  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (gi != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">949  </FONT>        </FONT><FONT COLOR="#808080"><I>//Hacemos corresponder la imagen de hipótesis con lo que vemos en la pantalla</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">950  </FONT>        </FONT><FONT COLOR="#808080"><I>//Demasie de cutre, pensar en algo mejor (+ rápido)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">951  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (gi.getWidth() &LT; finalImageWidth || gi.getHeight() &LT; finalImageHeight) 
+<FONT COLOR=0 STYLE="font-style:normal">952  </FONT>          gi = resizeImage(gi, finalImageWidth, finalImageHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">953  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">954  </FONT>        m_DrawingPanel.setGridImage(zoomInImage(gi, r2, finalImageWidth, finalImageHeight)); 
+<FONT COLOR=0 STYLE="font-style:normal">955  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">956  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">957  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">958  </FONT>    </FONT><FONT COLOR="#808080"><I>//Repintamos todo</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">959  </FONT>    m_DrawingPanel.clearSelection(); 
+<FONT COLOR=0 STYLE="font-style:normal">960  </FONT>    m_VisualOptionsPanel.getRepaintAction().actionPerformed(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">961  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">962  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">963  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">964  </FONT>   * Hace zoom out y retorna a la vista del problema a escala natural 
+<FONT COLOR=0 STYLE="font-style:normal">965  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">966  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> doZoomOut(){ 
+<FONT COLOR=0 STYLE="font-style:normal">967  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">968  </FONT>    ZoomHistory naturalScale = (ZoomHistory) m_ZoomHistory.get(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">969  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">970  </FONT>    </FONT><FONT COLOR="#808080"><I>//Recuperamos los datos que tengamos de cómo estaban las cosas antes de hacer zoom in</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">971  </FONT>    m_VisualOptionsPanel.setHypothesisImage(naturalScale.m_HypothesisImage); 
+<FONT COLOR=0 STYLE="font-style:normal">972  </FONT>    m_VisualOptionsPanel.setHypothesisSumImage(naturalScale.m_HypothesisSumImage); 
+<FONT COLOR=0 STYLE="font-style:normal">973  </FONT>    m_DrawingPanel.setGridColumnWidth(naturalScale.m_GridDimensions.x); 
+<FONT COLOR=0 STYLE="font-style:normal">974  </FONT>    m_DrawingPanel.setGridRowHeight(naturalScale.m_GridDimensions.y); 
+<FONT COLOR=0 STYLE="font-style:normal">975  </FONT>    m_DrawingPanel.setGridWidth(naturalScale.m_GridDimensions.width); 
+<FONT COLOR=0 STYLE="font-style:normal">976  </FONT>    m_DrawingPanel.setGridHeight(naturalScale.m_GridDimensions.height); 
+<FONT COLOR=0 STYLE="font-style:normal">977  </FONT>    m_DrawingPanel.setUpdateGrid(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">978  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">979  </FONT>    </FONT><FONT COLOR="#808080"><I>//Repintamos todo</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">980  </FONT>    m_DrawingPanel.setUpdateGrid(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">981  </FONT>    m_VisualOptionsPanel.getRepaintAction().actionPerformed(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">982  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">983  </FONT>    </FONT><FONT COLOR="#808080"><I>//Liberamos la memoria reservada para el historial de zoom</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">984  </FONT>    m_ZoomHistory = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ArrayList(); 
+<FONT COLOR=0 STYLE="font-style:normal">985  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">986  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">987  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">988  </FONT>   * Boora la información guardada acerca del estado de las cosas en la vista a escala natural 
+<FONT COLOR=0 STYLE="font-style:normal">989  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">990  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> resetNaturalScale(){ 
+<FONT COLOR=0 STYLE="font-style:normal">991  </FONT>    ZoomHistory naturalScale = (ZoomHistory) m_ZoomHistory.get(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">992  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">993  </FONT>    naturalScale.m_HypothesisImage = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">994  </FONT>    naturalScale.m_HypothesisSumImage = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">995  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">996  </FONT>    naturalScale.m_GridDimensions.x = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">997  </FONT>    naturalScale.m_GridDimensions.y = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">998  </FONT>    naturalScale.m_GridDimensions.width = -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">999  </FONT>    m_DrawingPanel.setGridHeight(naturalScale.m_GridDimensions.height); 
+<FONT COLOR=0 STYLE="font-style:normal">1000 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1001 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1002 </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">1003 </FONT>   * Escala una región dentro de una imagen para que aparezca en otra imagen 
+<FONT COLOR=0 STYLE="font-style:normal">1004 </FONT>   * de tamaño finalImageWidth x finalImageHeight 
+<FONT COLOR=0 STYLE="font-style:normal">1005 </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">1006 </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> image La imagen en que se encuentra la región a escalar 
+<FONT COLOR=0 STYLE="font-style:normal">1007 </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> region la región dentro de la imagen a escalar 
+<FONT COLOR=0 STYLE="font-style:normal">1008 </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> finalImageWidth El ancho de la imagen que se retornará 
+<FONT COLOR=0 STYLE="font-style:normal">1009 </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> finalImageHeight El alto de la imagen que se retornará 
+<FONT COLOR=0 STYLE="font-style:normal">1010 </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">1011 </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La imagen con la región escalada o null si image es null 
+<FONT COLOR=0 STYLE="font-style:normal">1012 </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1013 </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> BufferedImage zoomInImage(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> BufferedImage image, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Rectangle2D.Double region, 
+<FONT COLOR=0 STYLE="font-style:normal">1014 </FONT>                                    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> finalImageWidth, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> finalImageHeight){ 
+<FONT COLOR=0 STYLE="font-style:normal">1015 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1016 </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (image != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">1017 </FONT>      </FONT><FONT COLOR="#808080"><I>//Comprobar que la región no exceda los límites de la imagen</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1018 </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> maxWidth = image.getWidth() - (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(region.x); 
+<FONT COLOR=0 STYLE="font-style:normal">1019 </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> maxHeight = image.getHeight() - (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(region.y); 
+<FONT COLOR=0 STYLE="font-style:normal">1020 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1021 </FONT>      </FONT><FONT COLOR="#808080"><I>//El mayor tamaño a escojer de la imagen de zoom</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1022 </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> width = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(region.width) &LT; maxWidth ? (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(region.width) : maxWidth; 
+<FONT COLOR=0 STYLE="font-style:normal">1023 </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> height = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(region.height) &LT; maxHeight ? (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(region.height) : maxHeight; 
+<FONT COLOR=0 STYLE="font-style:normal">1024 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1025 </FONT>      </FONT><FONT COLOR="#808080"><I>//La imagen que retornaremos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1026 </FONT>      BufferedImage bi = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BufferedImage(finalImageWidth, finalImageHeight, BufferedImage.TYPE_INT_ARGB); 
+<FONT COLOR=0 STYLE="font-style:normal">1027 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1028 </FONT>      Graphics2D g2 = bi.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">1029 </FONT>      </FONT><FONT COLOR="#808080"><I>//TODO: Controlada la calidad de dibujado</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1030 </FONT>      g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); 
+<FONT COLOR=0 STYLE="font-style:normal">1031 </FONT>      </FONT><FONT COLOR="#808080"><I>//Dibujamos la región de la imagen original para que ocupe toda la imagen que retornaremos</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1032 </FONT>      g2.drawImage(image.getSubimage((</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(region.x), 
+<FONT COLOR=0 STYLE="font-style:normal">1033 </FONT>                                     (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) Math.round(region.y), 
+<FONT COLOR=0 STYLE="font-style:normal">1034 </FONT>                                     width, 
+<FONT COLOR=0 STYLE="font-style:normal">1035 </FONT>                                     height), 
+<FONT COLOR=0 STYLE="font-style:normal">1036 </FONT>                   </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, finalImageWidth, finalImageHeight, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1037 </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> bi; 
+<FONT COLOR=0 STYLE="font-style:normal">1038 </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">1039 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">1040 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1041 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1042 </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">1043 </FONT>   * Retorna una nueva imagen de tamaño newWidth y newHeight y con la imagen 
+<FONT COLOR=0 STYLE="font-style:normal">1044 </FONT>   * image pasada como parámetro dibujada en su interior; si 
+<FONT COLOR=0 STYLE="font-style:normal">1045 </FONT>   * newWidth &GT; image.getWidth() y/o newHeight &GT; image.getHeight() 
+<FONT COLOR=0 STYLE="font-style:normal">1046 </FONT>   * se rellena el área restante con un color transparente (0,0,0,0) 
+<FONT COLOR=0 STYLE="font-style:normal">1047 </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">1048 </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> image La imagen original 
+<FONT COLOR=0 STYLE="font-style:normal">1049 </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> newWidth La nueva anchura 
+<FONT COLOR=0 STYLE="font-style:normal">1050 </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> newHeight La nueva altura 
+<FONT COLOR=0 STYLE="font-style:normal">1051 </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">1052 </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> La imagen con el nuevo tamaño o null si image es null 
+<FONT COLOR=0 STYLE="font-style:normal">1053 </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1054 </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> BufferedImage resizeImage(BufferedImage image, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> newWidth, </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> newHeight){ 
+<FONT COLOR=0 STYLE="font-style:normal">1055 </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (image != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">1056 </FONT>      BufferedImage bi = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB); 
+<FONT COLOR=0 STYLE="font-style:normal">1057 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1058 </FONT>      </FONT><FONT COLOR="#808080"><I>//Rellenamos la imagen con un color transparente</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1059 </FONT>      Graphics2D g2 = bi.createGraphics(); 
+<FONT COLOR=0 STYLE="font-style:normal">1060 </FONT>      g2.setColor(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Color(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">1061 </FONT>      g2.fillRect(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, newWidth, newHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">1062 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1063 </FONT>      </FONT><FONT COLOR="#808080"><I>//Comprobar si estamos aumentando o disminuyendo el tamaño de la imagen</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1064 </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> minWidth = Math.min(image.getWidth(), newWidth); 
+<FONT COLOR=0 STYLE="font-style:normal">1065 </FONT>      </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> minHeight = Math.min(image.getHeight(), newHeight); 
+<FONT COLOR=0 STYLE="font-style:normal">1066 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1067 </FONT>      </FONT><FONT COLOR="#808080"><I>//Pintar la imagen original en la nueva imagen</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1068 </FONT>      g2.drawImage(image.getSubimage(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, minWidth, minHeight), </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, minWidth, minHeight, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1069 </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> bi; 
+<FONT COLOR=0 STYLE="font-style:normal">1070 </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">1071 </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">1072 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1073 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1074 </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">1075 </FONT>   * El frame principal de la aplicación 
+<FONT COLOR=0 STYLE="font-style:normal">1076 </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1077 </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> AppMainFrame{ 
+<FONT COLOR=0 STYLE="font-style:normal">1078 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1079 </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">1080 </FONT>     * El método inicial de la aplicación 
+<FONT COLOR=0 STYLE="font-style:normal">1081 </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">1082 </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> args los parámetros para la aplicación (ignorados) 
+<FONT COLOR=0 STYLE="font-style:normal">1083 </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1084 </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> main(String[] args){ 
+<FONT COLOR=0 STYLE="font-style:normal">1085 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1086 </FONT>      </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">1087 </FONT>        </FONT><FONT COLOR="#808080"><I>//La ventana principal de la aplicación</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1088 </FONT>        JFrame app = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JFrame(</FONT><FONT COLOR="#008000"><B>"Bidimensional generalization"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1089 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1090 </FONT>        </FONT><FONT COLOR="#808080"><I>//El icono para la ventana (y subventanas)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1091 </FONT>        app.setIconImage(AllContainerPanel.PROFX_ICON.getImage()); 
+<FONT COLOR=0 STYLE="font-style:normal">1092 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1093 </FONT>        </FONT><FONT COLOR="#808080"><I>//Configuración del Look & Feel; cuando haya tiempo, ponerlo "bonito" (Themes etc.)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1094 </FONT>        Font f = UIManager.getFont(</FONT><FONT COLOR="#008000"><B>"Button.font"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1095 </FONT>        UIManager.put(</FONT><FONT COLOR="#008000"><B>"Button.font"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FontUIResource(f.deriveFont(</FONT><FONT COLOR="#0000ff">10F</FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">1096 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1097 </FONT>        </FONT><FONT COLOR="#808080"><I>//Existe un bug en la clase javax.guiUtils.plaf.metal.MetalToolTipUI que hace que</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1098 </FONT>        </FONT><FONT COLOR="#808080"><I>//las teclas de acceso rápido que no se corresponden con caracteres convencionales</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1099 </FONT>        </FONT><FONT COLOR="#808080"><I>//se muestren de forma incorrecta, por lo que he preferido colocar esas teclas "a pelo".</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1100 </FONT>        </FONT><FONT COLOR="#808080"><I>//Ver en el Java Bug Parade:</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1101 </FONT>        </FONT><FONT COLOR="#808080"><I>//Bug ID 4375928 RFE Mnemonics for non-character keys are displayed incorrectly in the tooltip</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1102 </FONT>        </FONT><FONT COLOR="#808080"><I>// if(!oaidtb.misc.Utils.isJVMVersionGreaterOrEqualThan("1.4.0"))</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1103 </FONT>        </FONT><FONT COLOR="#808080"><I>// UIManager.getDefaults().put("ToolTipUI", "javax.guiUtils.plaf.basic.BasicToolTipUI");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1104 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1105 </FONT>        </FONT><FONT COLOR="#808080"><I>//El panel con los componentes de la aplicación</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1106 </FONT>        </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> AllContainerPanel acp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> AllContainerPanel(); 
+<FONT COLOR=0 STYLE="font-style:normal">1107 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1108 </FONT>        </FONT><FONT COLOR="#808080"><I>//Salir de la aplicación cuando cerremos la ventana</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1109 </FONT>        app.addWindowListener( 
+<FONT COLOR=0 STYLE="font-style:normal">1110 </FONT>          </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> WindowAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1111 </FONT>            </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> windowClosing(WindowEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">1112 </FONT>              System.exit(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1113 </FONT>            } 
+<FONT COLOR=0 STYLE="font-style:normal">1114 </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">1115 </FONT>        ); 
+<FONT COLOR=0 STYLE="font-style:normal">1116 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1117 </FONT>        </FONT><FONT COLOR="#808080"><I>//Añadir un menú de ayuda</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1118 </FONT>        JMenu menuAyuda = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenu(</FONT><FONT COLOR="#008000"><B>"Help"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1119 </FONT>        </FONT><FONT COLOR="#808080"><I>//El item de menu para abrir un frame con información sobre la aplicación</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1120 </FONT>        JMenuItem aboutItem = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuItem(</FONT><FONT COLOR="#008000"><B>"About"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1121 </FONT>        </FONT><FONT COLOR="#808080"><I>//Listener para abrir el frame de about</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1122 </FONT>        aboutItem.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">1123 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1124 </FONT>          </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">1125 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1126 </FONT>            </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_AboutFrame == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">1127 </FONT>              m_AboutFrame = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> AboutFrame(</FONT><FONT COLOR="#008000"><B>"OAIDTB Acerca de"</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\gui\OaidtbInfo.java.html">OaidtbInfo</A>()); 
+<FONT COLOR=0 STYLE="font-style:normal">1128 </FONT>              m_AboutFrame.pack(); 
+<FONT COLOR=0 STYLE="font-style:normal">1129 </FONT>              m_AboutFrame.setSize(</FONT><FONT COLOR="#0000ff">700</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">350</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1130 </FONT>              RefineryUtilities.centerFrameOnScreen(m_AboutFrame); 
+<FONT COLOR=0 STYLE="font-style:normal">1131 </FONT>            } 
+<FONT COLOR=0 STYLE="font-style:normal">1132 </FONT>            m_AboutFrame.show(); 
+<FONT COLOR=0 STYLE="font-style:normal">1133 </FONT>            m_AboutFrame.requestFocus(); 
+<FONT COLOR=0 STYLE="font-style:normal">1134 </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">1135 </FONT>        }); 
+<FONT COLOR=0 STYLE="font-style:normal">1136 </FONT>        menuAyuda.add(aboutItem); 
+<FONT COLOR=0 STYLE="font-style:normal">1137 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1138 </FONT>        </FONT><FONT COLOR="#808080"><I>//Añadimos la barra de menú de la aplicación</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1139 </FONT>        JMenuBar mb = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuBar(); 
+<FONT COLOR=0 STYLE="font-style:normal">1140 </FONT>        mb.add(acp.createGeneralOptionsMenu()); 
+<FONT COLOR=0 STYLE="font-style:normal">1141 </FONT>        </FONT><FONT COLOR="#808080"><I>//Colocamos el menú de ayuda a la derecha</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1142 </FONT>        mb.add(Box.createHorizontalGlue()); 
+<FONT COLOR=0 STYLE="font-style:normal">1143 </FONT>        mb.add(menuAyuda); 
+<FONT COLOR=0 STYLE="font-style:normal">1144 </FONT>        app.setJMenuBar(mb); 
+<FONT COLOR=0 STYLE="font-style:normal">1145 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1146 </FONT>        </FONT><FONT COLOR="#808080"><I>//Añadimos el panel que contiene los componentes de la aplicación a la ventana</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1147 </FONT>        app.getContentPane().add(acp.createDesktopPane()); 
+<FONT COLOR=0 STYLE="font-style:normal">1148 </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">1149 </FONT>        </FONT><FONT COLOR="#808080"><I>//Lo mostramos en pantalla</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">1150 </FONT>        app.pack(); 
+<FONT COLOR=0 STYLE="font-style:normal">1151 </FONT>        app.setSize(</FONT><FONT COLOR="#0000ff">800</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">600</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1152 </FONT>        RefineryUtilities.centerFrameOnScreen(app); 
+<FONT COLOR=0 STYLE="font-style:normal">1153 </FONT>        app.show(); 
+<FONT COLOR=0 STYLE="font-style:normal">1154 </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">1155 </FONT>      </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">1156 </FONT>        System.err.println(e.toString()); 
+<FONT COLOR=0 STYLE="font-style:normal">1157 </FONT>        e.printStackTrace(); 
+<FONT COLOR=0 STYLE="font-style:normal">1158 </FONT>        System.exit(-</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">1159 </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">1160 </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">1161 </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">1162 </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

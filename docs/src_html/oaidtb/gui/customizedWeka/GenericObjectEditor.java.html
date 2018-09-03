@@ -1,0 +1,946 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\gui\customizedWeka\GenericObjectEditor.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\gui\customizedWeka\GenericObjectEditor.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    GenericObjectEditor.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2001 Len Trigg, Xin Xu 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> *    Modified (2002) by Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.gui.customizedWeka; 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.OptionHandler; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.SelectedTag; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.SerializedObject; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Utils; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.gui.FileEditor; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.gui.PropertyDialog; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.gui.SelectedTagEditor; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.event.ChangeListener; 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.*; 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.datatransfer.StringSelection; 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.ActionEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.ActionListener; 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.WindowAdapter; 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.awt.event.WindowEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyChangeEvent; 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyChangeListener; 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyChangeSupport; 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.beans.PropertyEditor; 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.*; 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Properties; 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\AllContainerPanel.java.html">oaidtb.gui.AllContainerPanel</A>; 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT> * A PropertyEditor for objects that themselves have been defined as 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> * editable in the GenericObjectEditor configuration file, which lists 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> * possible values that can be selected from, and themselves configured. 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT> * The configuration file is called "GenericObjectEditor.props" and 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT> * may live in either the location given by "user.home" or the current 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT> * directory (this last will take precedence), and a default properties 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT> * file is read from the weka distribution. For speed, the properties 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT> * file is read only once when the class is first loaded -- this may need 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT> * to be changed if we ever end up running in a Java OS ;-). 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> * TODO: PropertySheetPanel class calls the setClassType only if the class is a weka.gui.GenericObjectEditor 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT> *   ==&GT; Change PropertySheetPanel 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> Len Trigg (trigg@cs.waikato.ac.nz) 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> Xin Xu (xx5@cs.waikato.ac.nz) 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> Santiago David Villalba (sdvb@wanadoo.es) 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.34 $ 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> GenericObjectEditor </FONT><FONT COLOR="#000080"><B>implements</B></FONT><FONT COLOR="#000000"> PropertyEditor{ 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The classifier being configured */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Object m_Object; 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Holds a copy of the current classifier that can be reverted to 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>   if the user decides to cancel */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Object m_Backup; 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Handles property change notification */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> PropertyChangeSupport m_Support = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PropertyChangeSupport(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The Class of objects being edited */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Class m_ClassType; 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>  </FONT><FONT COLOR="#808080"><I>/*---New feature: class customized properties.---*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>   * Allows to specialize the values that can be selected from a class of a certain type, by example, 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>   * Booster@AdaBoostMH 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String m_SpecializeFromClass = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getSpecializeFromClass(){ 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_SpecializeFromClass; 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setSpecializeFromClass(String specializeFromClass){ 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>    m_SpecializeFromClass = specializeFromClass; 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>  </FONT><FONT COLOR="#808080"><I>/*---New feature: class customized properties.---*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>  </FONT><FONT COLOR="#808080"><I>/** The GUI component for editing values, created when needed */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> GOEPanel m_EditorComponent = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> GOEPanel(); 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>  </FONT><FONT COLOR="#808080"><I>/** True if the GUI component is needed */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> m_Enabled = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>  </FONT><FONT COLOR="#808080"><I>/** The name of the properties file */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> String PROPERTY_FILE = </FONT><FONT COLOR="#008000"><B>"weka/gui/GenericObjectEditor.props"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Contains the editor properties */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> Properties EDITOR_PROPERTIES; 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Loads the configuration property file && cargar la lista de editores para las propiedades */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>  </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>    </FONT><FONT COLOR="#808080"><I>//Intentar cargar la lista de editores para cada objeto</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>    </FONT><FONT COLOR="#808080"><I>//Buscamos una clase RegisterEditors en el paquete al que pertenezca esta clase "GenericObjectEditor"</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>    </FONT><FONT COLOR="#808080"><I>//y, si no la encontramos, en el directorio desde donde ejecutamos.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>    </FONT><FONT COLOR="#808080"><I>//Ver oaidtb.gui.customizedWeka.RegisterEditors.java como un ejemplo sobre el formato de dicha clase</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>      Class.forName(GenericObjectEditor.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">.getPackage().getName() + </FONT><FONT COLOR="#008000"><B>".RegisterEditors"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>      </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>        Class.forName(</FONT><FONT COLOR="#008000"><B>"RegisterEditors"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>      </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex2){ 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"Warning: can't load property editors configutration class"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT></FONT><FONT COLOR="#808080"><I>// Allow a properties file in the current directory to override</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>      EDITOR_PROPERTIES = Utils.readProperties(PROPERTY_FILE); 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>      java.util.Enumeration keys = 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>        (java.util.Enumeration) EDITOR_PROPERTIES.propertyNames(); 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!keys.hasMoreElements()){ 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>        </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Failed to read a property file for the "</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>                            + </FONT><FONT COLOR="#008000"><B>"generic object editor"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>      JOptionPane.showMessageDialog(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>                                    </FONT><FONT COLOR="#008000"><B>"Could not read a configuration file for the generic object\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>                                    + </FONT><FONT COLOR="#008000"><B>"editor. An example file is included with the Weka distribution.\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>                                    + </FONT><FONT COLOR="#008000"><B>"This file should be named \""</B></FONT><FONT COLOR="#000000"> + PROPERTY_FILE + </FONT><FONT COLOR="#008000"><B>"\" and\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>                                    + </FONT><FONT COLOR="#008000"><B>"should be placed either in your user home (which is set\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>                                    + </FONT><FONT COLOR="#008000"><B>"to \""</B></FONT><FONT COLOR="#000000"> + System.getProperties().getProperty(</FONT><FONT COLOR="#008000"><B>"user.home"</B></FONT><FONT COLOR="#000000">) + </FONT><FONT COLOR="#008000"><B>"\")\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>                                    + </FONT><FONT COLOR="#008000"><B>"or the directory that java was started from\n"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>                                    </FONT><FONT COLOR="#008000"><B>"GenericObjectEditor"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>                                    JOptionPane.ERROR_MESSAGE); 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>   * Handles the GUI side of editing values. 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> GOEPanel </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> JPanel{ 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>    </FONT><FONT COLOR="#808080"><I>/** The chooser component */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\FromHierarchySelectorMenu.java.html">FromHierarchySelectorMenu</A> m_ObjectChooser; 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>    </FONT><FONT COLOR="#808080"><I>/** The component that performs classifier customization */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\PropertySheetPanel.java.html">PropertySheetPanel</A> m_ChildPropertySheet; 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Copy object textual representation to the system clipboard */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JButton m_ClipboardCopyBut; 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Open object from disk */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JButton m_OpenBut; 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Save object to disk */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JButton m_SaveBut; 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>    </FONT><FONT COLOR="#808080"><I>/** ok button */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JButton m_okBut; 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>    </FONT><FONT COLOR="#808080"><I>/** cancel button */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JButton m_cancelBut; 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT>    </FONT><FONT COLOR="#808080"><I>/** The filechooser for opening and saving object files */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JFileChooser m_FileChooser; 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT>    </FONT><FONT COLOR="#808080"><I>/** The Menubar to show the classes */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> JMenuBar m_MenuBar; 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Creates the GUI editor component */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> GOEPanel(){ 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>      </FONT><FONT COLOR="#808080"><I>//System.err.println("GOE(): " + m_Object);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>      m_Backup = copyObject(m_Object); 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>      m_MenuBar = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JMenuBar(); 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>      m_MenuBar.setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>      </FONT><FONT COLOR="#808080"><I>//Menu setup</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT>      m_ObjectChooser = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\FromHierarchySelectorMenu.java.html">FromHierarchySelectorMenu</A>(); 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>      m_ObjectChooser.setMnemonic(</FONT><FONT COLOR="#008000"><B>'c'</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>      m_ObjectChooser.setSelectablePrefix(</FONT><FONT COLOR="#008000"><B>"Class: "</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>      m_ObjectChooser.setNotSelectablePrefix(</FONT><FONT COLOR="#008000"><B>"Package: "</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>      m_ObjectChooser.setSelectableFont(m_ObjectChooser.getFont().deriveFont(Font.ITALIC | Font.BOLD)); 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>      m_ObjectChooser.setSelectableIcon(<A href="..\..\..\oaidtb\gui\AllContainerPanel.java.html">AllContainerPanel</A>.PROFX_ICON); 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT>      m_ObjectChooser.getObjectNames().setHierarchyLevelsSeparator(</FONT><FONT COLOR="#008000"><B>"."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>      m_ObjectChooser.setHierarchyLevelsSeparator(</FONT><FONT COLOR="#008000"><B>"."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>      m_ObjectChooser.setHierarchyMembersSeparator(</FONT><FONT COLOR="#008000"><B>", "</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>      </FONT><FONT COLOR="#808080"><I>//What to do when we select a new class.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">208  </FONT>      m_ObjectChooser.addChangeListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">209  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">210  </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> stateChanged(ChangeEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">211  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">212  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ObjectChooser.isSelected()) 
+<FONT COLOR=0 STYLE="font-style:normal">213  </FONT>            </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">214  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">215  </FONT>          </FONT><FONT COLOR="#808080"><I>//We assure that all of the pending events are processed before this one.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">216  </FONT>          </FONT><FONT COLOR="#808080"><I>//If it was an internal class, it could be easier and faster (added as an ActionListener to</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">217  </FONT>          </FONT><FONT COLOR="#808080"><I>//all of the JMenuItem's), but less reusable.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">218  </FONT>          SwingUtilities.invokeLater(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Runnable(){ 
+<FONT COLOR=0 STYLE="font-style:normal">219  </FONT>            </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> run(){ 
+<FONT COLOR=0 STYLE="font-style:normal">220  </FONT>              </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ObjectChooser.hasChanged()){ 
+<FONT COLOR=0 STYLE="font-style:normal">221  </FONT>                </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Object != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">222  </FONT>                  m_ObjectChooser.setSelectableMemberName(m_Object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">223  </FONT>              } 
+<FONT COLOR=0 STYLE="font-style:normal">224  </FONT>              </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">225  </FONT>                </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">226  </FONT>                  setValue(Class.forName(m_ObjectChooser.getLastHierarchyMemberSelected()).newInstance()); 
+<FONT COLOR=0 STYLE="font-style:normal">227  </FONT>                } 
+<FONT COLOR=0 STYLE="font-style:normal">228  </FONT>                </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">229  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">230  </FONT>                  JOptionPane.showMessageDialog(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">231  </FONT>                                                </FONT><FONT COLOR="#008000"><B>"Could not create an example of\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">232  </FONT>                                                + m_ObjectChooser.getLastHierarchyMemberSelected() + </FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">233  </FONT>                                                + </FONT><FONT COLOR="#008000"><B>"from the current classpath"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">234  </FONT>                                                </FONT><FONT COLOR="#008000"><B>"example loaded"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">235  </FONT>                                                JOptionPane.ERROR_MESSAGE); 
+<FONT COLOR=0 STYLE="font-style:normal">236  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">237  </FONT>                  </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">238  </FONT>                    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000"> == m_Backup){ 
+<FONT COLOR=0 STYLE="font-style:normal">239  </FONT>                      setDefaultValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">240  </FONT>                    } 
+<FONT COLOR=0 STYLE="font-style:normal">241  </FONT>                    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">242  </FONT>                      setValue(m_Backup); 
+<FONT COLOR=0 STYLE="font-style:normal">243  </FONT>                    } 
+<FONT COLOR=0 STYLE="font-style:normal">244  </FONT>                  } 
+<FONT COLOR=0 STYLE="font-style:normal">245  </FONT>                  </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex2){ 
+<FONT COLOR=0 STYLE="font-style:normal">246  </FONT>                    System.err.println(ex.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">247  </FONT>                    ex.printStackTrace(); 
+<FONT COLOR=0 STYLE="font-style:normal">248  </FONT>                  } 
+<FONT COLOR=0 STYLE="font-style:normal">249  </FONT>                } 
+<FONT COLOR=0 STYLE="font-style:normal">250  </FONT>            } 
+<FONT COLOR=0 STYLE="font-style:normal">251  </FONT>          }); 
+<FONT COLOR=0 STYLE="font-style:normal">252  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">253  </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">254  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">255  </FONT>      </FONT><FONT COLOR="#808080"><I>//Construct the menu tree</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">256  </FONT>      updateClassType(); 
+<FONT COLOR=0 STYLE="font-style:normal">257  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">258  </FONT>      m_MenuBar.add(m_ObjectChooser, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">259  </FONT>      m_MenuBar.setSelected(m_ObjectChooser); 
+<FONT COLOR=0 STYLE="font-style:normal">260  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">261  </FONT>      m_ChildPropertySheet = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\PropertySheetPanel.java.html">PropertySheetPanel</A>(); 
+<FONT COLOR=0 STYLE="font-style:normal">262  </FONT>      m_ChildPropertySheet.addPropertyChangeListener 
+<FONT COLOR=0 STYLE="font-style:normal">263  </FONT>        (</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PropertyChangeListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">264  </FONT>          </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> propertyChange(PropertyChangeEvent evt){ 
+<FONT COLOR=0 STYLE="font-style:normal">265  </FONT>            m_Support.firePropertyChange(</FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">266  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">267  </FONT>        }); 
+<FONT COLOR=0 STYLE="font-style:normal">268  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">269  </FONT>      m_ClipboardCopyBut = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#008000"><B>"To Clipboard"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">270  </FONT>      m_ClipboardCopyBut.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Copy the object's textual representation to the clipboard"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">271  </FONT>      m_ClipboardCopyBut.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">272  </FONT>      m_ClipboardCopyBut.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">273  </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">274  </FONT>          String rep = m_Object.getClass().getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">275  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Object </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> OptionHandler){ 
+<FONT COLOR=0 STYLE="font-style:normal">276  </FONT>            rep += </FONT><FONT COLOR="#008000"><B>" "</B></FONT><FONT COLOR="#000000"> + Utils.joinOptions(((OptionHandler) m_Object) 
+<FONT COLOR=0 STYLE="font-style:normal">277  </FONT>                                           .getOptions()); 
+<FONT COLOR=0 STYLE="font-style:normal">278  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">279  </FONT>          StringSelection ss = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> StringSelection(rep); 
+<FONT COLOR=0 STYLE="font-style:normal">280  </FONT>          Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">281  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">282  </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">283  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">284  </FONT>      m_OpenBut = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#008000"><B>"Open..."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">285  </FONT>      m_OpenBut.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Load a configured object"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">286  </FONT>      m_OpenBut.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">287  </FONT>      m_OpenBut.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">288  </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">289  </FONT>          Object object = openObject(); 
+<FONT COLOR=0 STYLE="font-style:normal">290  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (object != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">291  </FONT>            </FONT><FONT COLOR="#808080"><I>// setValue takes care of: Making sure obj is of right type,</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">292  </FONT>            </FONT><FONT COLOR="#808080"><I>// and firing property change.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">293  </FONT>            setValue(object); 
+<FONT COLOR=0 STYLE="font-style:normal">294  </FONT>            </FONT><FONT COLOR="#808080"><I>// Need a second setValue to get property values filled in OK.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">295  </FONT>            </FONT><FONT COLOR="#808080"><I>// Not sure why.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">296  </FONT>            setValue(object); 
+<FONT COLOR=0 STYLE="font-style:normal">297  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">298  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">299  </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">300  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">301  </FONT>      m_SaveBut = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#008000"><B>"Save..."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">302  </FONT>      m_SaveBut.setToolTipText(</FONT><FONT COLOR="#008000"><B>"Save the current configured object"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">303  </FONT>      m_SaveBut.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">304  </FONT>      m_SaveBut.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">305  </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">306  </FONT>          saveObject(m_Object); 
+<FONT COLOR=0 STYLE="font-style:normal">307  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">308  </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">309  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">310  </FONT>      m_okBut = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#008000"><B>"OK"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">311  </FONT>      m_okBut.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">312  </FONT>      m_okBut.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">313  </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">314  </FONT>          </FONT><FONT COLOR="#808080"><I>//System.err.println("\nOK--Backup: "+</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">315  </FONT>          </FONT><FONT COLOR="#808080"><I>// m_Backup.getClass().getName()+</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">316  </FONT>          </FONT><FONT COLOR="#808080"><I>//	   "\nOK--Object: "+</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">317  </FONT>          </FONT><FONT COLOR="#808080"><I>//		   m_Object.getClass().getName());</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">318  </FONT>          m_Backup = copyObject(m_Object); 
+<FONT COLOR=0 STYLE="font-style:normal">319  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((getTopLevelAncestor() != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">320  </FONT>            && (getTopLevelAncestor() </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> Window)){ 
+<FONT COLOR=0 STYLE="font-style:normal">321  </FONT>            Window w = (Window) getTopLevelAncestor(); 
+<FONT COLOR=0 STYLE="font-style:normal">322  </FONT>            w.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">323  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">324  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">325  </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">326  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">327  </FONT>      m_cancelBut = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JButton(</FONT><FONT COLOR="#008000"><B>"Cancel"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">328  </FONT>      m_cancelBut.setEnabled(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">329  </FONT>      m_cancelBut.addActionListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ActionListener(){ 
+<FONT COLOR=0 STYLE="font-style:normal">330  </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> actionPerformed(ActionEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">331  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Backup != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">332  </FONT>            </FONT><FONT COLOR="#808080"><I>//System.err.println("\nCncl--Backup: "+</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">333  </FONT>            </FONT><FONT COLOR="#808080"><I>// m_Backup.getClass().getName()+</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">334  </FONT>            </FONT><FONT COLOR="#808080"><I>//	       "\nCncl--Object: "+</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">335  </FONT>            </FONT><FONT COLOR="#808080"><I>//       m_Object.getClass().getName());</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">336  </FONT>            m_Object = copyObject(m_Backup); 
+<FONT COLOR=0 STYLE="font-style:normal">337  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">338  </FONT>            </FONT><FONT COLOR="#808080"><I>// To fire property change</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">339  </FONT>            m_Support.firePropertyChange(</FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">340  </FONT>            updateClassType(); 
+<FONT COLOR=0 STYLE="font-style:normal">341  </FONT>            updateChooser(); 
+<FONT COLOR=0 STYLE="font-style:normal">342  </FONT>            updateChildPropertySheet(); 
+<FONT COLOR=0 STYLE="font-style:normal">343  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">344  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((getTopLevelAncestor() != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">345  </FONT>            && (getTopLevelAncestor() </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> Window)){ 
+<FONT COLOR=0 STYLE="font-style:normal">346  </FONT>            Window w = (Window) getTopLevelAncestor(); 
+<FONT COLOR=0 STYLE="font-style:normal">347  </FONT>            w.dispose(); 
+<FONT COLOR=0 STYLE="font-style:normal">348  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">349  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">350  </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">351  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">352  </FONT>      setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BorderLayout()); 
+<FONT COLOR=0 STYLE="font-style:normal">353  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">354  </FONT>      add(m_MenuBar, BorderLayout.NORTH); 
+<FONT COLOR=0 STYLE="font-style:normal">355  </FONT>      add(m_ChildPropertySheet, BorderLayout.CENTER); 
+<FONT COLOR=0 STYLE="font-style:normal">356  </FONT>      </FONT><FONT COLOR="#808080"><I>// Since we resize to the size of the property sheet, a scrollpane isn't</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">357  </FONT>      </FONT><FONT COLOR="#808080"><I>// typically needed</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">358  </FONT>      </FONT><FONT COLOR="#808080"><I>// addMemberName(new JScrollPane(m_ChildPropertySheet), BorderLayout.CENTER);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">359  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">360  </FONT>      JPanel okcButs = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JPanel(); 
+<FONT COLOR=0 STYLE="font-style:normal">361  </FONT>      okcButs.setBorder(BorderFactory.createEmptyBorder(</FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">362  </FONT>      okcButs.setLayout(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> GridLayout(</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">5</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">363  </FONT>      okcButs.add(m_OpenBut); 
+<FONT COLOR=0 STYLE="font-style:normal">364  </FONT>      okcButs.add(m_SaveBut); 
+<FONT COLOR=0 STYLE="font-style:normal">365  </FONT>      okcButs.add(m_ClipboardCopyBut); 
+<FONT COLOR=0 STYLE="font-style:normal">366  </FONT>      okcButs.add(m_okBut); 
+<FONT COLOR=0 STYLE="font-style:normal">367  </FONT>      okcButs.add(m_cancelBut); 
+<FONT COLOR=0 STYLE="font-style:normal">368  </FONT>      add(okcButs, BorderLayout.SOUTH); 
+<FONT COLOR=0 STYLE="font-style:normal">369  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">370  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ClassType != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">371  </FONT>        updateClassType(); 
+<FONT COLOR=0 STYLE="font-style:normal">372  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Object != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">373  </FONT>          updateChooser(); 
+<FONT COLOR=0 STYLE="font-style:normal">374  </FONT>          updateChildPropertySheet(); 
+<FONT COLOR=0 STYLE="font-style:normal">375  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">376  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">377  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">378  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">379  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">380  </FONT>     * Enables/disables the cancel button. 
+<FONT COLOR=0 STYLE="font-style:normal">381  </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">382  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> flag true to enable cancel button, false 
+<FONT COLOR=0 STYLE="font-style:normal">383  </FONT>     * to disable it 
+<FONT COLOR=0 STYLE="font-style:normal">384  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">385  </FONT>    </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setCancelButton(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> flag){ 
+<FONT COLOR=0 STYLE="font-style:normal">386  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_cancelBut != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">387  </FONT>        m_cancelBut.setEnabled(flag); 
+<FONT COLOR=0 STYLE="font-style:normal">388  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">389  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">390  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">391  </FONT>     * Opens an object from a file selected by the user. 
+<FONT COLOR=0 STYLE="font-style:normal">392  </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">393  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> the loaded object, or null if the operation was cancelled 
+<FONT COLOR=0 STYLE="font-style:normal">394  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">395  </FONT>    </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> Object openObject(){ 
+<FONT COLOR=0 STYLE="font-style:normal">396  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">397  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_FileChooser == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">398  </FONT>        createFileChooser(); 
+<FONT COLOR=0 STYLE="font-style:normal">399  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">400  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> returnVal = m_FileChooser.showOpenDialog(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">401  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (returnVal == JFileChooser.APPROVE_OPTION){ 
+<FONT COLOR=0 STYLE="font-style:normal">402  </FONT>        File selected = m_FileChooser.getSelectedFile(); 
+<FONT COLOR=0 STYLE="font-style:normal">403  </FONT>        </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">404  </FONT>          ObjectInputStream oi = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ObjectInputStream(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BufferedInputStream(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FileInputStream(selected))); 
+<FONT COLOR=0 STYLE="font-style:normal">405  </FONT>          Object obj = oi.readObject(); 
+<FONT COLOR=0 STYLE="font-style:normal">406  </FONT>          oi.close(); 
+<FONT COLOR=0 STYLE="font-style:normal">407  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ClassType.isAssignableFrom(obj.getClass())){ 
+<FONT COLOR=0 STYLE="font-style:normal">408  </FONT>            </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Object not of type: "</B></FONT><FONT COLOR="#000000"> + m_ClassType.getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">409  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">410  </FONT>          </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> obj; 
+<FONT COLOR=0 STYLE="font-style:normal">411  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">412  </FONT>        </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">413  </FONT>          JOptionPane.showMessageDialog(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">414  </FONT>                                        </FONT><FONT COLOR="#008000"><B>"Couldn't read object: "</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">415  </FONT>                                        + selected.getName() 
+<FONT COLOR=0 STYLE="font-style:normal">416  </FONT>                                        + </FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> + ex.getMessage(), 
+<FONT COLOR=0 STYLE="font-style:normal">417  </FONT>                                        </FONT><FONT COLOR="#008000"><B>"Open object file"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">418  </FONT>                                        JOptionPane.ERROR_MESSAGE); 
+<FONT COLOR=0 STYLE="font-style:normal">419  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">420  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">421  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">422  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">423  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">424  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">425  </FONT>     * Opens an object from a file selected by the user. 
+<FONT COLOR=0 STYLE="font-style:normal">426  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">427  </FONT>    </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> saveObject(Object object){ 
+<FONT COLOR=0 STYLE="font-style:normal">428  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">429  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_FileChooser == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">430  </FONT>        createFileChooser(); 
+<FONT COLOR=0 STYLE="font-style:normal">431  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">432  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> returnVal = m_FileChooser.showSaveDialog(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">433  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (returnVal == JFileChooser.APPROVE_OPTION){ 
+<FONT COLOR=0 STYLE="font-style:normal">434  </FONT>        File sFile = m_FileChooser.getSelectedFile(); 
+<FONT COLOR=0 STYLE="font-style:normal">435  </FONT>        </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">436  </FONT>          ObjectOutputStream oo = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ObjectOutputStream(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BufferedOutputStream(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FileOutputStream(sFile))); 
+<FONT COLOR=0 STYLE="font-style:normal">437  </FONT>          oo.writeObject(object); 
+<FONT COLOR=0 STYLE="font-style:normal">438  </FONT>          oo.close(); 
+<FONT COLOR=0 STYLE="font-style:normal">439  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">440  </FONT>        </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">441  </FONT>          JOptionPane.showMessageDialog(</FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">442  </FONT>                                        </FONT><FONT COLOR="#008000"><B>"Couldn't write to file: "</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">443  </FONT>                                        + sFile.getName() 
+<FONT COLOR=0 STYLE="font-style:normal">444  </FONT>                                        + </FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> + ex.getMessage(), 
+<FONT COLOR=0 STYLE="font-style:normal">445  </FONT>                                        </FONT><FONT COLOR="#008000"><B>"Save object"</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">446  </FONT>                                        JOptionPane.ERROR_MESSAGE); 
+<FONT COLOR=0 STYLE="font-style:normal">447  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">448  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">449  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">450  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">451  </FONT>    </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> createFileChooser(){ 
+<FONT COLOR=0 STYLE="font-style:normal">452  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">453  </FONT>      m_FileChooser = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> JFileChooser(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> File(System.getProperty(</FONT><FONT COLOR="#008000"><B>"user.dir"</B></FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">454  </FONT>      m_FileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
+<FONT COLOR=0 STYLE="font-style:normal">455  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">456  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">457  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">458  </FONT>     * Makes a copy of an object using serialization 
+<FONT COLOR=0 STYLE="font-style:normal">459  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> source the object to copy 
+<FONT COLOR=0 STYLE="font-style:normal">460  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> a copy of the source object 
+<FONT COLOR=0 STYLE="font-style:normal">461  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">462  </FONT>    </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> Object copyObject(Object source){ 
+<FONT COLOR=0 STYLE="font-style:normal">463  </FONT>      Object result = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">464  </FONT>      </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">465  </FONT>        SerializedObject so = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> SerializedObject(source); 
+<FONT COLOR=0 STYLE="font-style:normal">466  </FONT>        result = so.getObject(); 
+<FONT COLOR=0 STYLE="font-style:normal">467  </FONT>        setCancelButton(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">468  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">469  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">470  </FONT>      </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">471  </FONT>        setCancelButton(</FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">472  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"GenericObjectEditor: Problem making backup object"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">473  </FONT>        System.err.println(ex); 
+<FONT COLOR=0 STYLE="font-style:normal">474  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">475  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> result; 
+<FONT COLOR=0 STYLE="font-style:normal">476  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">477  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">478  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">479  </FONT>     * This is used to hook an action listener to the ok button 
+<FONT COLOR=0 STYLE="font-style:normal">480  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> a The action listener. 
+<FONT COLOR=0 STYLE="font-style:normal">481  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">482  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addOkListener(ActionListener a){ 
+<FONT COLOR=0 STYLE="font-style:normal">483  </FONT>      m_okBut.addActionListener(a); 
+<FONT COLOR=0 STYLE="font-style:normal">484  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">485  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">486  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">487  </FONT>     * This is used to hook an action listener to the cancel button 
+<FONT COLOR=0 STYLE="font-style:normal">488  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> a The action listener. 
+<FONT COLOR=0 STYLE="font-style:normal">489  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">490  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addCancelListener(ActionListener a){ 
+<FONT COLOR=0 STYLE="font-style:normal">491  </FONT>      m_cancelBut.addActionListener(a); 
+<FONT COLOR=0 STYLE="font-style:normal">492  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">493  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">494  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">495  </FONT>     * This is used to remove an action listener from the ok button 
+<FONT COLOR=0 STYLE="font-style:normal">496  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> a The action listener 
+<FONT COLOR=0 STYLE="font-style:normal">497  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">498  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> removeOkListener(ActionListener a){ 
+<FONT COLOR=0 STYLE="font-style:normal">499  </FONT>      m_okBut.removeActionListener(a); 
+<FONT COLOR=0 STYLE="font-style:normal">500  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">501  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">502  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">503  </FONT>     * This is used to remove an action listener from the cancel button 
+<FONT COLOR=0 STYLE="font-style:normal">504  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> a The action listener 
+<FONT COLOR=0 STYLE="font-style:normal">505  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">506  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> removeCancelListener(ActionListener a){ 
+<FONT COLOR=0 STYLE="font-style:normal">507  </FONT>      m_cancelBut.removeActionListener(a); 
+<FONT COLOR=0 STYLE="font-style:normal">508  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">509  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">510  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Called when the class of object being edited changes. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">511  </FONT>    </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> updateClassType(){ 
+<FONT COLOR=0 STYLE="font-style:normal">512  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">513  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ClassType == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">514  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">515  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">516  </FONT>      </FONT><FONT COLOR="#808080"><I>//if(m_ObjectChooser == null)</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">517  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Object != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">518  </FONT>        m_ObjectChooser.buildMenu(getClassesFromProperties(), m_Object.getClass().getName()); 
+<FONT COLOR=0 STYLE="font-style:normal">519  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">520  </FONT>        m_ObjectChooser.buildMenu(getClassesFromProperties(), </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">521  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">522  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">523  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Called to update the cascaded combo box of the values to 
+<FONT COLOR=0 STYLE="font-style:normal">524  </FONT>     * to be selected from */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">525  </FONT>    </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> updateChooser(){ 
+<FONT COLOR=0 STYLE="font-style:normal">526  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">527  </FONT>      String objectName = m_Object.getClass().getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">528  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">529  </FONT>      m_ObjectChooser.addMemberName(objectName); 
+<FONT COLOR=0 STYLE="font-style:normal">530  </FONT>      m_ObjectChooser.setSelectableMemberName(objectName); 
+<FONT COLOR=0 STYLE="font-style:normal">531  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">532  </FONT>      repaint(); 
+<FONT COLOR=0 STYLE="font-style:normal">533  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">534  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">535  </FONT>    </FONT><FONT COLOR="#808080"><I>/** Updates the child property sheet, and creates if needed */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">536  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> updateChildPropertySheet(){ 
+<FONT COLOR=0 STYLE="font-style:normal">537  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">538  </FONT>      </FONT><FONT COLOR="#808080"><I>//System.err.println("GOE::updateChildPropertySheet()");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">539  </FONT>      </FONT><FONT COLOR="#808080"><I>// Set the object as the target of the propertysheet</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">540  </FONT>      m_ChildPropertySheet.setTarget(m_Object); 
+<FONT COLOR=0 STYLE="font-style:normal">541  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">542  </FONT>      </FONT><FONT COLOR="#808080"><I>// Adjust size of containing window if possible</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">543  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> ((getTopLevelAncestor() != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">544  </FONT>        && (getTopLevelAncestor() </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> Window)){ 
+<FONT COLOR=0 STYLE="font-style:normal">545  </FONT>        ((Window) getTopLevelAncestor()).pack(); 
+<FONT COLOR=0 STYLE="font-style:normal">546  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">547  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">548  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">549  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getDefaultValue() </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">550  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ObjectChooser.getFirstValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">551  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">552  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">553  </FONT>    </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">554  </FONT>     * Para poder configurar el menú (fuentes, iconos etc.) desde fuera 
+<FONT COLOR=0 STYLE="font-style:normal">555  </FONT>     * 
+<FONT COLOR=0 STYLE="font-style:normal">556  </FONT>     * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> El menú que permite seleccionar entre los objetos 
+<FONT COLOR=0 STYLE="font-style:normal">557  </FONT>     */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">558  </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\gui\customizedWeka\FromHierarchySelectorMenu.java.html">FromHierarchySelectorMenu</A> getObjectChooser(){ 
+<FONT COLOR=0 STYLE="font-style:normal">559  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_ObjectChooser; 
+<FONT COLOR=0 STYLE="font-style:normal">560  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">561  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">562  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">563  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Called when the class of object being edited changes. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">564  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> String getClassesFromProperties(){ 
+<FONT COLOR=0 STYLE="font-style:normal">565  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">566  </FONT>    String className = m_ClassType.getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">567  </FONT>    String typeOptions = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">568  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">569  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_SpecializeFromClass != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">570  </FONT>      typeOptions = EDITOR_PROPERTIES.getProperty(className + </FONT><FONT COLOR="#008000"><B>"@"</B></FONT><FONT COLOR="#000000"> + m_SpecializeFromClass); 
+<FONT COLOR=0 STYLE="font-style:normal">571  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">572  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (typeOptions == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">573  </FONT>      typeOptions = EDITOR_PROPERTIES.getProperty(className); 
+<FONT COLOR=0 STYLE="font-style:normal">574  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">575  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (typeOptions == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">576  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"Warning: No configuration property found in\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">577  </FONT>                         + PROPERTY_FILE + </FONT><FONT COLOR="#008000"><B>"\n"</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">578  </FONT>                         + </FONT><FONT COLOR="#008000"><B>"for "</B></FONT><FONT COLOR="#000000"> + className); 
+<FONT COLOR=0 STYLE="font-style:normal">579  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">580  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> typeOptions; 
+<FONT COLOR=0 STYLE="font-style:normal">581  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">582  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">583  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">584  </FONT>   * Sets whether the editor is "enabled", meaning that the current 
+<FONT COLOR=0 STYLE="font-style:normal">585  </FONT>   * values will be painted. 
+<FONT COLOR=0 STYLE="font-style:normal">586  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">587  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> newVal a value of type 'boolean' 
+<FONT COLOR=0 STYLE="font-style:normal">588  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">589  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setEnabled(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> newVal){ 
+<FONT COLOR=0 STYLE="font-style:normal">590  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">591  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (newVal != m_Enabled){ 
+<FONT COLOR=0 STYLE="font-style:normal">592  </FONT>      m_Enabled = newVal; 
+<FONT COLOR=0 STYLE="font-style:normal">593  </FONT>      </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">594  </FONT>        if (m_EditorComponent != null) { 
+<FONT COLOR=0 STYLE="font-style:normal">595  </FONT>        m_EditorComponent.setEnabled(m_Enabled); 
+<FONT COLOR=0 STYLE="font-style:normal">596  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">597  </FONT>      */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">598  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">599  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">600  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">601  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">602  </FONT>   * Sets the class of values that can be edited. 
+<FONT COLOR=0 STYLE="font-style:normal">603  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">604  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> type a value of type 'Class' 
+<FONT COLOR=0 STYLE="font-style:normal">605  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">606  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setClassType(Class type){ 
+<FONT COLOR=0 STYLE="font-style:normal">607  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">608  </FONT></FONT><FONT COLOR="#808080"><I>//System.err.println("setClassType("</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">609  </FONT></FONT><FONT COLOR="#808080"><I>//		   + (type == null? "&LT;null&GT;" : type.getName()) + ")");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">610  </FONT>    m_ClassType = type; 
+<FONT COLOR=0 STYLE="font-style:normal">611  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">612  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_EditorComponent != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">613  </FONT>      m_EditorComponent.updateClassType(); 
+<FONT COLOR=0 STYLE="font-style:normal">614  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">615  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">616  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">617  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">618  </FONT>   * Sets the current object to be the default, taken as the first item in 
+<FONT COLOR=0 STYLE="font-style:normal">619  </FONT>   * the chooser 
+<FONT COLOR=0 STYLE="font-style:normal">620  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">621  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setDefaultValue(){ 
+<FONT COLOR=0 STYLE="font-style:normal">622  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">623  </FONT></FONT><FONT COLOR="#808080"><I>//System.err.println("GOE::setDefaultValue()");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">624  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ClassType == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">625  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"No ClassType set up for GenericObjectEditor!!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">626  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">627  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">628  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">629  </FONT>    String defaultValue = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">630  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">631  </FONT>      defaultValue = m_EditorComponent.getDefaultValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">632  </FONT>      setValue(Class.forName(defaultValue).newInstance()); 
+<FONT COLOR=0 STYLE="font-style:normal">633  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">634  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">635  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (defaultValue != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">636  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"Problem loading the first class: "</B></FONT><FONT COLOR="#000000"> + defaultValue); 
+<FONT COLOR=0 STYLE="font-style:normal">637  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">638  </FONT>        System.err.println(</FONT><FONT COLOR="#008000"><B>"Can't find the first class name."</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">639  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">640  </FONT>      ex.printStackTrace(); 
+<FONT COLOR=0 STYLE="font-style:normal">641  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">642  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">643  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">644  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">645  </FONT>   * Sets the current Object. If the Object is in the 
+<FONT COLOR=0 STYLE="font-style:normal">646  </FONT>   * Object chooser, this becomes the selected item (and added 
+<FONT COLOR=0 STYLE="font-style:normal">647  </FONT>   * to the chooser if necessary). 
+<FONT COLOR=0 STYLE="font-style:normal">648  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">649  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> o an object that must be a Object. 
+<FONT COLOR=0 STYLE="font-style:normal">650  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">651  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setValue(Object o){ 
+<FONT COLOR=0 STYLE="font-style:normal">652  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">653  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_ClassType == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">654  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"No ClassType set up for GenericObjectEditor!!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">655  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">656  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">657  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">658  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!m_ClassType.isAssignableFrom(o.getClass())){ 
+<FONT COLOR=0 STYLE="font-style:normal">659  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"setValue object not of correct type!"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">660  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">661  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">662  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">663  </FONT>    setObject(o); 
+<FONT COLOR=0 STYLE="font-style:normal">664  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">665  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_EditorComponent != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">666  </FONT>      m_EditorComponent.updateChooser(); 
+<FONT COLOR=0 STYLE="font-style:normal">667  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">668  </FONT>    </FONT><FONT COLOR="#808080"><I>//If Class.forName(selected).newInstance() fails in the next call, m_Backup will</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">669  </FONT>    </FONT><FONT COLOR="#808080"><I>//not be updated to the last succesfully open object, it will turn back two calls</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">670  </FONT>    </FONT><FONT COLOR="#808080"><I>//unless we do this.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">671  </FONT>    m_Backup = m_Object; 
+<FONT COLOR=0 STYLE="font-style:normal">672  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">673  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">674  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">675  </FONT>   * Sets the current Object, but doesn't worry about updating 
+<FONT COLOR=0 STYLE="font-style:normal">676  </FONT>   * the state of the object chooser. 
+<FONT COLOR=0 STYLE="font-style:normal">677  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">678  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> c a value of type 'Object' 
+<FONT COLOR=0 STYLE="font-style:normal">679  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">680  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setObject(Object c){ 
+<FONT COLOR=0 STYLE="font-style:normal">681  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">682  </FONT></FONT><FONT COLOR="#808080"><I>// This should really call equals() for comparison.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">683  </FONT>    </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> trueChange; 
+<FONT COLOR=0 STYLE="font-style:normal">684  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (getValue() != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">685  </FONT>      trueChange = (!c.equals(getValue())); 
+<FONT COLOR=0 STYLE="font-style:normal">686  </FONT>      </FONT><FONT COLOR="#808080"><I>//System.err.println("GEO::setObject(): Changed? " + trueChange+ getValue().getClass().getName());</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">687  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">688  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">689  </FONT>      trueChange = </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">690  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">691  </FONT>    m_Object = c; 
+<FONT COLOR=0 STYLE="font-style:normal">692  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">693  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_EditorComponent != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">694  </FONT>      m_EditorComponent.updateChildPropertySheet(); 
+<FONT COLOR=0 STYLE="font-style:normal">695  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (trueChange){ 
+<FONT COLOR=0 STYLE="font-style:normal">696  </FONT>        m_Support.firePropertyChange(</FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">697  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">698  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">699  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">700  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">701  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">702  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">703  </FONT>   * Gets the current Object. 
+<FONT COLOR=0 STYLE="font-style:normal">704  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">705  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> the current Object 
+<FONT COLOR=0 STYLE="font-style:normal">706  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">707  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Object getValue(){ 
+<FONT COLOR=0 STYLE="font-style:normal">708  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">709  </FONT>    </FONT><FONT COLOR="#808080"><I>//System.err.println("getValue()");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">710  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Object; 
+<FONT COLOR=0 STYLE="font-style:normal">711  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">712  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">713  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">714  </FONT>   * Supposedly returns an initialization string to create a Object 
+<FONT COLOR=0 STYLE="font-style:normal">715  </FONT>   * identical to the current one, including it's state, but this doesn't 
+<FONT COLOR=0 STYLE="font-style:normal">716  </FONT>   * appear possible given that the initialization string isn't supposed to 
+<FONT COLOR=0 STYLE="font-style:normal">717  </FONT>   * contain multiple statements. 
+<FONT COLOR=0 STYLE="font-style:normal">718  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">719  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> the java source code initialisation string 
+<FONT COLOR=0 STYLE="font-style:normal">720  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">721  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getJavaInitializationString(){ 
+<FONT COLOR=0 STYLE="font-style:normal">722  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>"new "</B></FONT><FONT COLOR="#000000"> + m_Object.getClass().getName() + </FONT><FONT COLOR="#008000"><B>"()"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">723  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">724  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">725  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">726  </FONT>   * Returns true to indicate that we can paint a representation of the 
+<FONT COLOR=0 STYLE="font-style:normal">727  </FONT>   * Object. 
+<FONT COLOR=0 STYLE="font-style:normal">728  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">729  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true 
+<FONT COLOR=0 STYLE="font-style:normal">730  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">731  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isPaintable(){ 
+<FONT COLOR=0 STYLE="font-style:normal">732  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">733  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">734  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">735  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">736  </FONT>   * Paints a representation of the current Object. 
+<FONT COLOR=0 STYLE="font-style:normal">737  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">738  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> gfx the graphics context to use 
+<FONT COLOR=0 STYLE="font-style:normal">739  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> box the area we are allowed to paint into 
+<FONT COLOR=0 STYLE="font-style:normal">740  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">741  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> paintValue(java.awt.Graphics gfx, java.awt.Rectangle box){ 
+<FONT COLOR=0 STYLE="font-style:normal">742  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">743  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Enabled && m_Object != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">744  </FONT>      FontMetrics fm = gfx.getFontMetrics(); 
+<FONT COLOR=0 STYLE="font-style:normal">745  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> vpad = (box.height - fm.getHeight()) / </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">746  </FONT>      gfx.drawString(getObjectConfigurationText(), </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">, fm.getHeight() + vpad); 
+<FONT COLOR=0 STYLE="font-style:normal">747  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">748  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">749  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">750  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">751  </FONT>   * TODO: Replace the getAsText method with this and, to conform the PropertyEditor API, enable the setAsText() 
+<FONT COLOR=0 STYLE="font-style:normal">752  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">753  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The representation of the current object and its configuration as a String 
+<FONT COLOR=0 STYLE="font-style:normal">754  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">755  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getObjectConfigurationText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">756  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!(m_Enabled && m_Object != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">)) 
+<FONT COLOR=0 STYLE="font-style:normal">757  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">758  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">759  </FONT>    String rep = m_Object.getClass().getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">760  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> dotPos = rep.lastIndexOf(</FONT><FONT COLOR="#008000"><B>'.'</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">761  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (dotPos != -</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">762  </FONT>      rep = rep.substring(dotPos + </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">763  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">764  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Object </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> OptionHandler) 
+<FONT COLOR=0 STYLE="font-style:normal">765  </FONT>      rep += </FONT><FONT COLOR="#008000"><B>" "</B></FONT><FONT COLOR="#000000"> + Utils.joinOptions(((OptionHandler) m_Object).getOptions()); 
+<FONT COLOR=0 STYLE="font-style:normal">766  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> rep; 
+<FONT COLOR=0 STYLE="font-style:normal">767  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">768  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">769  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The object name. If none, "". */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">770  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getObjectName(){ 
+<FONT COLOR=0 STYLE="font-style:normal">771  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!(m_Enabled && m_Object != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">)) 
+<FONT COLOR=0 STYLE="font-style:normal">772  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">773  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">774  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_Object.getClass().getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">775  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">776  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">777  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The object options. If none, "" */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">778  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getObjectOptions(){ 
+<FONT COLOR=0 STYLE="font-style:normal">779  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">780  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Object </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> OptionHandler) 
+<FONT COLOR=0 STYLE="font-style:normal">781  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> Utils.joinOptions(((OptionHandler) m_Object).getOptions()); 
+<FONT COLOR=0 STYLE="font-style:normal">782  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">783  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">784  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">785  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">786  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">787  </FONT>   * Returns null as we don't support getting/setting values as text. 
+<FONT COLOR=0 STYLE="font-style:normal">788  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">789  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> null 
+<FONT COLOR=0 STYLE="font-style:normal">790  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">791  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getAsText(){ 
+<FONT COLOR=0 STYLE="font-style:normal">792  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">793  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">794  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">795  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">796  </FONT>   * Returns null as we don't support getting/setting values as text. 
+<FONT COLOR=0 STYLE="font-style:normal">797  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">798  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> text the text value 
+<FONT COLOR=0 STYLE="font-style:normal">799  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> IllegalArgumentException as we don't support 
+<FONT COLOR=0 STYLE="font-style:normal">800  </FONT>   * getting/setting values as text. 
+<FONT COLOR=0 STYLE="font-style:normal">801  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">802  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setAsText(String text) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> IllegalArgumentException{ 
+<FONT COLOR=0 STYLE="font-style:normal">803  </FONT>    </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> IllegalArgumentException(text); 
+<FONT COLOR=0 STYLE="font-style:normal">804  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">805  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">806  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">807  </FONT>   * Returns null as we don't support getting values as tags. 
+<FONT COLOR=0 STYLE="font-style:normal">808  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">809  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> null 
+<FONT COLOR=0 STYLE="font-style:normal">810  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">811  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String[] getTags(){ 
+<FONT COLOR=0 STYLE="font-style:normal">812  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">813  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">814  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">815  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">816  </FONT>   * Returns true because we do support a custom editor. 
+<FONT COLOR=0 STYLE="font-style:normal">817  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">818  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true 
+<FONT COLOR=0 STYLE="font-style:normal">819  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">820  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> supportsCustomEditor(){ 
+<FONT COLOR=0 STYLE="font-style:normal">821  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">822  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">823  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">824  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">825  </FONT>   * Returns the array editing component. 
+<FONT COLOR=0 STYLE="font-style:normal">826  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">827  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> a value of type 'java.awt.Component' 
+<FONT COLOR=0 STYLE="font-style:normal">828  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">829  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> java.awt.Component getCustomEditor(){ 
+<FONT COLOR=0 STYLE="font-style:normal">830  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">831  </FONT>    </FONT><FONT COLOR="#808080"><I>//System.err.println("getCustomEditor()");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">832  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_EditorComponent == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">833  </FONT>      </FONT><FONT COLOR="#808080"><I>//System.err.println("creating new editing component");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">834  </FONT>      m_EditorComponent = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> GOEPanel(); 
+<FONT COLOR=0 STYLE="font-style:normal">835  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">836  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> m_EditorComponent; 
+<FONT COLOR=0 STYLE="font-style:normal">837  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">838  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">839  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">840  </FONT>   * Adds a PropertyChangeListener who will be notified of value changes. 
+<FONT COLOR=0 STYLE="font-style:normal">841  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">842  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> l a value of type 'PropertyChangeListener' 
+<FONT COLOR=0 STYLE="font-style:normal">843  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">844  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> addPropertyChangeListener(PropertyChangeListener l){ 
+<FONT COLOR=0 STYLE="font-style:normal">845  </FONT>    m_Support.addPropertyChangeListener(l); 
+<FONT COLOR=0 STYLE="font-style:normal">846  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">847  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">848  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">849  </FONT>   * Removes a PropertyChangeListener. 
+<FONT COLOR=0 STYLE="font-style:normal">850  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">851  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> l a value of type 'PropertyChangeListener' 
+<FONT COLOR=0 STYLE="font-style:normal">852  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">853  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> removePropertyChangeListener(PropertyChangeListener l){ 
+<FONT COLOR=0 STYLE="font-style:normal">854  </FONT>    m_Support.removePropertyChangeListener(l); 
+<FONT COLOR=0 STYLE="font-style:normal">855  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">856  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">857  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">858  </FONT>   * Tests out the Object editor from the command line. 
+<FONT COLOR=0 STYLE="font-style:normal">859  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">860  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> args may contain the class name of a Object to edit 
+<FONT COLOR=0 STYLE="font-style:normal">861  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">862  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> main(String[] args){ 
+<FONT COLOR=0 STYLE="font-style:normal">863  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">864  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">865  </FONT>      System.err.println(</FONT><FONT COLOR="#008000"><B>"---Registering Weka Editors---"</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">866  </FONT>      java.beans.PropertyEditorManager 
+<FONT COLOR=0 STYLE="font-style:normal">867  </FONT>        .registerEditor(weka.experiment.ResultProducer.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">868  </FONT>                        GenericObjectEditor.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">869  </FONT>      java.beans.PropertyEditorManager 
+<FONT COLOR=0 STYLE="font-style:normal">870  </FONT>        .registerEditor(weka.experiment.SplitEvaluator.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">871  </FONT>                        GenericObjectEditor.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">872  </FONT>      java.beans.PropertyEditorManager 
+<FONT COLOR=0 STYLE="font-style:normal">873  </FONT>        .registerEditor(weka.classifiers.Classifier.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">874  </FONT>                        GenericObjectEditor.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">875  </FONT>      java.beans.PropertyEditorManager 
+<FONT COLOR=0 STYLE="font-style:normal">876  </FONT>        .registerEditor(weka.attributeSelection.ASEvaluation.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">877  </FONT>                        GenericObjectEditor.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">878  </FONT>      java.beans.PropertyEditorManager 
+<FONT COLOR=0 STYLE="font-style:normal">879  </FONT>        .registerEditor(weka.attributeSelection.ASSearch.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">880  </FONT>                        GenericObjectEditor.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">881  </FONT>      java.beans.PropertyEditorManager 
+<FONT COLOR=0 STYLE="font-style:normal">882  </FONT>        .registerEditor(SelectedTag.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">883  </FONT>                        SelectedTagEditor.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">884  </FONT>      java.beans.PropertyEditorManager 
+<FONT COLOR=0 STYLE="font-style:normal">885  </FONT>        .registerEditor(java.io.File.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">, 
+<FONT COLOR=0 STYLE="font-style:normal">886  </FONT>                        FileEditor.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">887  </FONT>      GenericObjectEditor ce = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> GenericObjectEditor(); 
+<FONT COLOR=0 STYLE="font-style:normal">888  </FONT>      ce.setClassType(weka.classifiers.Classifier.</FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">889  </FONT>      Object initial = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> weka.classifiers.rules.ZeroR(); 
+<FONT COLOR=0 STYLE="font-style:normal">890  </FONT></FONT><FONT COLOR="#808080"><I>//      ce.setClassType(oaidtb.misc.pointDistributions.NormalDistribution.class);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">891  </FONT></FONT><FONT COLOR="#808080"><I>//      Object initial = new oaidtb.misc.pointDistributions.NormalDistribution();</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">892  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (args.length &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">893  </FONT>        ce.setClassType(Class.forName(args[</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">])); 
+<FONT COLOR=0 STYLE="font-style:normal">894  </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (args.length &GT; </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">895  </FONT>          initial = Class.forName(args[</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">]).newInstance(); 
+<FONT COLOR=0 STYLE="font-style:normal">896  </FONT>          ce.setValue(initial); 
+<FONT COLOR=0 STYLE="font-style:normal">897  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">898  </FONT>        </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">899  </FONT>          ce.setDefaultValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">900  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">901  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">902  </FONT>        ce.setValue(initial); 
+<FONT COLOR=0 STYLE="font-style:normal">903  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">904  </FONT>      PropertyDialog pd = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PropertyDialog(ce, </FONT><FONT COLOR="#0000ff">100</FONT><FONT COLOR="#000000">, </FONT><FONT COLOR="#0000ff">100</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">905  </FONT>      pd.addWindowListener(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> WindowAdapter(){ 
+<FONT COLOR=0 STYLE="font-style:normal">906  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">907  </FONT>        </FONT><FONT COLOR="#808080"><I>/** Invoked when a window has been closed. Needed fro properly work of the cancel button */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">908  </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> windowClosed(WindowEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">909  </FONT>          windowClosing(e); 
+<FONT COLOR=0 STYLE="font-style:normal">910  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">911  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">912  </FONT>        </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> windowClosing(WindowEvent e){ 
+<FONT COLOR=0 STYLE="font-style:normal">913  </FONT>          PropertyEditor pe = ((PropertyDialog) e.getSource()).getEditor(); 
+<FONT COLOR=0 STYLE="font-style:normal">914  </FONT>          Object c = pe.getValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">915  </FONT>          String options = </FONT><FONT COLOR="#008000"><B>""</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">916  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (c </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> OptionHandler){ 
+<FONT COLOR=0 STYLE="font-style:normal">917  </FONT>            options = Utils.joinOptions(((OptionHandler) c).getOptions()); 
+<FONT COLOR=0 STYLE="font-style:normal">918  </FONT>          } 
+<FONT COLOR=0 STYLE="font-style:normal">919  </FONT>          System.out.println(c.getClass().getName() + </FONT><FONT COLOR="#008000"><B>" "</B></FONT><FONT COLOR="#000000"> + options); 
+<FONT COLOR=0 STYLE="font-style:normal">920  </FONT>          System.exit(</FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">921  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">922  </FONT>      }); 
+<FONT COLOR=0 STYLE="font-style:normal">923  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">924  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">925  </FONT>      ex.printStackTrace(); 
+<FONT COLOR=0 STYLE="font-style:normal">926  </FONT>      System.err.println(ex.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">927  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">928  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">929  </FONT>} 
+<FONT COLOR=0 STYLE="font-style:normal">930  </FONT></FONT></PRE>
+</BODY>
+</HTML>

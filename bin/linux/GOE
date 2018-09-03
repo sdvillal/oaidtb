@@ -1,0 +1,10 @@
+#!/bin/bash
+#Inicia el "Editor Genérico de Objetos" para editar las propiedades de los clasificadores
+
+MAIN_CLASS_NAME="oaidtb.gui.customizedWeka.GenericObjectEditor"
+
+export MAIN_CLASS_NAME
+OUTPUT_FILE=
+
+./_oaidtb_ $OUTPUT_FILE
+

@@ -1,0 +1,10 @@
+#!/bin/bash
+#Inicia el "KnowledgeFlow" de Weka
+
+MAIN_CLASS_NAME="weka.gui.beans.KnowledgeFlow"
+export MAIN_CLASS_NAME
+
+OUTPUT_FILE=
+
+./_oaidtb_ $OUTPUT_FILE
+

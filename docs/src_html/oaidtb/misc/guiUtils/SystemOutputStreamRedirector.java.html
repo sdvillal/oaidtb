@@ -1,0 +1,223 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\misc\guiUtils\SystemOutputStreamRedirector.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\misc\guiUtils\SystemOutputStreamRedirector.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    SystemOutputStreamRedirector.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> *  Lista de cambios: 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> *  - v1.1--&GT; Se manda a dormir al thread tras comprobar la existencia de y/o redireccionar mnsajes 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT> *            un tiempo configurable, que antes se me calentaba mucho el aparato (sin dobles intenciones;) 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.misc.guiUtils; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.text.MutableAttributeSet; 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.text.StyledDocument; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.*; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * Clase que implementa un thread que redirige uno de los streams de salida estándar 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * (System.out o System err) a un JEditorPane, permitiendo especificar 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * el formato de salida y si la salida también debe ser redirigida al 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * stream original (que no tiene por qué ser el original del sistema). 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * Cuando un thread de esta clase es interrumpido, retorna el sistema a su estado original. 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.1 $ 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> SystemOutputStreamRedirector </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> Thread{ 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El panel al que es redirigida la salida del stream */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> JEditorPane redirectedTo; 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> javax.swing.text.Document} del panel de texto, que no debe ser cambiado */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> StyledDocument doc; 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Los atributos del texto (color, fuente...) para los mensajes redirigidos */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> MutableAttributeSet textAtts; 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>  </FONT><FONT COLOR="#808080"><I>/** El stream al que, en el momento de llamar al constructor, es enviada la información del stream */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> PrintStream originalStream; 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Hacer o no un fork con {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> #originalStream} */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isFork; 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>  </FONT><FONT COLOR="#808080"><I>/** Redirigimos System.err o System.out? */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isSystemErr; 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>   * Cada cuánto tiempo debe comprobar el thread la existencia o no de mensajes 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>   * Se debe buscar una solución de compromiso entre la velocidad de respuesta y el tiempo de proceso que se quiere 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>   * utilizar para esta tarea 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> TIME_TO_SLEEP = </FONT><FONT COLOR="#0000ff">300</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> el stream para la salida de error estándar de la plataforma en que nos encontremos */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> PrintStream getDefaultSystemErr(){ 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>    </FONT><FONT COLOR="#808080"><I>//return new PrintStream(new BufferedOutputStream(new FileOutputStream(FileDescriptor.err),128));</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PrintStream(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FileOutputStream(FileDescriptor.err), </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> el stream para la salida estándar de la plataforma en que nos encontremos */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> PrintStream getDefaultSystemOut(){ 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>    </FONT><FONT COLOR="#808080"><I>//return new PrintStream(new BufferedOutputStream(new FileOutputStream(FileDescriptor.out),128));</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PrintStream(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> FileOutputStream(FileDescriptor.out), </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>   * Constructor 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> area El área de texto a la que redirigiremos los mensajes 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> atts los atributos de testo de los mensajes redirigidos 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> isSystemErr Redirigimos System.err o System.out? 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> isFork Hacemos un fork con el stream ya existente? 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> SystemOutputStreamRedirector(JEditorPane area, MutableAttributeSet atts, </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isSystemErr, </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isFork){ 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>    </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">.isSystemErr = isSystemErr; 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (isSystemErr) 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>      originalStream = System.err; 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>      originalStream = System.out; 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>    redirectedTo = area; 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>    doc = (StyledDocument) area.getDocument(); 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>    textAtts = atts; 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>    </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">.isFork = isFork; 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>    </FONT><FONT COLOR="#808080"><I>//Default thread settings</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>    setDaemon(</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>    setPriority(Thread.MIN_PRIORITY); 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Si se está o no haciendo fork con el stream original */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isFork(){ 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> isFork; 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> fork Hacer o no fork con el stream original*/</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setFork(</FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> fork){ 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>    isFork = fork; 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> Los atributos de texto que se están aplicando a los mensajes dirigidos al área especificada */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> MutableAttributeSet getTextAtts(){ 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> textAtts; 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> textAtts Los atributos de texto que se aplicarán a los mensajes dirigidos al área especificada */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setTextAtts(MutableAttributeSet textAtts){ 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>    </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">.textAtts = textAtts; 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>   * Deja el sistema en el estado que se encontraba antes de llamar a {</I></FONT><FONT COLOR="#808080"><B>@link</B></FONT><FONT COLOR="#808080"><I> #run} 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> restoreOriginal(){ 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (isSystemErr) 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>      System.setErr(originalStream); 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>      System.setOut(originalStream); 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>   * El método que "escucha" la llegada de nuevos mensajes y los dirige 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>   * al área especificada y, si se está haciendo fork, también 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>   * al stream original 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> pi El stream que recoge los mensajes 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> redirect(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> PipedInputStream pi){ 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>byte</B></FONT><FONT COLOR="#000000">[] buf = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>byte</B></FONT><FONT COLOR="#000000">[</FONT><FONT COLOR="#0000ff">1024</FONT><FONT COLOR="#000000">]; 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>      </FONT><FONT COLOR="#808080"><I>//Mientras no interrumpamos el Thread</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>      </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (!interrupted()){ 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>        </FONT><FONT COLOR="#808080"><I>//Mientras exista texto por procesar</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>        </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (pi.available() != </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>          </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> len = pi.read(buf); 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>          </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> String tmp = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> String(buf, </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">, len); 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>          </FONT><FONT COLOR="#808080"><I>//Lo mandamos a donde corresponda</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>          doc.insertString(doc.getLength(), tmp, textAtts); 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>          </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (isFork) 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>            originalStream.println(tmp); 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>          </FONT><FONT COLOR="#808080"><I>//Hacemos que la última línea siempre sea visible</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>          redirectedTo.setCaretPosition(redirectedTo.getDocument().getLength() - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT></FONT><FONT COLOR="#808080"><I>//        System.out.println("A dormir");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>        sleep(TIME_TO_SLEEP); 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000">(InterruptedException ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT></FONT><FONT COLOR="#808080"><I>//      Thread.currentThread().interrupt();</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">175  </FONT>      System.err.println(e.toString()); 
+<FONT COLOR=0 STYLE="font-style:normal">176  </FONT>      e.printStackTrace(); 
+<FONT COLOR=0 STYLE="font-style:normal">177  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">178  </FONT>    </FONT><FONT COLOR="#000080"><B>finally</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">179  </FONT>      restoreOriginal(); 
+<FONT COLOR=0 STYLE="font-style:normal">180  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">181  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">182  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">183  </FONT>  </FONT><FONT COLOR="#808080"><I>/** Pos eso, el método run del thread */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">184  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> run(){ 
+<FONT COLOR=0 STYLE="font-style:normal">185  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">186  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> PipedInputStream pi; 
+<FONT COLOR=0 STYLE="font-style:normal">187  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> PipedOutputStream po; 
+<FONT COLOR=0 STYLE="font-style:normal">188  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">189  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">190  </FONT>      pi = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PipedInputStream(); 
+<FONT COLOR=0 STYLE="font-style:normal">191  </FONT>      po = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PipedOutputStream(pi); 
+<FONT COLOR=0 STYLE="font-style:normal">192  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">193  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (IOException ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">194  </FONT>      System.err.println(ex.toString()); 
+<FONT COLOR=0 STYLE="font-style:normal">195  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">196  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">197  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">198  </FONT>    </FONT><FONT COLOR="#808080"><I>//Redirigimos la salida que corresponda a po...</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">199  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (isSystemErr) 
+<FONT COLOR=0 STYLE="font-style:normal">200  </FONT>      System.setErr(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PrintStream(po, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">201  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">202  </FONT>      System.setOut(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> PrintStream(po, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">203  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">204  </FONT>    </FONT><FONT COLOR="#808080"><I>//...que a su vez está concetado con pi</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">205  </FONT>    redirect(pi); 
+<FONT COLOR=0 STYLE="font-style:normal">206  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">207  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

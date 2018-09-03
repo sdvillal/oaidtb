@@ -1,0 +1,190 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\filters\NominalToRandomPermutationOfEvenSplitOCFilter.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\filters\NominalToRandomPermutationOfEvenSplitOCFilter.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    NominalToRandomPermutationOfEvenSplitOCFilter.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.filters; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Instances; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Option; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Utils; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.filters.Filter; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.BitSet; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Enumeration; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Random; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.util.Vector; 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * A nominal to output code filter; it splits the values of the attribute processed by 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * generating a random permutation of a partition in which a half of the values are in 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * one set and the other half is in the other set. 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@see</B></FONT><FONT COLOR="#808080"><I> <A href="..\..\oaidtb\filters\AbstractNominalToOCFilter.java.html">oaidtb.filters.AbstractNominalToOCFilter</A> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@see</B></FONT><FONT COLOR="#808080"><I> <A href="..\..\oaidtb\filters\AbstractNominalToRandomOCFilter.java.html">oaidtb.filters.AbstractNominalToRandomOCFilter</A> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> NominalToRandomPermutationOfEvenSplitOCFilter </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> <A href="..\..\oaidtb\filters\AbstractNominalToRandomOCFilter.java.html">AbstractNominalToRandomOCFilter</A>{ 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>  </FONT><FONT COLOR="#808080"><I>/** A partition with half of the values in each set. */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> BitSet m_PartitionToShuffle; 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>   * Generate a new partition at specified position even though it has already been generated 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>   * (it will be overwritten). 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>   * It doesn't use the instances information (so it can be null). 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instances Perhaps a subclasss will use some information of them. 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> partitionNumber The number of the partition to generate. 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If partitionNumber is incorrect or another error occurs. 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> newPartition(Instances instances, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> partitionNumber) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (partitionNumber &GT; m_NumGeneratedPartitions || partitionNumber &LT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>      </FONT><FONT COLOR="#000080"><B>throw</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Exception(</FONT><FONT COLOR="#008000"><B>"Partition index must be between 0 and "</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>                          + String.valueOf(m_NumGeneratedPartitions + </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">)); 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>    </FONT><FONT COLOR="#808080"><I>//Generate the random permutation by shuffling.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_OutputCode.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>      swapBits(i, m_Random.nextInt(m_OutputCode.length), m_PartitionToShuffle); 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>    setPartition(partitionNumber, m_PartitionToShuffle); 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>    </FONT><FONT COLOR="#808080"><I>//Increment de index of the "last partition".</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (partitionNumber == m_NumGeneratedPartitions) 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>      m_NumGeneratedPartitions++; 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>   * Generate a new partition incrementing the number of partitions generated, 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>   * and so incrementing by 1 the length of all code words. It's equivalent 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>   * to newPartition(instances, m_NumGeneratedPartitions), but faster. 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instances Perhaps a subclasss will use some information of them. 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error occurs. 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> newPartition(Instances instances) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>    </FONT><FONT COLOR="#808080"><I>//Generate the random permutation by shuffling.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_OutputCode.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>      swapBits(i, m_Random.nextInt(m_OutputCode.length), m_PartitionToShuffle); 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>    setPartition(m_NumGeneratedPartitions, m_PartitionToShuffle); 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>    </FONT><FONT COLOR="#808080"><I>//Increment de index of the "last partition".</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>    m_NumGeneratedPartitions++; 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>   * Swaps the bits a & b in the bitset. 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> a Index of one bit 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> b Index of other bit 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> bitset The BitSet where the bits will be swapped. 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> swapBits(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> a, </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> b, BitSet bitset){ 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>    </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> tmp = bitset.get(a); 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (bitset.get(b)) 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>      bitset.set(a); 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>      bitset.clear(a); 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (tmp) 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>      bitset.set(b); 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>    </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>      bitset.clear(b); 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>   * Sets the format of the input instances. 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> instanceInfo an Instances object containing the input instance structure. 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> true if the outputFormat may be collected immediately 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@exception</B></FONT><FONT COLOR="#808080"><I> Exception if the format couldn't be set successfully 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> setInputFormat(Instances instanceInfo) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>    </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i; 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>    </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.setInputFormat(instanceInfo); 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>    </FONT><FONT COLOR="#808080"><I>//Initialize the data structure which will hold the codes.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>    m_OutputCode = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BitSet[instanceInfo.numDistinctValues(m_ProcessedAttribute)]; 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_OutputCode.length; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>      m_OutputCode[i] = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BitSet(); 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_Random == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>      m_Random = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Random(m_Seed); 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>    m_PartitionToShuffle = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> BitSet(); 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_OutputCode.length / </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>      m_PartitionToShuffle.set(i); 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>    newPartition(</FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>   * Main method for testing this class. 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> argv the options 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> main(String[] argv){ 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">162  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">163  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (Utils.getFlag(</FONT><FONT COLOR="#008000"><B>'b'</B></FONT><FONT COLOR="#000000">, argv)){ 
+<FONT COLOR=0 STYLE="font-style:normal">164  </FONT>        Filter.batchFilterFile(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> NominalToRandomPermutationOfEvenSplitOCFilter(), argv); 
+<FONT COLOR=0 STYLE="font-style:normal">165  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">166  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">167  </FONT>        Filter.filterFile(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> NominalToRandomPermutationOfEvenSplitOCFilter(), argv); 
+<FONT COLOR=0 STYLE="font-style:normal">168  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">169  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">170  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception ex){ 
+<FONT COLOR=0 STYLE="font-style:normal">171  </FONT>      System.out.println(ex.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">172  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">173  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">174  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

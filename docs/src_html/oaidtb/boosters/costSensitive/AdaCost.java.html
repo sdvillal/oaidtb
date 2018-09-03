@@ -1,0 +1,177 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\boosters\costSensitive\AdaCost.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\boosters\costSensitive\AdaCost.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    AdaCost.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.boosters.costSensitive; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.DistributionClassifier; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.classifiers.Evaluation; 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> weka.core.Instance; 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT> * An implementation of AdaCost; for more information, see:</I></FONT><FONT COLOR="#808080"><I>&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="http://www.cs.columbia.edu/~sal/hpapers/ICML99-adacost.ps.gz"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> * Fan, Stolfo, Zhang & Chan, </I></FONT><FONT COLOR="#808080"><I>&LT;i&GT;</I></FONT><FONT COLOR="#808080"><I>AdaCost: Misclassification cost-sensitive boosting.</I></FONT><FONT COLOR="#808080"><I>&LT;/i&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * Proceedings of The Sixteenth International Conference on Machine Learning. pp. 97-105. 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * San Francisco: Morgan Kaufmann. 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> AdaCost </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> <A href="..\..\..\oaidtb\boosters\costSensitive\AbstractCSB.java.html">AbstractCSB</A>{ 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>  </FONT><FONT COLOR="#808080"><I>/** The cost matrix containing the total costs of misclassify each class */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] m_CustomCostMatrix; 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>   * Make numIterations iterations. Construct the cost matrix required for the algorithm to work. 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> numIterations The number of iterations to perform. 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error occurs (ej. Booster not initialized). 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> nextIterations(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> numIterations) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>    </FONT><FONT COLOR="#808080"><I>//Compute the total costs of misclassify each class and normalize them to be in [0,1]</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_NumIterations == </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>      m_CustomCostMatrix = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[m_NumClasses]; 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> maxValue = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>        </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> j = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; j &LT; m_NumClasses; j++) </FONT><FONT COLOR="#808080"><I>//m_CostMatrix.getElement(i,i) must be 0 for all i</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>          m_CustomCostMatrix[i] += m_CostMatrix.getElement(i, j); 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (m_CustomCostMatrix[i] &GT; maxValue) 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>          maxValue = m_CustomCostMatrix[i]; 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>      </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumClasses; i++) 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>        m_CustomCostMatrix[i] /= maxValue; 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>    </FONT><FONT COLOR="#000080"><B>super</B></FONT><FONT COLOR="#000000">.nextIterations(numIterations); 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>   * Calculate the classifier's vote weight according to its training error and the cost adjustment function. 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifier The base classifier 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The classifier's vote weight 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@throws</B></FONT><FONT COLOR="#808080"><I> Exception If an error occurs 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> calculateAlfa(DistributionClassifier classifier) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> tmp = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> sumTmp = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumInstances; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>      Instance instance = m_TrainData.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance = classifier.distributionForInstance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classifiedAs = <A href="..\..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.maxIndex(distributionForInstance); 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> trueClass = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.classValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (classifiedAs == trueClass) 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>        tmp += instance.weight() * distributionForInstance[classifiedAs] * costAdjustmentFunction(trueClass, </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>        tmp -= instance.weight() * distributionForInstance[classifiedAs] * costAdjustmentFunction(trueClass, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>      sumTmp += instance.weight(); 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>    tmp = (tmp + NO_DIVISION_BY_ZERO) / (sumTmp + NO_DIVISION_BY_ZERO); 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> Math.log((</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> + tmp) / (</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000"> - tmp)) / </FONT><FONT COLOR="#0000ff">2</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT>  </FONT><FONT COLOR="#808080"><I>/** </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> classifier The classifier to be used to calculate new instances weights.  */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> reweight(DistributionClassifier classifier, </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> alfa) </FONT><FONT COLOR="#000080"><B>throws</B></FONT><FONT COLOR="#000000"> Exception{ 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>    Instance instance; 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>    </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> newWeightsSum = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>    </FONT><FONT COLOR="#000080"><B>for</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000">; i &LT; m_NumInstances; i++){ 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>      instance = m_TrainData.instance(i); 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> trueClassValue = (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) instance.classValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT>      </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000">[] distributionForInstance = classifier.distributionForInstance(instance); 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>      </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> classifiedAs = <A href="..\..\..\oaidtb\misc\Utils.java.html">oaidtb.misc.Utils</A>.maxIndex(distributionForInstance); 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (classifiedAs != trueClassValue) 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>        instance.setWeight(instance.weight() * m_CostMatrix.getElement(trueClassValue, classifiedAs) * 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>                           Math.exp(distributionForInstance[classifiedAs] * 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>                                    alfa * 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT>                                    costAdjustmentFunction(trueClassValue, </FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>      </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>        instance.setWeight(instance.weight() * 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>                           Math.exp(-distributionForInstance[classifiedAs] * 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>                                    alfa * 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>                                    costAdjustmentFunction(trueClassValue, </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">))); 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>      newWeightsSum += instance.weight(); 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT>    normalizeWeights(newWeightsSum); 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT>   * Calculate the cost adjustment function for an instance based on if it's or not misclassified. 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> trueClass The class the instance belongs to 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> isMisclassified True if the classifier correctly classifies the instance, false otherwise 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> The cost adjustment function proposed by Fan et. el. 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> costAdjustmentFunction(</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> trueClass, </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> isMisclassified){ 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>   </FONT><FONT COLOR="#808080"><I>//TODO: Do the operations once and store the results.</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (!isMisclassified) 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> -</FONT><FONT COLOR="#0000ff">0.5</FONT><FONT COLOR="#000000"> * m_CustomCostMatrix[trueClass] + </FONT><FONT COLOR="#0000ff">0.5</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff">0.5</FONT><FONT COLOR="#000000"> * m_CustomCostMatrix[trueClass] + </FONT><FONT COLOR="#0000ff">0.5</FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT>   * Main method for testing this class. 
+<FONT COLOR=0 STYLE="font-style:normal">149  </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">150  </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@param</B></FONT><FONT COLOR="#808080"><I> argv the options 
+<FONT COLOR=0 STYLE="font-style:normal">151  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">152  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> main(String[] argv){ 
+<FONT COLOR=0 STYLE="font-style:normal">153  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">154  </FONT>    </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">155  </FONT>      System.out.println(Evaluation.evaluateModel(</FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> AdaCost(), argv)); 
+<FONT COLOR=0 STYLE="font-style:normal">156  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">157  </FONT>    </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (Exception e){ 
+<FONT COLOR=0 STYLE="font-style:normal">158  </FONT>      System.err.println(e.getMessage()); 
+<FONT COLOR=0 STYLE="font-style:normal">159  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">160  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">161  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

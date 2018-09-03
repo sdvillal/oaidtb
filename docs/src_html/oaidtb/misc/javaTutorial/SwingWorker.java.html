@@ -1,0 +1,164 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\misc\javaTutorial\SwingWorker.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\misc\javaTutorial\SwingWorker.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.misc.javaTutorial; 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.*; 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> * This is the 3rd version of SwingWorker (also known as 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> * SwingWorker 3), an abstract class that you subclass to 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> * perform GUI-related work in a dedicated thread.  For 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> * instructions on using this class, see: 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> * http://java.sun.com/docs/books/tutorial/uiswing/misc/threads.html 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> * Note that the API changed slightly in the 3rd version: 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> * You must now invoke start() on the SwingWorker after 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> * creating it. 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> SwingWorker{ 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Object value;  </FONT><FONT COLOR="#808080"><I>// see getValue(), setValue()</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT>   * Class to maintain reference to current worker thread 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT>   * under separate synchronization control. 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>static</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> ThreadVar{ 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> Thread thread; 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT>    ThreadVar(Thread t){ 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT>      thread = t; 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT>    </FONT><FONT COLOR="#000080"><B>synchronized</B></FONT><FONT COLOR="#000000"> Thread get(){ 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> thread; 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT>    </FONT><FONT COLOR="#000080"><B>synchronized</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> clear(){ 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT>      thread = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> ThreadVar threadVar; 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>   * Get the value produced by the worker thread, or null if it 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>   * hasn't been constructed yet. 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>  </FONT><FONT COLOR="#000080"><B>protected</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>synchronized</B></FONT><FONT COLOR="#000000"> Object getValue(){ 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> value; 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>   * Set the value produced by worker thread 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>synchronized</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> setValue(Object x){ 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>    value = x; 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>   * Compute the value to be returned by the </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>get</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I> method. 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>abstract</B></FONT><FONT COLOR="#000000"> Object construct(); 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>   * Called on the event dispatching thread (not on the worker thread) 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>   * after the </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>construct</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I> method has returned. 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> finished(){ 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>   * A new method that interrupts the worker thread.  Call this method 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>   * to force the worker to stop what it's doing. 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> interrupt(){ 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>    Thread t = threadVar.get(); 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (t != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT></FONT><FONT COLOR="#808080"><I>//      t.stop();</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>      t.interrupt(); 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>    threadVar.clear(); 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>   * Return the value created by the </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>construct</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I> method. 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>   * Returns null if either the constructing thread or the current 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>   * thread was interrupted before a value was produced. 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I> the value created by the </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>construct</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I> method 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Object get(){ 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>    </FONT><FONT COLOR="#000080"><B>while</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>true</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>      Thread t = threadVar.get(); 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>      </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (t == </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> getValue(); 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>      </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>        t.join(); 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>      </FONT><FONT COLOR="#000080"><B>catch</B></FONT><FONT COLOR="#000000"> (InterruptedException e){ 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>        Thread.currentThread().interrupt(); </FONT><FONT COLOR="#808080"><I>// propagate</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">104  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">105  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">106  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">107  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">108  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">109  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">110  </FONT>   * Start a thread that will call the </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>construct</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I> method 
+<FONT COLOR=0 STYLE="font-style:normal">111  </FONT>   * and then exit. 
+<FONT COLOR=0 STYLE="font-style:normal">112  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">113  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> SwingWorker(){ 
+<FONT COLOR=0 STYLE="font-style:normal">114  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">115  </FONT>    </FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> Runnable doFinished = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Runnable(){ 
+<FONT COLOR=0 STYLE="font-style:normal">116  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> run(){ 
+<FONT COLOR=0 STYLE="font-style:normal">117  </FONT>        finished(); 
+<FONT COLOR=0 STYLE="font-style:normal">118  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">119  </FONT>    }; 
+<FONT COLOR=0 STYLE="font-style:normal">120  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">121  </FONT>    Runnable doConstruct = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Runnable(){ 
+<FONT COLOR=0 STYLE="font-style:normal">122  </FONT>      </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> run(){ 
+<FONT COLOR=0 STYLE="font-style:normal">123  </FONT>        </FONT><FONT COLOR="#000080"><B>try</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">124  </FONT>          setValue(construct()); 
+<FONT COLOR=0 STYLE="font-style:normal">125  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">126  </FONT>        </FONT><FONT COLOR="#000080"><B>finally</B></FONT><FONT COLOR="#000000">{ 
+<FONT COLOR=0 STYLE="font-style:normal">127  </FONT>          threadVar.clear(); 
+<FONT COLOR=0 STYLE="font-style:normal">128  </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">129  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">130  </FONT>        SwingUtilities.invokeLater(doFinished); 
+<FONT COLOR=0 STYLE="font-style:normal">131  </FONT>      } 
+<FONT COLOR=0 STYLE="font-style:normal">132  </FONT>    }; 
+<FONT COLOR=0 STYLE="font-style:normal">133  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">134  </FONT>    Thread t = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Thread(doConstruct); 
+<FONT COLOR=0 STYLE="font-style:normal">135  </FONT>    threadVar = </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> ThreadVar(t); 
+<FONT COLOR=0 STYLE="font-style:normal">136  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">137  </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">138  </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">139  </FONT>   * Start the worker thread. 
+<FONT COLOR=0 STYLE="font-style:normal">140  </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">141  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>void</B></FONT><FONT COLOR="#000000"> start(){ 
+<FONT COLOR=0 STYLE="font-style:normal">142  </FONT>    Thread t = threadVar.get(); 
+<FONT COLOR=0 STYLE="font-style:normal">143  </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (t != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">){ 
+<FONT COLOR=0 STYLE="font-style:normal">144  </FONT>      t.start(); 
+<FONT COLOR=0 STYLE="font-style:normal">145  </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">146  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">147  </FONT>} 
+<FONT COLOR=0 STYLE="font-style:normal">148  </FONT></FONT></PRE>
+</BODY>
+</HTML>

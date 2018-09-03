@@ -1,0 +1,119 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\misc\SimpleDouble.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\misc\SimpleDouble.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> *    This program is free software; you can redistribute it and/or modify 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT> *    it under the terms of the GNU General Public License as published by 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT> *    the Free Software Foundation; either version 2 of the License, or 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> *    (at your option) any later version. 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT> *    This program is distributed in the hope that it will be useful, 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT> *    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT> *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> *    GNU General Public License for more details. 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT> *    You should have received a copy of the GNU General Public License 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT> *    along with this program; if not, write to the Free Software 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT></FONT><FONT COLOR="#808080"><I>/* 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> *    SimpleInteger.java 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT> *    Copyright (C) 2002 Santiago David Villalba 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT></FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.misc; 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT></FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT> * Clase que encapsula un tipo primitivo double en un objeto 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT> * con mayor eficiencia en términos de memoria que la clase Integer. 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="http://www.javaworld.com/javaworld/javatips/jw-javatip130.html"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT> * Vladimir Roubtsov. </I></FONT><FONT COLOR="#808080"><I>&LT;i&GT;</I></FONT><FONT COLOR="#808080"><I>Do you know your data size?</I></FONT><FONT COLOR="#808080"><I>&LT;/i&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT> * JavaWorld tips and tricks nº 130 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT> * </I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;&LT;p&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT> * 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@author</B></FONT><FONT COLOR="#808080"><I> </I></FONT><FONT COLOR="#808080"><I>&LT;a</I></FONT><FONT COLOR="#808080"><I> href="mailto:sdvb@wanadoo.es"</I></FONT><FONT COLOR="#808080"><I>&GT;</I></FONT><FONT COLOR="#808080"><I>Santiago David Villalba Bartolom&eacute;</I></FONT><FONT COLOR="#808080"><I>&LT;/a&GT;</I></FONT><FONT COLOR="#808080"><I> 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT> * </I></FONT><FONT COLOR="#808080"><B>@version</B></FONT><FONT COLOR="#808080"><I> $Revision: 1.0 $ 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT> */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> SimpleDouble </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> Number{ 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT>  </FONT><FONT COLOR="#808080"><I>//No lo hacemos final para poder hacer cosas como value++</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> value; 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> SimpleDouble(</FONT><FONT COLOR="#000080"><B>final</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> value){ 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT>    </FONT><FONT COLOR="#000080"><B>this</B></FONT><FONT COLOR="#000000">.value = value; 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>boolean</B></FONT><FONT COLOR="#000000"> equals(Object obj){ 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT>    </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (obj </FONT><FONT COLOR="#000080"><B>instanceof</B></FONT><FONT COLOR="#000000"> SimpleDouble) 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT>      </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> value == ((SimpleDouble) obj).value; 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>false</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> hashCode() { 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>new</B></FONT><FONT COLOR="#000000"> Double(value).hashCode(); 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String toString() { 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> String.valueOf(value); 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT>   * Returns the value of the specified number as a </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>double</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>   * This may involve rounding. 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I>  the numeric value represented by this object after conversion 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT>   *          to type </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>double</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>double</B></FONT><FONT COLOR="#000000"> doubleValue(){ 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> value; 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT>   * Returns the value of the specified number as a </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>float</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">73   </FONT>   * This may involve rounding. 
+<FONT COLOR=0 STYLE="font-style:normal">74   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">75   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I>  the numeric value represented by this object after conversion 
+<FONT COLOR=0 STYLE="font-style:normal">76   </FONT>   *          to type </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>float</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">77   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">78   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>float</B></FONT><FONT COLOR="#000000"> floatValue(){ 
+<FONT COLOR=0 STYLE="font-style:normal">79   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>float</B></FONT><FONT COLOR="#000000">) value; 
+<FONT COLOR=0 STYLE="font-style:normal">80   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">81   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">82   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">83   </FONT>   * Returns the value of the specified number as an </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>int</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">84   </FONT>   * This may involve rounding. 
+<FONT COLOR=0 STYLE="font-style:normal">85   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">86   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I>  the numeric value represented by this object after conversion 
+<FONT COLOR=0 STYLE="font-style:normal">87   </FONT>   *          to type </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>int</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">88   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">89   </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> intValue(){ 
+<FONT COLOR=0 STYLE="font-style:normal">90   </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000">) value; 
+<FONT COLOR=0 STYLE="font-style:normal">91   </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">92   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">93   </FONT>  </FONT><FONT COLOR="#808080"><I>/** 
+<FONT COLOR=0 STYLE="font-style:normal">94   </FONT>   * Returns the value of the specified number as a </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>long</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">95   </FONT>   * This may involve rounding. 
+<FONT COLOR=0 STYLE="font-style:normal">96   </FONT>   * 
+<FONT COLOR=0 STYLE="font-style:normal">97   </FONT>   * </I></FONT><FONT COLOR="#808080"><B>@return</B></FONT><FONT COLOR="#808080"><I>  the numeric value represented by this object after conversion 
+<FONT COLOR=0 STYLE="font-style:normal">98   </FONT>   *          to type </I></FONT><FONT COLOR="#808080"><I>&LT;code&GT;</I></FONT><FONT COLOR="#808080"><I>long</I></FONT><FONT COLOR="#808080"><I>&LT;/code&GT;</I></FONT><FONT COLOR="#808080"><I>. 
+<FONT COLOR=0 STYLE="font-style:normal">99   </FONT>   */</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">100  </FONT>  </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>long</B></FONT><FONT COLOR="#000000"> longValue(){ 
+<FONT COLOR=0 STYLE="font-style:normal">101  </FONT>    </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> (</FONT><FONT COLOR="#000080"><B>long</B></FONT><FONT COLOR="#000000">) value; 
+<FONT COLOR=0 STYLE="font-style:normal">102  </FONT>  } 
+<FONT COLOR=0 STYLE="font-style:normal">103  </FONT>}</FONT></PRE>
+</BODY>
+</HTML>

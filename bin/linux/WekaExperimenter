@@ -1,0 +1,10 @@
+#!/bin/bash
+#Inicia el "Entorno de Experimentación" de Weka
+
+MAIN_CLASS_NAME="weka.gui.experiment.Experimenter"
+export MAIN_CLASS_NAME
+
+OUTPUT_FILE=
+
+./_oaidtb_ $OUTPUT_FILE
+

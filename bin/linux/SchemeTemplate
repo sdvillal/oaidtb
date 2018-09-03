@@ -1,0 +1,20 @@
+#!/bin/bash
+#Plantilla de ejemplo que muestra cómo construir y evaluar un clasificador desde la línea de comandos
+#Se puede utilizar en conjunción con el GOE (copiar y pegar la configuración de los clasificadores)
+#Con pequeñas modificaciones, con este script se pueden programar experimentos en modo batch
+
+#Especificamos las instancias de entrenamiento
+TRAIN_DATA_FILE=../_data_/uci/audiology.arff
+#Especificamos el nombre del clasificador y sus opciones
+SCHEME_NAME="oaidtb.boosters.AdaBoostECC"
+SCHEME_OPTIONS="-x 2 -F oaidtb.filters.NominalToRandomPermutationOfEvenSplitOCFilter -U 1 -I 10 -S 1 -N 0 -W weka.classifiers.trees.DecisionStump --"
+
+#Lo juntamos todo
+MAIN_CLASS_NAME="$SCHEME_NAME -t $TRAIN_DATA_FILE $SCHEME_OPTIONS"
+export MAIN_CLASS_NAME
+
+#Especificamos un archivo donde guardar los resultados
+OUTPUT_FILE=../../_results_/ECC_Audiology.txt
+
+#Llamamos al script de ejecución
+./_oaidtb_ $OUTPUT_FILE

@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+<TITLE>D:\Pfc\Src\oaidtb\misc\javaTutorial\ImageFileView.java</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="KEYWORDS" CONTENT="IntelliJ_IDEA_Html">
+</HEAD>
+<BODY BGCOLOR="#d3d2aa">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial,Helvetica" COLOR="#000000">
+D:\Pfc\Src\oaidtb\misc\javaTutorial\ImageFileView.java</FONT>
+</center></TD></TR></TABLE></FONT>
+<PRE>
+
+<FONT COLOR=0 STYLE="font-style:normal">1    </FONT><FONT COLOR="#000080"><B>package</B></FONT><FONT COLOR="#000000"> oaidtb.misc.javaTutorial; 
+<FONT COLOR=0 STYLE="font-style:normal">2    </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">3    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> java.io.File; 
+<FONT COLOR=0 STYLE="font-style:normal">4    </FONT></FONT><FONT COLOR="#000080"><B>import</B></FONT><FONT COLOR="#000000"> javax.swing.filechooser.*; 
+<FONT COLOR=0 STYLE="font-style:normal">5    </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">6    </FONT></FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>class</B></FONT><FONT COLOR="#000000"> ImageFileView </FONT><FONT COLOR="#000080"><B>extends</B></FONT><FONT COLOR="#000000"> FileView { 
+<FONT COLOR=0 STYLE="font-style:normal">7    </FONT></FONT><FONT COLOR="#808080"><I>//    ImageIcon jpgIcon = new ImageIcon(getClass().getPackage().getName() + "./images/jpgIcon.gif");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">8    </FONT></FONT><FONT COLOR="#808080"><I>//    ImageIcon gifIcon = new ImageIcon(getClass().getPackage().getName() + "./images/gifIcon.gif");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">9    </FONT></FONT><FONT COLOR="#808080"><I>//    ImageIcon tiffIcon = new ImageIcon(getClass().getPackage().getName() + "./images/tiffIcon.gif");</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">10   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">11   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getName(File f) { 
+<FONT COLOR=0 STYLE="font-style:normal">12   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; </FONT><FONT COLOR="#808080"><I>// let the L&F FileView figure this out</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">13   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">14   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">15   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getDescription(File f) { 
+<FONT COLOR=0 STYLE="font-style:normal">16   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; </FONT><FONT COLOR="#808080"><I>// let the L&F FileView figure this out</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">17   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">18   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">19   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> Boolean isTraversable(File f) { 
+<FONT COLOR=0 STYLE="font-style:normal">20   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; </FONT><FONT COLOR="#808080"><I>// let the L&F FileView figure this out</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">21   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">22   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">23   </FONT>    </FONT><FONT COLOR="#000080"><B>public</B></FONT><FONT COLOR="#000000"> String getTypeDescription(File f) { 
+<FONT COLOR=0 STYLE="font-style:normal">24   </FONT>        String extension = getExtension(f); 
+<FONT COLOR=0 STYLE="font-style:normal">25   </FONT>        String type = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">26   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">27   </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (extension != </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">) { 
+<FONT COLOR=0 STYLE="font-style:normal">28   </FONT>            </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (extension.equals(</FONT><FONT COLOR="#008000"><B>"jpeg"</B></FONT><FONT COLOR="#000000">) || 
+<FONT COLOR=0 STYLE="font-style:normal">29   </FONT>                extension.equals(</FONT><FONT COLOR="#008000"><B>"jpg"</B></FONT><FONT COLOR="#000000">)) { 
+<FONT COLOR=0 STYLE="font-style:normal">30   </FONT>                type = </FONT><FONT COLOR="#008000"><B>"JPEG Image"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">31   </FONT>            } </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (extension.equals(</FONT><FONT COLOR="#008000"><B>"gif"</B></FONT><FONT COLOR="#000000">)){ 
+<FONT COLOR=0 STYLE="font-style:normal">32   </FONT>                type = </FONT><FONT COLOR="#008000"><B>"GIF Image"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">33   </FONT>            } </FONT><FONT COLOR="#000080"><B>else</B></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (extension.equals(</FONT><FONT COLOR="#008000"><B>"tiff"</B></FONT><FONT COLOR="#000000">) || 
+<FONT COLOR=0 STYLE="font-style:normal">34   </FONT>                       extension.equals(</FONT><FONT COLOR="#008000"><B>"tif"</B></FONT><FONT COLOR="#000000">)) { 
+<FONT COLOR=0 STYLE="font-style:normal">35   </FONT>                type = </FONT><FONT COLOR="#008000"><B>"TIFF Image"</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">36   </FONT>            } 
+<FONT COLOR=0 STYLE="font-style:normal">37   </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">38   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> type; 
+<FONT COLOR=0 STYLE="font-style:normal">39   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">40   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">41   </FONT></FONT><FONT COLOR="#808080"><I>//    public Icon getIcon(File f) {</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">42   </FONT></FONT><FONT COLOR="#808080"><I>//        String extension = getExtension(f);</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">43   </FONT></FONT><FONT COLOR="#808080"><I>//        Icon icon = null;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">44   </FONT></FONT><FONT COLOR="#808080"><I>//        if (extension != null) {</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">45   </FONT></FONT><FONT COLOR="#808080"><I>//            if (extension.equals("jpeg") ||</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">46   </FONT></FONT><FONT COLOR="#808080"><I>//                extension.equals("jpg")) {</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">47   </FONT></FONT><FONT COLOR="#808080"><I>//                icon = jpgIcon;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">48   </FONT></FONT><FONT COLOR="#808080"><I>//            } else if (extension.equals("gif")) {</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">49   </FONT></FONT><FONT COLOR="#808080"><I>//                icon = gifIcon;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">50   </FONT></FONT><FONT COLOR="#808080"><I>//            } else if (extension.equals("tiff") ||</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">51   </FONT></FONT><FONT COLOR="#808080"><I>//                       extension.equals("tif")) {</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">52   </FONT></FONT><FONT COLOR="#808080"><I>//                icon = tiffIcon;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">53   </FONT></FONT><FONT COLOR="#808080"><I>//            }</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">54   </FONT></FONT><FONT COLOR="#808080"><I>//        }</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">55   </FONT></FONT><FONT COLOR="#808080"><I>//        return icon;</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">56   </FONT></FONT><FONT COLOR="#808080"><I>//    }</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">57   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">58   </FONT>    </FONT><FONT COLOR="#808080"><I>// Get the extension of this file. Code is factored out</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">59   </FONT>    </FONT><FONT COLOR="#808080"><I>// because we use this in both getIcon and getTypeDescription</I></FONT><FONT COLOR="#000000"> 
+<FONT COLOR=0 STYLE="font-style:normal">60   </FONT>    </FONT><FONT COLOR="#000080"><B>private</B></FONT><FONT COLOR="#000000"> String getExtension(File f) { 
+<FONT COLOR=0 STYLE="font-style:normal">61   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">62   </FONT>        String ext = </FONT><FONT COLOR="#000080"><B>null</B></FONT><FONT COLOR="#000000">; 
+<FONT COLOR=0 STYLE="font-style:normal">63   </FONT>        String s = f.getName(); 
+<FONT COLOR=0 STYLE="font-style:normal">64   </FONT>        </FONT><FONT COLOR="#000080"><B>int</B></FONT><FONT COLOR="#000000"> i = s.lastIndexOf(</FONT><FONT COLOR="#008000"><B>'.'</B></FONT><FONT COLOR="#000000">); 
+<FONT COLOR=0 STYLE="font-style:normal">65   </FONT> 
+<FONT COLOR=0 STYLE="font-style:normal">66   </FONT>        </FONT><FONT COLOR="#000080"><B>if</B></FONT><FONT COLOR="#000000"> (i &GT; </FONT><FONT COLOR="#0000ff">0</FONT><FONT COLOR="#000000"> &&  i &LT; s.length() - </FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">) { 
+<FONT COLOR=0 STYLE="font-style:normal">67   </FONT>            ext = s.substring(i+</FONT><FONT COLOR="#0000ff">1</FONT><FONT COLOR="#000000">).toLowerCase(); 
+<FONT COLOR=0 STYLE="font-style:normal">68   </FONT>        } 
+<FONT COLOR=0 STYLE="font-style:normal">69   </FONT>        </FONT><FONT COLOR="#000080"><B>return</B></FONT><FONT COLOR="#000000"> ext; 
+<FONT COLOR=0 STYLE="font-style:normal">70   </FONT>    } 
+<FONT COLOR=0 STYLE="font-style:normal">71   </FONT>} 
+<FONT COLOR=0 STYLE="font-style:normal">72   </FONT></FONT></PRE>
+</BODY>
+</HTML>
